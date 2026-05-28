@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "breakthrough-eval"
+version = "0.1.0"
+description = "通用「突破复现」评测系统 — 把 Einstein Test 工程化为时间冻结的开卷研究考试"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "pydantic>=2.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+breakthrough-eval = "breakthrough_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["breakthrough_eval*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

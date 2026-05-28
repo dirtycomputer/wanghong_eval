@@ -1,0 +1,48 @@
+# Model Registry (plan §6.2)
+# Controller 自动筛 cutoff < retrieval_cutoff 的候选; 厂商 cutoff 是「软」的, 故标 confidence,
+# 最终以 §8 探针实测为准。backend_kwargs 传给后端 factory (mock: capability/contaminated/scaffold_version)。
+#
+# 注: 这些都是 provider=mock 的"模拟"模型, 用于离线跑通全链路。
+# 接真实模型时把 provider 改成 local-vllm/codex, backend_kwargs 填 model/model_provider。
+models:
+  - name: open-precutoff-strong
+    cutoff_date: 2024-10-01
+    cutoff_confidence: high
+    open_source: true
+    capability_tier: research
+    provider: mock
+    backend_kwargs: { capability: 0.78, scaffold_version: "deep" }
+
+  - name: open-precutoff-mid
+    cutoff_date: 2024-06-01
+    cutoff_confidence: high
+    open_source: true
+    capability_tier: strong
+    provider: mock
+    backend_kwargs: { capability: 0.5, scaffold_version: "vanilla" }
+
+  - name: open-precutoff-weak
+    cutoff_date: 2023-12-01
+    cutoff_confidence: medium
+    open_source: true
+    capability_tier: weak
+    provider: mock
+    backend_kwargs: { capability: 0.25, scaffold_version: "vanilla" }
+
+  # cutoff 日期合格 (< 2025-01-31), 但通过 talk/口耳相传见过答案 → 探针应判污染除名 (plan §8.3)。
+  - name: leaky-eligible-by-date
+    cutoff_date: 2024-12-01
+    cutoff_confidence: low
+    open_source: false
+    capability_tier: research
+    provider: mock
+    backend_kwargs: { capability: 0.7, contaminated: true, scaffold_version: "deep" }
+
+  # cutoff 晚于 retrieval_cutoff → 资格校验直接拒绝 (plan §2, §6.2)。
+  - name: post-cutoff-frontier
+    cutoff_date: 2025-03-01
+    cutoff_confidence: high
+    open_source: false
+    capability_tier: frontier
+    provider: mock
+    backend_kwargs: { capability: 0.95, scaffold_version: "deep" }
