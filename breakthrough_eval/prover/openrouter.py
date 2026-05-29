@@ -47,7 +47,7 @@ class OpenRouterProverBackend(ProverBackend):
         scaffold_version: str = "openrouter",
         max_tool_calls: int = 3,
         temperature: float = 0.3,
-        max_tokens: int = 3072,
+        max_tokens: int = 1536,
         probe_max_tokens: int = 400,
         client: OpenRouterClient | None = None,
     ):
@@ -161,6 +161,6 @@ def _factory(**kwargs) -> OpenRouterProverBackend:
         scaffold_version=kwargs.get("scaffold_version", "openrouter"),
         max_tool_calls=kwargs.get("max_tool_calls", 3),
         temperature=kwargs.get("temperature", 0.3),
-        max_tokens=kwargs.get("max_tokens", 3072),
+        max_tokens=kwargs.get("max_tokens", 1536),
         probe_max_tokens=kwargs.get("probe_max_tokens", 400),
     )

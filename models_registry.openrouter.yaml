@@ -23,5 +23,5 @@ models:
       scaffold_version: "openrouter"
       max_tool_calls: 3
       temperature: 0.3
-      max_tokens: 3072
+      max_tokens: 1536      # 较低的 prove token 预算 → gemma ~12 tok/s 下更快
       probe_max_tokens: 400

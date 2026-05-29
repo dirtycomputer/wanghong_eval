@@ -73,7 +73,12 @@ class ProverRunner:
         self.source = source
         self.allowed_hosts = allowed_hosts or {ARXIV_MCP_HOST}
 
-    def run(self, task: TaskSpec, job: Job) -> ProverRunResult:
+    def run(
+        self,
+        task: TaskSpec,
+        job: Job,
+        probe_responses: list | None = None,
+    ) -> ProverRunResult:
         harness = self.backend.harness_fingerprint(job.model)
         result = ProverRunResult(
             job_id=job.job_id,
@@ -85,22 +90,28 @@ class ProverRunner:
         )
 
         # 1. Probe phase ------------------------------------------------- #
-        for probe in task.contamination_probes:
-            ctx = ProverContext(
-                task=task,
-                job=job,
-                phase="probe",
-                system=PROBE_SYSTEM_PROMPT,
-                user=probe_prompt(task, probe.id),
-                source=self.source,
-                allowed_hosts=self.allowed_hosts,
-                probe_id=probe.id,
-            )
-            resp = self.backend.run(ctx)
-            result.probe_responses.append(evaluate_probe(probe, resp.text))
-            result.usage.input_tokens += resp.usage.input_tokens
-            result.usage.output_tokens += resp.usage.output_tokens
-            result.usage.wall_seconds += resp.usage.wall_seconds
+        # Contamination is a property of (model, task), not of the hint level,
+        # so the Controller probes once and passes the cached responses here
+        # (plan §8.3). Only run probes when none were supplied.
+        if probe_responses is None:
+            for probe in task.contamination_probes:
+                ctx = ProverContext(
+                    task=task,
+                    job=job,
+                    phase="probe",
+                    system=PROBE_SYSTEM_PROMPT,
+                    user=probe_prompt(task, probe.id),
+                    source=self.source,
+                    allowed_hosts=self.allowed_hosts,
+                    probe_id=probe.id,
+                )
+                resp = self.backend.run(ctx)
+                result.probe_responses.append(evaluate_probe(probe, resp.text))
+                result.usage.input_tokens += resp.usage.input_tokens
+                result.usage.output_tokens += resp.usage.output_tokens
+                result.usage.wall_seconds += resp.usage.wall_seconds
+        else:
+            result.probe_responses = list(probe_responses)
 
         if any_leaked(result.probe_responses):
             # 探针命中 → 该 (model, task) 判污染, 不计入正式分 (plan §3.3, §8.3).
