@@ -56,7 +56,13 @@ class OpenRouterProverBackend(ProverBackend):
         self.max_tool_calls = max_tool_calls
         self.probe_max_tokens = probe_max_tokens
         self.client = client or OpenRouterClient(
-            model=model, temperature=temperature, max_tokens=max_tokens
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            # Only route to providers that actually support tools (otherwise the
+            # tool-result follow-up intermittently fails); plan §3.2 wants real
+            # retrieval, so this keeps the search tool usable.
+            provider_prefs={"require_parameters": True},
         )
 
     def available(self) -> bool:

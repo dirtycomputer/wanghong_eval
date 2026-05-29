@@ -49,6 +49,7 @@ class OpenRouterClient:
         timeout: int = 240,
         max_retries: int = 4,
         extra_headers: Optional[dict] = None,
+        provider_prefs: Optional[dict] = None,
         transport: Optional[Transport] = None,
     ):
         self.model = model
@@ -58,6 +59,9 @@ class OpenRouterClient:
         self.max_tokens = max_tokens
         self.timeout = timeout
         self.max_retries = max_retries
+        # OpenRouter provider routing (e.g. {"require_parameters": True} to only
+        # route to providers that actually support tools / response_format).
+        self.provider_prefs = provider_prefs
         self.extra_headers = extra_headers or {
             "HTTP-Referer": "https://github.com/dirtycomputer/wanghong_eval",
             "X-Title": "breakthrough-eval",
@@ -91,12 +95,15 @@ class OpenRouterClient:
             payload["tool_choice"] = tool_choice or "auto"
         if response_format:
             payload["response_format"] = response_format
+        if self.provider_prefs:
+            payload["provider"] = self.provider_prefs
 
         data = self._post_with_retries(payload)
-        try:
-            msg = data["choices"][0]["message"]
-        except (KeyError, IndexError) as exc:
-            raise LLMError(f"OpenRouter 返回结构异常: {str(data)[:300]}") from exc
+        if "choices" not in data or not data["choices"]:
+            # OpenRouter returns errors as a 200 body with an "error" field.
+            err = data.get("error")
+            raise LLMError(f"OpenRouter 无 choices: {err or str(data)[:300]}")
+        msg = data["choices"][0]["message"]
         return ChatResult(
             content=msg.get("content") or "",
             tool_calls=msg.get("tool_calls") or [],
