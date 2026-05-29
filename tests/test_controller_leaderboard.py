@@ -85,6 +85,34 @@ def test_full_pipeline_and_leaderboard(tasks, registry, task):
     assert "难度曲线" in board.render_difficulty_curve(strong.harness, task.task_id)
 
 
+def test_probes_cached_per_model_task(tasks, registry, task):
+    # Probes must run once per (model, task), not per hint level (plan §8.3).
+    from breakthrough_eval.prover.base import ProverContext
+    from breakthrough_eval.prover.mock import MockProverBackend, MockProverConfig
+
+    backend = MockProverBackend(MockProverConfig(capability=0.6))
+    probe_calls = {"n": 0}
+    orig = backend.run
+
+    def counting(ctx: ProverContext):
+        if ctx.phase == "probe":
+            probe_calls["n"] += 1
+        return orig(ctx)
+
+    backend.run = counting
+
+    ctrl = _controller(tasks, registry)
+    ctrl.backend_specs = {}
+    ctrl._backend_cache["open-precutoff-strong"] = backend  # inject counting backend
+
+    matrix = ctrl.expand_job_matrix(
+        [task.task_id], model_names=["open-precutoff-strong"], hint_levels=[0, 1, 2, 3], trials=2
+    )
+    ctrl.run(matrix)
+    # 3 probes x exactly one (model, task), regardless of 4 hints x 2 trials = 8 jobs.
+    assert probe_calls["n"] == len(task.contamination_probes)
+
+
 def test_differential_sanity_check_shows_gap(tasks, registry, task):
     # Frozen arXiv hides the golden paper → cold-start solve rate 0.
     # Post-breakthrough arXiv exposes it → the model can copy the answer.

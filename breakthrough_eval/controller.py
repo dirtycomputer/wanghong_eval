@@ -60,6 +60,9 @@ class Controller:
         self.source_factory = source_factory
         self.backend_specs = backend_specs or {}
         self._backend_cache: dict[str, ProverBackend] = {}
+        # Probe results cached per (task_id, model): contamination is per
+        # (model, task), so we probe once and reuse across hint levels/trials.
+        self._probe_cache: dict[tuple[str, str], list] = {}
 
     # ------------------------------------------------------------------ #
     def backend_for(self, model: str) -> ProverBackend:
@@ -116,7 +119,14 @@ class Controller:
         task = self.tasks[job.task_id]
         source = self.source_factory(task.retrieval_cutoff)
         runner = ProverRunner(self.backend_for(job.model), source)
-        prover_result = runner.run(task, job)
+
+        # Probe once per (model, task); reuse across hint levels/trials (plan §8.3).
+        key = (job.task_id, job.model)
+        cached_probes = self._probe_cache.get(key)
+        prover_result = runner.run(task, job, probe_responses=cached_probes)
+        if cached_probes is None:
+            self._probe_cache[key] = prover_result.probe_responses
+
         eval_result = self.evaluator.evaluate(prover_result, task)
         if self.store is not None:
             self.store.save_prover(prover_result)
