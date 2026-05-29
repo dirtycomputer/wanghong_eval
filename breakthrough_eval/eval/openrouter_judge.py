@@ -13,6 +13,9 @@ from .llm import LLMJudge
 
 
 def make_openrouter_complete(model: str, **client_kwargs):
+    # Judges emit a per-item JSON verdict; give generous room so it isn't
+    # truncated into invalid JSON (the LLMJudge also retries + abstains).
+    client_kwargs.setdefault("max_tokens", 4096)
     client = OpenRouterClient(model=model, **client_kwargs)
 
     def complete(system: str, user: str) -> str:

@@ -114,11 +114,14 @@ python -m breakthrough_eval \
 - **PROVER**：`provider: openrouter` + `backend_kwargs.model`（见 `models_registry.openrouter.yaml`）。
   内置 `OpenRouterProverBackend` 跑一个带 `search_arxiv` 工具的 agent loop，工具只回时间冻结
   快照里的论文，每次调用都记进 transcript 供审计；探针阶段不给工具（要它的「无援」回答）。
-- **评委**：`--judges openrouter:<model>`（可与 `mock` 混用做多评委一致性）。
+- **评委**：`--judges openrouter:<model>`（可与 `mock` 混用做多评委一致性）。评委是现代强模型
+  恰恰是想要的 —— EVAL 被允许知道答案（plan §4）。
 
-> ⚠️ 但 `gemma-4` / `deepseek-v4` 都是**现代模型**，真实 cutoff 晚于 Kakeya 突破日期 ——
-> 用它们只能**验证链路跑通**，做不出有效的王虹测试（探针很可能直接把 PROVER 判污染）。
-> 要拿有效结果，PROVER 必须换成训练数据时间确实早于 2025-01 的模型。
+> 关于王虹测试的有效性：`gemma-4-31b-it` 的官方 cutoff 是 **January 2025**（模型卡），
+> **早于** Wang–Zahl 突破（2025-02-25），所以它训练里不会见过那篇证明 —— 实跑的污染探针
+> 也确实全部 clean。它因此是一个**边界合法的 pre-breakthrough PROVER**。
+> 注意 cutoff 是厂商宣称的软日期（plan §10.6 突破日期本身也可能因 talk/流出而模糊），
+> 故 `cutoff_confidence: medium`，并以探针实测为最终判据。
 
 ### 其它后端
 

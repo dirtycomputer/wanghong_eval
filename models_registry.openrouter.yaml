@@ -1,22 +1,27 @@
 # OpenRouter 真实后端 registry (用 `--registry models_registry.openrouter.yaml`)。
 #
-# ⚠️ 科学性警告: gemma-4 是「现代」模型, 其真实训练 cutoff 几乎肯定晚于 2025-02
-# (Kakeya 突破日期)。这里把 cutoff_date 填成 2024-08-01 只是为了让资格校验放行、
-# 跑通真实链路 (plumbing test)。它很可能已见过 Wang–Zahl 的答案 ——
-# 这正好用来演示「探针层」会把它判污染除名。要做有效的王虹测试, 必须换一个
-# 训练数据时间可考据、确实早于 2025-01 的模型。
+# gemma-4-31b-it 的官方 cutoff 是 "January 2025" (模型卡:
+# https://huggingface.co/google/gemma-4-31B-it — pre-training cutoff date of January 2025)。
+# 这早于 Wang–Zahl 三维 Kakeya 突破 (arXiv 2502.17655, 2025-02-25), 所以它在训练里
+# 不可能见过那篇证明 —— 这也解释了为什么它的污染探针全部 clean。因此它是王虹测试的
+# 一个 (边界) 合法 pre-breakthrough PROVER 候选。
+#
+# 注意 (plan §10.6 "突破日期本身模糊"): cutoff 是厂商宣称的"软"日期, 取月末 2025-01-31
+# 作为保守上界; 距 preprint 约 25 天 buffer。探针实测是最终判据 (plan §6.2/§8), 实跑探针
+# 已通过。confidence 标 medium。
 #
 # API key 从环境变量 OPENROUTER_KEY 读取, 不写进任何文件。
 models:
   - name: gemma-4-31b
-    cutoff_date: 2024-08-01          # 占位 (见上方警告), confidence=low
-    cutoff_confidence: low
+    cutoff_date: 2025-01-31          # 模型卡 "January 2025" 的保守上界 (月末)
+    cutoff_confidence: medium        # 厂商宣称, 软 cutoff
     open_source: true
     capability_tier: research
     provider: openrouter
     backend_kwargs:
       model: "google/gemma-4-31b-it"
       scaffold_version: "openrouter"
-      max_tool_calls: 4
+      max_tool_calls: 3
       temperature: 0.3
       max_tokens: 3072
+      probe_max_tokens: 400

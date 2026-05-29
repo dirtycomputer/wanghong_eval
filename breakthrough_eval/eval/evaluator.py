@@ -62,26 +62,32 @@ class Evaluator:
         item_ids = [r.id for r in task.rubric]
         delta_ids = {r.id for r in task.rubric if r.frontier_delta}
 
-        verdicts = [j.judge(task, proof_text, task.golden_proof) for j in self.judges]
+        all_verdicts = [j.judge(task, proof_text, task.golden_proof) for j in self.judges]
+        # Judges whose output couldn't be parsed abstain (don't vote), but force
+        # the cell into the human-review queue (plan §4.2).
+        verdicts = [v for v in all_verdicts if not v.parse_failed]
+        had_parse_failure = len(verdicts) < len(all_verdicts)
 
-        # Per-item majority consensus.
+        # Per-item majority consensus (over voting judges only).
         consensus: dict[str, bool] = {}
         item_disagreement: set[str] = set()
         for iid in item_ids:
             votes = [v.verdict_map().get(iid, False) for v in verdicts]
-            consensus[iid] = sum(votes) * 2 > len(votes)  # strict majority
+            consensus[iid] = bool(votes) and sum(votes) * 2 > len(votes)  # strict majority
             if any(votes) and not all(votes):
                 item_disagreement.add(iid)
 
         passed_items = sum(1 for ok in consensus.values() if ok)
         overall_votes = [v.overall_valid for v in verdicts]
-        overall_valid = sum(overall_votes) * 2 > len(overall_votes)
+        overall_valid = bool(overall_votes) and sum(overall_votes) * 2 > len(overall_votes)
         alt_votes = [v.alternative_valid for v in verdicts]
-        alternative_valid = sum(alt_votes) * 2 > len(alt_votes)
+        alternative_valid = bool(alt_votes) and sum(alt_votes) * 2 > len(alt_votes)
 
         agreement = mean_pairwise_kappa(verdicts, item_ids)
         needs_review = (
-            agreement < self.review_kappa_threshold
+            had_parse_failure
+            or not verdicts
+            or agreement < self.review_kappa_threshold
             or (any(overall_votes) and not all(overall_votes))
             or bool(item_disagreement & delta_ids)
         )
@@ -89,7 +95,7 @@ class Evaluator:
         return EvalResult(
             job_id=job_id,
             task_id=task.task_id,
-            judges=verdicts,
+            judges=all_verdicts,  # keep abstaining/parse-failed verdicts for transparency
             item_consensus=consensus,
             passed_items=passed_items,
             total_items=len(item_ids),

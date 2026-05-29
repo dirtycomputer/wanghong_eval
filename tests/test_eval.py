@@ -86,6 +86,29 @@ def test_llm_judge_parses_injected_client(task):
     assert len(verdict.item_verdicts) == len(task.rubric)
 
 
+def test_llm_judge_abstains_on_unparseable_output(task):
+    # A judge that returns junk must NOT crash the run; it abstains + flags review.
+    from breakthrough_eval.eval.llm import LLMJudge
+
+    judge = LLMJudge(complete=lambda s, u: "totally not json", name="broken")
+    verdict = judge.judge(task, "proof", task.golden_proof)
+    assert verdict.parse_failed
+    assert verdict.item_verdicts == []
+
+
+def test_evaluator_survives_parse_failure(task):
+    from breakthrough_eval.eval.llm import LLMJudge
+
+    good = MockJudge(MockJudgeConfig(strictness=0.5))
+    broken = LLMJudge(complete=lambda s, u: "<<garbage>>", name="broken")
+    ev = Evaluator([good, broken])
+    res = ev.evaluate_text("j", task, golden_reference_text(task))
+    # broken judge abstains; good judge still scores; cell flagged for review
+    assert res.needs_human_review
+    assert res.passed_items == res.total_items  # good judge passes the golden ref
+    assert any(v.parse_failed for v in res.judges)
+
+
 def test_llm_judge_without_client_raises(task):
     judge = LLMJudge(complete=None)
     assert not judge.available()
