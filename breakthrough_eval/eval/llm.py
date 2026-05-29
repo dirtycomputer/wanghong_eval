@@ -27,7 +27,8 @@ JUDGE_SYSTEM = """\
 规则:
 - 逐条 rubric item 判定 pass/fail, 并给出 prover_output 的具体行号作为证据 (禁止笼统判断)。
 - 对自信的胡话保持警惕: 没有可核查的论证就判 fail。
-- 仅输出 JSON, 不要解释性文字。
+- justification 必须简短 (每条 <= 40 字), 以免输出超长被截断。
+- 只输出一个 JSON 对象, 不要 markdown 代码块、不要任何解释性文字。
 """
 
 
@@ -52,9 +53,15 @@ def build_judge_prompt(task: TaskSpec, proof_text: str, golden: GoldenProof) -> 
 
 
 class LLMJudge(JudgeBackend):
-    def __init__(self, complete: Optional[CompleteFn] = None, name: str = "llm-judge"):
+    def __init__(
+        self,
+        complete: Optional[CompleteFn] = None,
+        name: str = "llm-judge",
+        max_parse_retries: int = 1,
+    ):
         self._complete = complete
         self.name = name
+        self.max_parse_retries = max_parse_retries
 
     def available(self) -> bool:
         return self._complete is not None
@@ -66,8 +73,21 @@ class LLMJudge(JudgeBackend):
                 "(本环境请改用 MockJudge)。"
             )
         user = build_judge_prompt(task, proof_text, golden)
-        raw = self._complete(JUDGE_SYSTEM, user)
-        return self._parse(raw, task)
+        last_err = ""
+        for _ in range(self.max_parse_retries + 1):
+            try:
+                raw = self._complete(JUDGE_SYSTEM, user)
+                return self._parse(raw, task)
+            except (ValueError, KeyError) as exc:
+                # JSON 截断 / 非法输出: 重试一次, 仍失败则弃权进人工复核 (plan §4.2)。
+                last_err = f"{type(exc).__name__}: {exc}"
+        return JudgeVerdict(
+            judge_name=self.name,
+            item_verdicts=[],
+            overall_valid=False,
+            notes=f"评委输出无法解析为 JSON, 弃权: {last_err}",
+            parse_failed=True,
+        )
 
     def _parse(self, raw: str, task: TaskSpec) -> JudgeVerdict:
         data = json.loads(_extract_json(raw))

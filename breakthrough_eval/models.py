@@ -351,6 +351,10 @@ class JudgeVerdict(BaseModel):
         False, description="评委判定的 alternative-but-valid 另解 (plan §4.1, §10.3)."
     )
     notes: str = ""
+    parse_failed: bool = Field(
+        False,
+        description="评委输出无法解析 (e.g. JSON 截断). 该评委视为弃权并进人工复核.",
+    )
 
     def verdict_map(self) -> dict[str, bool]:
         return {v.item_id: v.passed for v in self.item_verdicts}
