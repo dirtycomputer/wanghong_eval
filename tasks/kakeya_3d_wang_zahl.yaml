@@ -1,0 +1,131 @@
+# 王虹测试 — 三维 Kakeya 猜想 (golden proof = Wang–Zahl, arXiv:2502.17655)
+# 这是一份纯数据 TaskSpec (plan §2)。系统代码对所有 task 同构, 新增 task = 新增一份 spec。
+task_id: kakeya_3d_wang_zahl
+title: "王虹测试 — 三维 Kakeya 猜想"
+domain: math/geometric_measure_theory
+
+# —— 时间锚 (决定一切污染防控; 红线: model_cutoff <= retrieval_cutoff < breakthrough) ——
+breakthrough_date: 2025-02-25          # Wang–Zahl preprint 挂 arXiv 的日期
+retrieval_cutoff: 2025-01-31           # 给 PROVER 的检索源冻结到这天 (早于 preprint 和任何 talk)
+allowed_model_cutoff_before: 2025-01-31
+
+# —— 题面 (T 时刻表述, 不得出现 Wang–Zahl 方法名 / convex set volume estimate) ——
+problem_statement: |
+  证明三维 Kakeya 猜想: R^3 中包含每个方向上单位线段的集合 (Kakeya 集),
+  其 Hausdorff 维数与 Minkowski 维数均为 3。
+  可等价地用 δ-管 (δ-tube) 的离散版本表述: 取 δ⁻² 根方向 δ-分离的单位 δ-管,
+  证明它们的并集体积 ≳ 1 (up to logs)。也可用 Wolff 公理版表述。
+problem_framing_notes: |
+  题面只陈述「T 之前公认的开放问题状态」。不得出现 Wang–Zahl 的方法名、
+  "convex set volume estimate"、"多尺度归纳结构定理" 等会指向答案的字眼。
+
+# —— golden proof (评测基准, 不给 PROVER, 只给 EVAL) ——
+golden_proof:
+  primary: "arXiv:2502.17655 (Wang, Zahl)"
+  companions:
+    - "Tao 博客 2025-02-25 (induction on scales 解读)"
+    - "Guth, arXiv:2505.07695 (proof 综述, 列出核心 ingredient)"
+
+# —— rubric: 沿 frontier delta 切分关键创新点 (plan §4.1) ——
+# frontier_delta=true 标记「突破本身的关键创新」(要测模型能否自己跨过);
+# frontier_delta=false 是 T 之前已有的合法工具。
+# indicators 仅供 mock 评委/探针机检, 绝不进 PROVER 提示 (plan §10 risk 4)。
+rubric:
+  - id: R1
+    title: "离散化为 δ-tube 体积/incidence 问题"
+    criterion: "是否把猜想正确归约为 δ⁻² 根 δ-分离方向的 tube 并集体积 ≳ 1 (up to logs)。"
+    frontier_delta: false
+    indicators: ["δ-tube 离散", "incidence 估计", "δ⁻² 根管"]
+  - id: R2
+    title: "识别海森堡型构型为核心障碍"
+    criterion: "是否意识到并处理 Heisenberg group 式构型这一关键障碍 (Guth 综述开篇)。"
+    frontier_delta: true
+    indicators: ["海森堡型构型", "Heisenberg obstacle", "核心障碍识别"]
+  - id: R3
+    title: "以 induction on scales 作为组织骨架"
+    criterion: "是否采用尺度归纳并用对 (Tao 博客点出的核心标签)。"
+    frontier_delta: false
+    indicators: ["尺度归纳骨架", "induction on scales", "逐尺度推进"]
+  - id: R4
+    title: "重构为凸集并集的体积估计 / 更强等价表述"
+    criterion: "是否得到 Wang–Zahl 标题式的凸集并集体积估计这一更强等价表述。"
+    frontier_delta: true
+    indicators: ["凸集并集体积", "convex set volume", "更强等价表述"]
+  - id: R5
+    title: "tube 多尺度聚簇结构 (sticky / grains)"
+    criterion: "是否给出 sticky/grains 多尺度聚簇结构的关键刻画。"
+    frontier_delta: true
+    indicators: ["sticky 黏性", "grains 颗粒", "多尺度聚簇结构"]
+  - id: R6
+    title: "关键结构定理: 闭合 grainy 与海森堡型"
+    criterion: "是否给出并证对把 grainy 情形与海森堡型分情形闭合的结构定理。"
+    frontier_delta: true
+    indicators: ["关键结构定理", "grainy 情形闭合", "海森堡情形闭合"]
+  - id: R7
+    title: "组合闭合归纳, 得到满维 3"
+    criterion: "整体是否真的 close: 组合 R1–R6 闭合归纳得到 Hausdorff/Minkowski 维数 3。"
+    frontier_delta: true
+    indicators: ["组合闭合归纳", "得到满维 3", "Hausdorff/Minkowski 满维"]
+
+# —— 污染探针 (跑正式 task 前先问; 命中关键创新即判污染除名, plan §8.3) ——
+contamination_probes:
+  - id: P1_direct
+    kind: direct
+    prompt: "三维 Kakeya 猜想 (R^3 中 Kakeya 集满维) 已经被证明了吗? 如果是, 关键思路是什么?"
+    leak_indicators: ["凸集并集的体积估计定理", "convex set volume estimate", "多尺度归纳结构定理", "grains 结构定理"]
+    threshold: 1
+  - id: P2_indirect
+    kind: indirect
+    prompt: "要证明 R^3 Kakeya 满维, 用『对相关集合做体积估计 + 尺度归纳』这条路线能走通吗? 关键引理会长什么样?"
+    leak_indicators: ["凸集并集的体积估计定理", "convex set volume estimate", "多尺度归纳结构定理", "grains 结构定理"]
+    threshold: 1
+  - id: P3_completion
+    kind: completion
+    prompt: "续写以下证明开头并给出其特有的结构定理: 『我们将三维 Kakeya 归约为 δ-管并集体积下界, 并……』"
+    leak_indicators: ["凸集并集的体积估计定理", "convex set volume estimate", "多尺度归纳结构定理", "grains 结构定理"]
+    threshold: 1
+
+# —— hint 阶梯 (0%→~90%, 每级逐步逼近 golden; plan §5) ——
+# content 是脱敏后的提示文本; reveals_rubric_items 仅作审计记录。
+hint_ladder:
+  - level: 0
+    label: L0
+    ratio: 0.0
+    content: ""
+    reveals_rubric_items: []
+  - level: 1
+    label: L1
+    ratio: 0.15
+    content: "可将问题离散化为: δ⁻² 根 δ-分离方向的单位 δ-管的 incidence / 并集体积下界问题 (up to logs)。"
+    reveals_rubric_items: ["R1"]
+  - level: 2
+    label: L2
+    ratio: 0.30
+    content: "核心障碍是海森堡 (Heisenberg) 型构型 (近似满足三维线性关系、难以用低维方法排除的管簇)。"
+    reveals_rubric_items: ["R2"]
+  - level: 3
+    label: L3
+    ratio: 0.50
+    content: "主技术路线: 沿 induction on scales (尺度归纳) 组织, 并对相关集合在每个尺度做体积估计。"
+    reveals_rubric_items: ["R3", "R4"]
+  - level: 4
+    label: L4
+    ratio: 0.70
+    content: |
+      关键引理 (仅陈述, 不给证明):
+      (a) 管在多尺度下呈 sticky/grains 聚簇结构;
+      (b) 存在一个结构定理, 把 grainy 情形与海森堡型构型分情形处理闭合。
+    reveals_rubric_items: ["R5", "R6"]
+  - level: 5
+    label: L5
+    ratio: 0.90
+    content: |
+      证明骨架 (留关键步让你补全):
+      离散化 → 识别海森堡障碍 → 尺度归纳 → 每尺度做体积估计 →
+      用结构定理闭合 grainy 与海森堡情形 → 组合得到满维 3。请补全各关键步的论证。
+    reveals_rubric_items: ["R7"]
+
+retrieval:
+  arxiv_snapshot: "frozen <= 2025-01-31"
+  other_sources: []
+  web_search: DISABLED
