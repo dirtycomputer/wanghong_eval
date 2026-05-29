@@ -1,0 +1,22 @@
+# OpenRouter 真实后端 registry (用 `--registry models_registry.openrouter.yaml`)。
+#
+# ⚠️ 科学性警告: gemma-4 是「现代」模型, 其真实训练 cutoff 几乎肯定晚于 2025-02
+# (Kakeya 突破日期)。这里把 cutoff_date 填成 2024-08-01 只是为了让资格校验放行、
+# 跑通真实链路 (plumbing test)。它很可能已见过 Wang–Zahl 的答案 ——
+# 这正好用来演示「探针层」会把它判污染除名。要做有效的王虹测试, 必须换一个
+# 训练数据时间可考据、确实早于 2025-01 的模型。
+#
+# API key 从环境变量 OPENROUTER_KEY 读取, 不写进任何文件。
+models:
+  - name: gemma-4-31b
+    cutoff_date: 2024-08-01          # 占位 (见上方警告), confidence=low
+    cutoff_confidence: low
+    open_source: true
+    capability_tier: research
+    provider: openrouter
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "openrouter"
+      max_tool_calls: 4
+      temperature: 0.3
+      max_tokens: 3072
