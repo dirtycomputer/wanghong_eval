@@ -15,14 +15,18 @@ from .eval.base import register_judge
 from .eval.evaluator import Evaluator
 from .eval.llm import LLMJudge
 from .eval.mock import MockJudge, _factory as _mock_judge_factory
+from .eval.openrouter_judge import _factory as _openrouter_judge_factory, openrouter_judge
 from .prover.base import register_backend
 from .prover.codex import CodexProverBackend, _factory as _codex_factory
 from .prover.mock import MockProverBackend, _factory as _mock_prover_factory
+from .prover.openrouter import OpenRouterProverBackend, _factory as _openrouter_prover_factory
 
 register_backend("mock", _mock_prover_factory)
 register_backend("codex", _codex_factory)
 register_backend("local-vllm", _codex_factory)  # codex backend points at local vLLM
+register_backend("openrouter", _openrouter_prover_factory)  # real model via OpenRouter
 register_judge("mock", _mock_judge_factory)
+register_judge("openrouter", _openrouter_judge_factory)  # real strong judge via OpenRouter
 
 from .arxiv_frozen import ArxivFrozenSource, InMemoryArxivSource  # noqa: E402
 from .controller import BackendSpec, Controller, JobMatrix  # noqa: E402
@@ -53,8 +57,10 @@ __all__ = [
     "Evaluator",
     "MockJudge",
     "LLMJudge",
+    "openrouter_judge",
     "MockProverBackend",
     "CodexProverBackend",
+    "OpenRouterProverBackend",
     "Leaderboard",
     "ResultStore",
     "ArxivFrozenSource",

@@ -98,7 +98,29 @@ Rubric 沿 frontier delta 切分：`frontier_delta=true` 是**突破本身的关
 
 ## 接入真实后端
 
-框架对后端零耦合，通过 registry 选择 provider：
+### 最快路径：OpenRouter（已内置）
+
+PROVER 和强评委都可直接走 OpenRouter（OpenAI 兼容），无需 codex / 自建 serving：
+
+```bash
+export OPENROUTER_KEY=sk-or-...          # 只从环境变量读, 不写进任何文件
+
+python -m breakthrough_eval \
+  --registry models_registry.openrouter.yaml \
+  run --task kakeya_3d_wang_zahl --models gemma-4-31b --trials 1 \
+  --judges "openrouter:deepseek/deepseek-v4-pro,mock:0.5"
+```
+
+- **PROVER**：`provider: openrouter` + `backend_kwargs.model`（见 `models_registry.openrouter.yaml`）。
+  内置 `OpenRouterProverBackend` 跑一个带 `search_arxiv` 工具的 agent loop，工具只回时间冻结
+  快照里的论文，每次调用都记进 transcript 供审计；探针阶段不给工具（要它的「无援」回答）。
+- **评委**：`--judges openrouter:<model>`（可与 `mock` 混用做多评委一致性）。
+
+> ⚠️ 但 `gemma-4` / `deepseek-v4` 都是**现代模型**，真实 cutoff 晚于 Kakeya 突破日期 ——
+> 用它们只能**验证链路跑通**，做不出有效的王虹测试（探针很可能直接把 PROVER 判污染）。
+> 要拿有效结果，PROVER 必须换成训练数据时间确实早于 2025-01 的模型。
+
+### 其它后端
 
 - **PROVER（codex exec, plan §3.2）**：把 registry 里的 `provider` 改成 `codex` / `local-vllm`，
   `backend_kwargs` 填 `model` / `model_provider`。`CodexProverBackend` 会按 plan §3.2 渲染

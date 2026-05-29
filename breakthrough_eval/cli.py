@@ -17,8 +17,10 @@ import sys
 from pathlib import Path
 
 from .controller import Controller
+from .eval.base import JudgeBackend
 from .eval.evaluator import Evaluator
 from .eval.mock import MockJudge, MockJudgeConfig
+from .eval.openrouter_judge import openrouter_judge
 from .leaderboard import Leaderboard
 from .registry import ModelRegistry
 from .storage import ResultStore
@@ -29,7 +31,7 @@ DEFAULT_REGISTRY = "models_registry.yaml"
 DEFAULT_RESULTS = "results"
 
 
-def _default_judges() -> list[MockJudge]:
+def _default_judges() -> list[JudgeBackend]:
     # A 3-judge panel with differing strictness → realistic agreement (plan §4.2).
     return [
         MockJudge(MockJudgeConfig(strictness=0.4, name="judge-lenient")),
@@ -38,10 +40,39 @@ def _default_judges() -> list[MockJudge]:
     ]
 
 
+def _parse_judges(spec: str | None) -> list[JudgeBackend]:
+    """Parse a ``--judges`` spec into judge backends.
+
+    Comma-separated entries; each is one of:
+      * ``mock`` or ``mock:<strictness>``
+      * ``openrouter:<model>``  e.g. ``openrouter:deepseek/deepseek-v4-pro``
+    Empty / None → the default 3-judge mock panel.
+    """
+    if not spec:
+        return _default_judges()
+    judges: list[JudgeBackend] = []
+    for raw in spec.split(","):
+        entry = raw.strip()
+        if not entry:
+            continue
+        if entry == "mock":
+            judges.append(MockJudge(MockJudgeConfig(name="mock")))
+        elif entry.startswith("mock:"):
+            judges.append(
+                MockJudge(MockJudgeConfig(strictness=float(entry.split(":", 1)[1]), name=entry))
+            )
+        elif entry.startswith("openrouter:"):
+            model = entry.split(":", 1)[1]
+            judges.append(openrouter_judge(model))
+        else:
+            raise SystemExit(f"未知 judge spec: '{entry}' (用 mock / mock:0.5 / openrouter:<model>)")
+    return judges
+
+
 def _build_controller(args) -> Controller:
     tasks = load_all_tasks(args.tasks_dir)
     registry = ModelRegistry.load(args.registry)
-    evaluator = Evaluator(_default_judges())
+    evaluator = Evaluator(_parse_judges(getattr(args, "judges", None)))
     store = ResultStore(args.results_dir)
     return Controller(tasks=tasks, registry=registry, evaluator=evaluator, store=store)
 
@@ -196,6 +227,11 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--hints", default=None, help="逗号分隔 hint level, e.g. 0,1,2 (默认全部)")
     r.add_argument("--trials", type=int, default=3)
     r.add_argument("--no-early-stop", action="store_true")
+    r.add_argument(
+        "--judges",
+        default=None,
+        help="评委: mock / mock:0.5 / openrouter:<model> (逗号分隔; 默认 mock 三评委面板)",
+    )
     r.set_defaults(func=cmd_run)
 
     lb = sub.add_parser("leaderboard", help="渲染榜单")
@@ -211,6 +247,7 @@ def build_parser() -> argparse.ArgumentParser:
     dc.add_argument("--model", required=True)
     dc.add_argument("--hint", type=int, default=0)
     dc.add_argument("--trials", type=int, default=3)
+    dc.add_argument("--judges", default=None, help="同 run --judges")
     dc.set_defaults(func=cmd_diff_check)
     return p
 
