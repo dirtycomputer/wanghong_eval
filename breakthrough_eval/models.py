@@ -209,8 +209,16 @@ class ModelEntry(BaseModel):
     )
 
     def eligible_for(self, task: TaskSpec) -> bool:
-        """Eligible iff training cutoff is before the retrieval cutoff (plan §6.2)."""
-        return self.cutoff_date < task.retrieval_cutoff
+        """Eligible iff the model's training cutoff is within the task's allowed
+        window — i.e. no later than ``allowed_model_cutoff_before`` (plan §2, §6.2).
+
+        Uses the dedicated admission threshold rather than ``retrieval_cutoff``
+        (the two coincide by default, but the threshold is what governs model
+        admission). ``<=`` so a model sitting exactly on the boundary — e.g. a
+        documented "January 2025" cutoff against a 2025-01-31 threshold — is
+        admitted; the §8 probes remain the final arbiter of cleanliness.
+        """
+        return self.cutoff_date <= task.allowed_model_cutoff_before
 
 
 # --------------------------------------------------------------------------- #
