@@ -45,14 +45,16 @@ class OpenRouterProverBackend(ProverBackend):
         self,
         model: str,
         scaffold_version: str = "openrouter",
-        max_tool_calls: int = 4,
+        max_tool_calls: int = 3,
         temperature: float = 0.3,
         max_tokens: int = 3072,
+        probe_max_tokens: int = 400,
         client: OpenRouterClient | None = None,
     ):
         self.model = model
         self.scaffold_version = scaffold_version
         self.max_tool_calls = max_tool_calls
+        self.probe_max_tokens = probe_max_tokens
         self.client = client or OpenRouterClient(
             model=model, temperature=temperature, max_tokens=max_tokens
         )
@@ -72,20 +74,20 @@ class OpenRouterProverBackend(ProverBackend):
         ]
         usage = UsageStats()
         recorded: list[ToolCall] = []
-        # No tools in the probe phase (we want the unaided answer).
-        tools = None if ctx.phase == "probe" else [ARXIV_TOOL]
+        if ctx.phase == "probe":
+            # Probe: no tools, short answer (we want the unaided answer, fast).
+            return self._loop(ctx, messages, None, usage, recorded, self.probe_max_tokens)
 
+        tools = [ARXIV_TOOL]
         try:
-            return self._loop(ctx, messages, tools, usage, recorded)
+            return self._loop(ctx, messages, tools, usage, recorded, None)
         except LLMError:
-            if tools is not None:
-                # Some models reject tool schemas; fall back to a no-tool answer.
-                return self._loop(ctx, messages, None, usage, recorded)
-            raise
+            # Some models reject tool schemas; fall back to a no-tool answer.
+            return self._loop(ctx, messages, None, usage, recorded, None)
 
-    def _loop(self, ctx, messages, tools, usage, recorded) -> BackendResponse:
+    def _loop(self, ctx, messages, tools, usage, recorded, max_tokens) -> BackendResponse:
         for _ in range(self.max_tool_calls):
-            res = self.client.chat(messages, tools=tools)
+            res = self.client.chat(messages, tools=tools, max_tokens=max_tokens)
             self._add_usage(usage, res.usage)
             if tools and res.tool_calls:
                 messages.append(
@@ -101,7 +103,7 @@ class OpenRouterProverBackend(ProverBackend):
             return BackendResponse(text=res.content, tool_calls=recorded, usage=usage)
 
         # Tool budget exhausted: force a final answer with no tools.
-        res = self.client.chat(messages, tools=None)
+        res = self.client.chat(messages, tools=None, max_tokens=max_tokens)
         self._add_usage(usage, res.usage)
         return BackendResponse(text=res.content, tool_calls=recorded, usage=usage)
 
@@ -151,7 +153,8 @@ def _factory(**kwargs) -> OpenRouterProverBackend:
     return OpenRouterProverBackend(
         model=kwargs["model"],
         scaffold_version=kwargs.get("scaffold_version", "openrouter"),
-        max_tool_calls=kwargs.get("max_tool_calls", 4),
+        max_tool_calls=kwargs.get("max_tool_calls", 3),
         temperature=kwargs.get("temperature", 0.3),
         max_tokens=kwargs.get("max_tokens", 3072),
+        probe_max_tokens=kwargs.get("probe_max_tokens", 400),
     )

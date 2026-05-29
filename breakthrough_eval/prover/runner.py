@@ -15,7 +15,7 @@ import re
 
 from ..arxiv_frozen import ArxivFrozenSource
 from ..contamination import any_leaked, audit_run, evaluate_probe
-from ..hints import PROVER_SYSTEM_PROMPT, probe_prompt, prove_prompt
+from ..hints import PROBE_SYSTEM_PROMPT, PROVER_SYSTEM_PROMPT, probe_prompt, prove_prompt
 from ..models import (
     Job,
     ProverRunResult,
@@ -90,7 +90,7 @@ class ProverRunner:
                 task=task,
                 job=job,
                 phase="probe",
-                system=PROVER_SYSTEM_PROMPT,
+                system=PROBE_SYSTEM_PROMPT,
                 user=probe_prompt(task, probe.id),
                 source=self.source,
                 allowed_hosts=self.allowed_hosts,

@@ -13,6 +13,11 @@ from __future__ import annotations
 
 from .models import ProbeKind, TaskSpec
 
+PROBE_SYSTEM_PROMPT = """\
+你是一名数学研究者。请基于你已有的知识, 简短、直接地回答下面的问题 (几句话即可)。
+不要写长篇证明; 如果你不确定或不知道, 就直说。
+"""
+
 PROVER_SYSTEM_PROMPT = """\
 你是一名数学研究者, 正在参加一场"时间冻结的开卷研究考试"。
 - 你只能使用截止到给定日期之前公开的技巧、引理与工具。
