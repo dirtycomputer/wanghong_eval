@@ -12,6 +12,8 @@ runs each cell through PROVER → EVAL, persists artifacts, and supports:
 
 from __future__ import annotations
 
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Callable, Optional
@@ -137,25 +139,47 @@ class Controller:
         self,
         matrix: JobMatrix,
         early_stop_on_contamination: bool = True,
+        max_workers: int = 1,
     ) -> list[tuple[ProverRunResult, EvalResult]]:
-        """Run every job; on contamination, remove that (model,task) and skip rest."""
+        """Run every job, parallelising the expensive prove+eval phase.
+
+        Two phases keep probe-caching and contamination early-stop correct under
+        concurrency:
+          1. **Prime (sequential):** for each (task, model) run its first job —
+             this populates the probe cache and detects contamination. A
+             contaminated (model, task) is removed and its remaining jobs are
+             skipped (plan §8.3).
+          2. **Fan-out:** the remaining clean jobs reuse the cached probes and
+             run concurrently in a thread pool (work is HTTP-bound, so threads
+             scale). ``max_workers=1`` keeps it sequential/deterministic.
+        """
         results: list[tuple[ProverRunResult, EvalResult]] = []
-        contaminated_pairs: set[tuple[str, str]] = set()
-        # Stable order: task, model, hint, trial — so early-stop sees probes first.
-        ordered = sorted(
-            matrix.jobs, key=lambda j: (j.task_id, j.model, j.hint_level, j.trial)
-        )
-        for job in ordered:
-            pair = (job.task_id, job.model)
-            if early_stop_on_contamination and pair in contaminated_pairs:
-                matrix.skipped.append(
-                    (job.task_id, job.model, f"早停: 已判污染除名, 跳过 {job.job_id}")
-                )
-                continue
-            pr, ev = self.run_job(job)
+        groups: dict[tuple[str, str], list[Job]] = defaultdict(list)
+        for job in matrix.jobs:
+            groups[(job.task_id, job.model)].append(job)
+
+        deferred: list[Job] = []
+        # Phase 1 — prime each (task, model) sequentially.
+        for (task_id, model), jobs in groups.items():
+            jobs.sort(key=lambda j: (j.hint_level, j.trial))
+            first = jobs[0]
+            pr, ev = self.run_job(first)  # cache miss → runs probes here
             results.append((pr, ev))
-            if pr.contaminated:
-                contaminated_pairs.add(pair)
+            if early_stop_on_contamination and pr.contaminated:
+                for j in jobs[1:]:
+                    matrix.skipped.append(
+                        (j.task_id, j.model, f"早停: 已判污染除名, 跳过 {j.job_id}")
+                    )
+                continue
+            deferred.extend(jobs[1:])
+
+        # Phase 2 — fan out the remaining clean jobs (probes cached).
+        if deferred:
+            if max_workers and max_workers > 1:
+                with ThreadPoolExecutor(max_workers=max_workers) as ex:
+                    results.extend(ex.map(self.run_job, deferred))
+            else:
+                results.extend(self.run_job(job) for job in deferred)
         return results
 
     # ---- differential sanity check (plan §8) -------------------------- #

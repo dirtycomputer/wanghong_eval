@@ -78,8 +78,9 @@ class LLMJudge(JudgeBackend):
             try:
                 raw = self._complete(JUDGE_SYSTEM, user)
                 return self._parse(raw, task)
-            except (ValueError, KeyError) as exc:
-                # JSON 截断 / 非法输出: 重试一次, 仍失败则弃权进人工复核 (plan §4.2)。
+            except Exception as exc:  # noqa: BLE001
+                # JSON 截断 / 非法输出 / 网络错误: 重试一次, 仍失败则弃权进人工复核
+                # (plan §4.2)。一票评委的瞬时失败不应中断整轮 (尤其并行时)。
                 last_err = f"{type(exc).__name__}: {exc}"
         return JudgeVerdict(
             judge_name=self.name,

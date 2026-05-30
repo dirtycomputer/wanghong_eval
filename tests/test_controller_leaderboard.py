@@ -113,6 +113,28 @@ def test_probes_cached_per_model_task(tasks, registry, task):
     assert probe_calls["n"] == len(task.contamination_probes)
 
 
+def test_parallel_matches_sequential(tasks, registry, task):
+    # Parallel execution must produce the same aggregated leaderboard as serial
+    # (mock backend is deterministic per job_id).
+    models = ["open-precutoff-strong", "open-precutoff-weak"]
+
+    def _board(workers):
+        ctrl = _controller(tasks, registry)
+        matrix = ctrl.expand_job_matrix([task.task_id], model_names=models, trials=2)
+        results = ctrl.run(matrix, max_workers=workers)
+        prover = [pr for pr, _ in results]
+        evals = [ev for _, ev in results]
+        return Leaderboard.build(prover, evals, max_hint_level=task.max_hint_level)
+
+    serial = _board(1)
+    parallel = _board(6)
+    s = {r.harness: (round(r.hint_auc, 6), r.peak_rubric_coverage) for r in serial.rows}
+    p = {r.harness: (round(r.hint_auc, 6), r.peak_rubric_coverage) for r in parallel.rows}
+    assert s == p
+    # and every job ran exactly once
+    assert sum(len(r.points) for r in parallel.rows) == sum(len(r.points) for r in serial.rows)
+
+
 def test_differential_sanity_check_shows_gap(tasks, registry, task):
     # Frozen arXiv hides the golden paper → cold-start solve rate 0.
     # Post-breakthrough arXiv exposes it → the model can copy the answer.
