@@ -140,7 +140,11 @@ def cmd_run(args) -> int:
     for tid, m, reason in matrix.skipped:
         print(f"  · skip {tid}/{m}: {reason}")
 
-    results = controller.run(matrix, early_stop_on_contamination=not args.no_early_stop)
+    results = controller.run(
+        matrix,
+        early_stop_on_contamination=not args.no_early_stop,
+        max_workers=args.workers,
+    )
     contaminated = sum(1 for pr, _ in results if pr.contaminated)
     valid = sum(1 for _, ev in results if ev.overall_valid and not ev.excluded)
     print(f"\n完成 {len(results)} 个 run: {valid} 个整体有效, {contaminated} 个判污染。")
@@ -226,6 +230,10 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--models", default=None, help="逗号分隔 (默认全部合格 model)")
     r.add_argument("--hints", default=None, help="逗号分隔 hint level, e.g. 0,1,2 (默认全部)")
     r.add_argument("--trials", type=int, default=3)
+    r.add_argument(
+        "--workers", type=int, default=4,
+        help="prove+eval 并发度 (HTTP-bound; 1=顺序. 探针仍每 model+task 跑一次)",
+    )
     r.add_argument("--no-early-stop", action="store_true")
     r.add_argument(
         "--judges",
