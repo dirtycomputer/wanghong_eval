@@ -31,7 +31,8 @@ python -m breakthrough_eval validate
 python -m breakthrough_eval list-models --task kakeya_3d_wang_zahl
 
 # 3. 跑通 Controller→PROVER(探针→证明)→EVAL→分数, 产物落盘 results/
-python -m breakthrough_eval run --task kakeya_3d_wang_zahl --trials 5
+#    --workers N 并发跑 prove+eval (HTTP-bound; 探针每 model+task 仍只跑一次)
+python -m breakthrough_eval run --task kakeya_3d_wang_zahl --trials 5 --workers 4
 
 # 4. 渲染主榜 + 每个 harness 的难度曲线
 python -m breakthrough_eval leaderboard
@@ -73,7 +74,7 @@ Controller ──展开 job=(task×model×hint×trial)──▶ PROVER ──pro
 | probe-then-prove 编排 | `prover/runner.py` | §3.3 |
 | EVAL 评委接口 / mock / LLM / 多评委聚合 | `eval/` | §4 |
 | Model Registry | `registry.py` | §6.2 |
-| Controller / 调度 / 早停 / 差分检查 | `controller.py` | §6, §8 |
+| Controller / 调度 / 早停 / 差分检查 / 并发 | `controller.py` | §6, §8 |
 | Leaderboard / hint-AUC / 难度曲线 | `leaderboard.py` | §7 |
 | 产物落盘 | `storage.py` | §6.4 |
 | CLI | `cli.py` | — |
