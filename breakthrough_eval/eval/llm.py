@@ -12,10 +12,13 @@ citations required**, no blanket judgement.
 from __future__ import annotations
 
 import json
+import logging
 from typing import Callable, Optional
 
 from ..models import GoldenProof, JudgeVerdict, RubricItemVerdict, TaskSpec
 from .base import JudgeBackend
+
+log = logging.getLogger(__name__)
 
 CompleteFn = Callable[[str, str], str]
 
@@ -82,6 +85,8 @@ class LLMJudge(JudgeBackend):
                 # JSON 截断 / 非法输出 / 网络错误: 重试一次, 仍失败则弃权进人工复核
                 # (plan §4.2)。一票评委的瞬时失败不应中断整轮 (尤其并行时)。
                 last_err = f"{type(exc).__name__}: {exc}"
+                log.warning("评委 %s 输出无法解析, 重试: %s", self.name, last_err[:160])
+        log.error("评委 %s 多次解析失败, 弃权进人工复核", self.name)
         return JudgeVerdict(
             judge_name=self.name,
             item_verdicts=[],

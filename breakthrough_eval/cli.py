@@ -22,6 +22,7 @@ from .eval.evaluator import Evaluator
 from .eval.mock import MockJudge, MockJudgeConfig
 from .eval.openrouter_judge import openrouter_judge
 from .leaderboard import Leaderboard
+from .logging_util import setup_logging
 from .registry import ModelRegistry
 from .storage import ResultStore
 from .taskspec import load_all_tasks, validate_taskspec
@@ -212,6 +213,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--tasks-dir", default=DEFAULT_TASKS_DIR)
     p.add_argument("--registry", default=DEFAULT_REGISTRY)
     p.add_argument("--results-dir", default=DEFAULT_RESULTS)
+    p.add_argument(
+        "-v", "--verbose", action="count", default=0,
+        help="日志详细度: -v=INFO (每 job/阶段/API 调用进度), -vv=DEBUG",
+    )
+    p.add_argument("--log-level", default=None, help="显式日志级别 (DEBUG/INFO/WARNING/ERROR), 覆盖 -v")
+    p.add_argument("--log-file", default=None, help="同时把 DEBUG 级日志写入该文件")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     v = sub.add_parser("validate", help="校验 TaskSpec")
@@ -263,6 +270,11 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    setup_logging(
+        verbosity=getattr(args, "verbose", 0),
+        log_file=getattr(args, "log_file", None),
+        level=getattr(args, "log_level", None),
+    )
     return args.func(args)
 
 

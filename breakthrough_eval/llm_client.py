@@ -11,12 +11,15 @@ The API key is read from the ``OPENROUTER_KEY`` environment variable and is
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 from typing import Callable, Optional
+
+log = logging.getLogger(__name__)
 
 DEFAULT_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 DEFAULT_KEY_ENV = "OPENROUTER_KEY"
@@ -98,12 +101,26 @@ class OpenRouterClient:
         if self.provider_prefs:
             payload["provider"] = self.provider_prefs
 
+        log.debug(
+            "chat → model=%s msgs=%d tools=%s max_tokens=%s",
+            self.model, len(messages), bool(tools), payload["max_tokens"],
+        )
+        t0 = time.perf_counter()
         data = self._post_with_retries(payload)
+        elapsed = time.perf_counter() - t0
+
         if "choices" not in data or not data["choices"]:
             # OpenRouter returns errors as a 200 body with an "error" field.
             err = data.get("error")
+            log.error("chat ✗ model=%s %.1fs 无 choices: %s", self.model, elapsed, err)
             raise LLMError(f"OpenRouter 无 choices: {err or str(data)[:300]}")
         msg = data["choices"][0]["message"]
+        pt, ct = self.usage_tokens(data.get("usage") or {})
+        log.info(
+            "chat ✓ model=%s %.1fs provider=%s tok(in/out)=%d/%d tool_calls=%d",
+            self.model, elapsed, data.get("provider", "?"), pt, ct,
+            len(msg.get("tool_calls") or []),
+        )
         return ChatResult(
             content=msg.get("content") or "",
             tool_calls=msg.get("tool_calls") or [],
@@ -120,7 +137,12 @@ class OpenRouterClient:
             except Exception as exc:  # noqa: BLE001 - retry on any transport error
                 last = exc
                 if attempt < self.max_retries - 1:
-                    time.sleep(2 ** attempt)
+                    backoff = 2 ** attempt
+                    log.warning(
+                        "OpenRouter 调用失败 (model=%s, attempt %d/%d), %ds 后重试: %s",
+                        self.model, attempt + 1, self.max_retries, backoff, str(exc)[:200],
+                    )
+                    time.sleep(backoff)
         raise LLMError(f"OpenRouter 调用失败 (重试 {self.max_retries} 次): {last}")
 
     def _headers(self) -> dict:

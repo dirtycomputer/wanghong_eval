@@ -10,6 +10,11 @@ Controller 量产 (突破问题, golden proof, rubric, hint 阶梯), PROVER 在�
 
 from __future__ import annotations
 
+import logging as _logging
+
+# Library is quiet by default; the CLI / caller opts in via setup_logging.
+_logging.getLogger("breakthrough_eval").addHandler(_logging.NullHandler())
+
 # Register pluggable backends on import.
 from .eval.base import register_judge
 from .eval.evaluator import Evaluator
@@ -31,6 +36,7 @@ register_judge("openrouter", _openrouter_judge_factory)  # real strong judge via
 from .arxiv_frozen import ArxivFrozenSource, InMemoryArxivSource  # noqa: E402
 from .controller import BackendSpec, Controller, JobMatrix  # noqa: E402
 from .leaderboard import Leaderboard  # noqa: E402
+from .logging_util import get_logger, setup_logging  # noqa: E402
 from .models import (  # noqa: E402
     EvalResult,
     Job,
@@ -68,4 +74,6 @@ __all__ = [
     "load_taskspec",
     "load_all_tasks",
     "validate_taskspec",
+    "setup_logging",
+    "get_logger",
 ]

@@ -11,7 +11,9 @@
 
 from __future__ import annotations
 
+import logging
 import re
+import time
 
 from ..arxiv_frozen import ArxivFrozenSource
 from ..contamination import any_leaked, audit_run, evaluate_probe
@@ -24,6 +26,8 @@ from ..models import (
 )
 from .base import ProverBackend, ProverContext
 from .mock import ARXIV_MCP_HOST
+
+log = logging.getLogger(__name__)
 
 _HEADING_RE = re.compile(r"^##\s*(\d+)\.")
 
@@ -94,6 +98,7 @@ class ProverRunner:
         # so the Controller probes once and passes the cached responses here
         # (plan §8.3). Only run probes when none were supplied.
         if probe_responses is None:
+            log.info("job %s: 探针阶段 (%d 个探针)", job.job_id, len(task.contamination_probes))
             for probe in task.contamination_probes:
                 ctx = ProverContext(
                     task=task,
@@ -105,17 +110,27 @@ class ProverRunner:
                     allowed_hosts=self.allowed_hosts,
                     probe_id=probe.id,
                 )
+                t0 = time.perf_counter()
                 resp = self.backend.run(ctx)
-                result.probe_responses.append(evaluate_probe(probe, resp.text))
+                pr = evaluate_probe(probe, resp.text)
+                result.probe_responses.append(pr)
                 result.usage.input_tokens += resp.usage.input_tokens
                 result.usage.output_tokens += resp.usage.output_tokens
-                result.usage.wall_seconds += resp.usage.wall_seconds
+                result.usage.wall_seconds += resp.usage.wall_seconds or (time.perf_counter() - t0)
+                log.info(
+                    "  探针 %s (%s): %s%s",
+                    probe.id, probe.kind.value,
+                    "❌ 泄露" if pr.leaked else "✅ clean",
+                    f" 命中={pr.matched_indicators}" if pr.matched_indicators else "",
+                )
         else:
             result.probe_responses = list(probe_responses)
+            log.debug("job %s: 复用缓存探针 (%d)", job.job_id, len(probe_responses))
 
         if any_leaked(result.probe_responses):
             # 探针命中 → 该 (model, task) 判污染, 不计入正式分 (plan §3.3, §8.3).
             result.contaminated = True
+            log.warning("job %s: 探针命中关键创新 → 判污染除名", job.job_id)
             return result
 
         # 2. Prove phase ------------------------------------------------- #
@@ -128,18 +143,27 @@ class ProverRunner:
             source=self.source,
             allowed_hosts=self.allowed_hosts,
         )
+        log.info("job %s: 证明阶段 (hint L%d)", job.job_id, job.hint_level)
+        t0 = time.perf_counter()
         try:
             resp = self.backend.run(ctx)
         except Exception as exc:  # noqa: BLE001 - record and surface
             result.error = f"{type(exc).__name__}: {exc}"
+            log.error("job %s: 证明阶段异常: %s", job.job_id, result.error)
             return result
+        prove_elapsed = time.perf_counter() - t0
 
         result.raw_output = resp.text
         result.structured_output = resp.structured or parse_structured(resp.text)
         result.transcript = resp.tool_calls
         result.usage.input_tokens += resp.usage.input_tokens
         result.usage.output_tokens += resp.usage.output_tokens
-        result.usage.wall_seconds += resp.usage.wall_seconds
+        result.usage.wall_seconds += resp.usage.wall_seconds or prove_elapsed
+        log.info(
+            "job %s: 证明完成 %.1fs, %d 字, 检索 %d 次, tok(in/out)=%d/%d",
+            job.job_id, prove_elapsed, len(result.proof_text),
+            len(result.transcript), resp.usage.input_tokens, resp.usage.output_tokens,
+        )
 
         # 3. Audit ------------------------------------------------------- #
         result.audit = audit_run(
@@ -149,4 +173,12 @@ class ProverRunner:
             cutoff=task.retrieval_cutoff,
             allowed_hosts=self.allowed_hosts,
         )
+        if not result.audit.passed:
+            log.warning(
+                "job %s: 审计失败 越界引用=%s 越界网络=%s",
+                job.job_id, result.audit.out_of_window_references,
+                result.audit.out_of_window_network,
+            )
+        else:
+            log.debug("job %s: 审计通过 (引用均 <= cutoff)", job.job_id)
         return result
