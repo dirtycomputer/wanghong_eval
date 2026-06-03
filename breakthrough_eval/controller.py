@@ -12,6 +12,8 @@ runs each cell through PROVER → EVAL, persists artifacts, and supports:
 
 from __future__ import annotations
 
+import logging
+import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -25,6 +27,8 @@ from .prover.base import ProverBackend, get_backend
 from .prover.runner import ProverRunner
 from .registry import ModelRegistry
 from .storage import ResultStore
+
+log = logging.getLogger(__name__)
 
 SourceFactory = Callable[[date], ArxivFrozenSource]
 
@@ -125,11 +129,18 @@ class Controller:
         # Probe once per (model, task); reuse across hint levels/trials (plan §8.3).
         key = (job.task_id, job.model)
         cached_probes = self._probe_cache.get(key)
+        log.info("▶ job %s 开始", job.job_id)
+        t0 = time.perf_counter()
         prover_result = runner.run(task, job, probe_responses=cached_probes)
         if cached_probes is None:
             self._probe_cache[key] = prover_result.probe_responses
 
         eval_result = self.evaluator.evaluate(prover_result, task)
+        log.info(
+            "✔ job %s 完成 %.1fs (contaminated=%s excluded=%s)",
+            job.job_id, time.perf_counter() - t0,
+            prover_result.contaminated, prover_result.excluded,
+        )
         if self.store is not None:
             self.store.save_prover(prover_result)
             self.store.save_eval(eval_result)
@@ -158,14 +169,22 @@ class Controller:
         for job in matrix.jobs:
             groups[(job.task_id, job.model)].append(job)
 
+        log.info(
+            "运行: %d job, %d 个 (task,model) 组, max_workers=%d",
+            len(matrix.jobs), len(groups), max_workers,
+        )
         deferred: list[Job] = []
         # Phase 1 — prime each (task, model) sequentially.
+        log.info("Phase 1 (prime): 每组首个 job 顺序跑 (探针 + 污染判定)")
         for (task_id, model), jobs in groups.items():
             jobs.sort(key=lambda j: (j.hint_level, j.trial))
             first = jobs[0]
             pr, ev = self.run_job(first)  # cache miss → runs probes here
             results.append((pr, ev))
             if early_stop_on_contamination and pr.contaminated:
+                log.warning(
+                    "(%s,%s) 污染除名, 早停跳过其余 %d 个 job", task_id, model, len(jobs) - 1
+                )
                 for j in jobs[1:]:
                     matrix.skipped.append(
                         (j.task_id, j.model, f"早停: 已判污染除名, 跳过 {j.job_id}")
@@ -175,11 +194,13 @@ class Controller:
 
         # Phase 2 — fan out the remaining clean jobs (probes cached).
         if deferred:
+            log.info("Phase 2 (fan-out): 并发跑 %d 个 job, workers=%d", len(deferred), max_workers)
             if max_workers and max_workers > 1:
                 with ThreadPoolExecutor(max_workers=max_workers) as ex:
                     results.extend(ex.map(self.run_job, deferred))
             else:
                 results.extend(self.run_job(job) for job in deferred)
+        log.info("运行结束: %d 个 result", len(results))
         return results
 
     # ---- differential sanity check (plan §8) -------------------------- #

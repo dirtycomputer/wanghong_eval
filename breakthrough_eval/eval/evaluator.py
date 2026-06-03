@@ -10,10 +10,13 @@
 
 from __future__ import annotations
 
+import logging
 from itertools import combinations
 
 from ..models import EvalResult, GoldenProof, JudgeVerdict, ProverRunResult, TaskSpec
 from .base import JudgeBackend
+
+log = logging.getLogger(__name__)
 
 
 def cohen_kappa(a: list[bool], b: list[bool]) -> float:
@@ -92,6 +95,11 @@ class Evaluator:
             or bool(item_disagreement & delta_ids)
         )
 
+        log.info(
+            "eval %s: %d/%d items, valid=%s, κ=%.2f, review=%s%s",
+            job_id, passed_items, len(item_ids), overall_valid, agreement,
+            needs_review, " [评委解析失败]" if had_parse_failure else "",
+        )
         return EvalResult(
             job_id=job_id,
             task_id=task.task_id,

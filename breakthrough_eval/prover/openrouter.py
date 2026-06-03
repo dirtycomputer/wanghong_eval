@@ -12,11 +12,14 @@ Web search is never offered as a tool (red line). The probe phase is run
 from __future__ import annotations
 
 import json
+import logging
 
 from ..llm_client import LLMError, OpenRouterClient
 from ..models import ToolCall, UsageStats
 from .base import BackendResponse, ProverBackend, ProverContext
 from .mock import ARXIV_MCP_HOST
+
+log = logging.getLogger(__name__)
 
 ARXIV_TOOL = {
     "type": "function",
@@ -87,8 +90,12 @@ class OpenRouterProverBackend(ProverBackend):
         tools = [ARXIV_TOOL]
         try:
             return self._loop(ctx, messages, tools, usage, recorded, None)
-        except LLMError:
-            # Some models reject tool schemas; fall back to a no-tool answer.
+        except LLMError as exc:
+            # Some models/providers reject tool schemas; fall back to no-tool.
+            log.warning(
+                "job %s: 工具调用失败, 回退到无工具模式: %s",
+                ctx.job.job_id, str(exc)[:160],
+            )
             return self._loop(ctx, messages, None, usage, recorded, None)
 
     def _loop(self, ctx, messages, tools, usage, recorded, max_tokens) -> BackendResponse:
@@ -144,6 +151,7 @@ class OpenRouterProverBackend(ProverBackend):
             host=ARXIV_MCP_HOST,
             returned_dates=[p.submission_date for p in papers],
         )
+        log.info("  🔎 search_arxiv query=%r → %d 篇 (均 <= cutoff)", query, len(papers))
         return json.dumps({"results": results}, ensure_ascii=False), [call]
 
     @staticmethod
