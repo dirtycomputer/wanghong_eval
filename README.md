@@ -42,6 +42,26 @@ python -m breakthrough_eval probe --task kakeya_3d_wang_zahl --model leaky-eligi
 python -m breakthrough_eval diff-check --task kakeya_3d_wang_zahl --model open-precutoff-weak
 ```
 
+### 调试 / 日志
+
+系统默认安静；用 `-v` 打开进度日志（写到 **stderr**，结果仍在 stdout）：
+
+```bash
+python -m breakthrough_eval -v   run ...   # INFO: 每 job/阶段/API 调用进度+耗时
+python -m breakthrough_eval -vv  run ...   # DEBUG: 请求细节、检索 query、审计细节
+python -m breakthrough_eval --log-file run.log run ...   # 同时落 DEBUG 到文件
+```
+
+INFO 级会逐行打印：每次 OpenRouter 调用的 **延迟/provider/token 数**（定位"慢在哪"）、
+探针逐条 clean/泄露、污染早停、证明阶段耗时/字数/检索次数、每个评委的 items/valid/κ/复核，
+并行时带 `threadName` 区分并发 job。例如：
+
+```
+12:00:03 INFO [ThreadPoolExecutor-0_1] ...llm_client: chat ✓ model=google/gemma-4-31b-it 126.7s provider=Ambient tok(in/out)=665/1500 tool_calls=0
+12:00:04 INFO [ThreadPoolExecutor-0_1] ...runner: job ...::L2::t0: 证明完成 130.2s, 2823 字, 检索 1 次, tok(in/out)=665/1500
+12:00:31 INFO [ThreadPoolExecutor-0_1] ...evaluator: eval ...::L2::t0: 1/7 items, valid=False, κ=1.00, review=False
+```
+
 主榜示例（mock 后端）：
 
 ```
