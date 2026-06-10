@@ -6,6 +6,7 @@ Subcommands:
   list-models  列出 registry 里的 model 及其对某 task 的资格
   run          展开 job 矩阵并跑通 Controller→PROVER→EVAL→分数, 落盘
   leaderboard  从 results 目录聚合并渲染榜单 + 难度曲线
+  export-web   导出可视化站点数据 (docs/data.js, 供 GitHub Pages)
   probe        只跑污染探针 (probe-then 的 probe 段)
   diff-check   差分 sanity check (冻结 vs 突破后 arXiv)
 """
@@ -184,6 +185,20 @@ def cmd_leaderboard(args) -> int:
     return 0
 
 
+def cmd_export_web(args) -> int:
+    from .webexport import build_site_data, write_data_js
+
+    data = build_site_data(args.results_dir, args.tasks_dir)
+    if not data["results"]:
+        print(f"results 目录 {args.results_dir} 为空, 先跑 `run`。")
+        return 1
+    out = write_data_js(data, args.out)
+    n = len(data["results"])
+    print(f"已导出 {n} 个 run 的可视化数据 → {out}")
+    print("本地预览: python -m http.server -d docs  (然后访问 http://localhost:8000)")
+    return 0
+
+
 def cmd_probe(args) -> int:
     from .models import Job
     from .prover.runner import ProverRunner
@@ -262,6 +277,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     lb = sub.add_parser("leaderboard", help="渲染榜单")
     lb.set_defaults(func=cmd_leaderboard)
+
+    ew = sub.add_parser("export-web", help="导出可视化站点数据 (docs/data.js, 供 GitHub Pages)")
+    ew.add_argument("--out", default="docs/data.js", help="输出路径 (默认 docs/data.js)")
+    ew.set_defaults(func=cmd_export_web)
 
     pr = sub.add_parser("probe", help="只跑污染探针")
     pr.add_argument("--task", required=True)

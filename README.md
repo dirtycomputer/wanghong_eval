@@ -40,6 +40,9 @@ python -m breakthrough_eval leaderboard
 # 5. 只跑污染探针 / 差分 sanity check
 python -m breakthrough_eval probe --task kakeya_3d_wang_zahl --model leaky-eligible-by-date
 python -m breakthrough_eval diff-check --task kakeya_3d_wang_zahl --model open-precutoff-weak
+
+# 6. 导出可视化站点数据 (docs/data.js, 见下文 GitHub Pages)
+python -m breakthrough_eval export-web
 ```
 
 ### 调试 / 日志
@@ -187,6 +190,27 @@ TaskSpec 是纯数据，系统代码对所有 task 同构。新增 = 丢一份 `
 6. `python -m breakthrough_eval validate tasks/<id>.yaml`。
 
 ---
+
+## 可视化站点 (GitHub Pages)
+
+`docs/` 是一个**零依赖纯静态**的评测过程可视化站点:概览指标卡、probe→prove→audit→eval
+流水线统计、难度曲线 (solve rate / rubric 覆盖率 + 每 trial 散点)、job 矩阵;点开任一
+cell 可看 **rubric × 评委判定矩阵**(逐项理由 + 行号引用 + 置信度)、证明全文 (§3.4 结构)、
+探针问答、审计 transcript;底部任务卡展示完整 TaskSpec(时间锚、rubric、hint 阶梯、探针)。
+
+```bash
+python -m breakthrough_eval export-web   # 把 results/ + tasks/ 烘焙成 docs/data.js
+python -m http.server -d docs            # 本地预览 → http://localhost:8000
+```
+
+**部署**:仓库 Settings → Pages → "Deploy from a branch" → 选分支 + `/docs` 目录,
+站点即发布在 `https://<user>.github.io/wanghong_eval/`。之后每次跑完 `run`,重新
+`export-web` 并提交 `docs/data.js` 即可更新。数据以 `window.BE_DATA` 内联进 JS,
+`file://` 直开和 Pages 托管都不会有 CORS 问题;`docs/.nojekyll` 跳过 Jekyll 处理。
+
+> 当前仓库内置的 `docs/data.js` 是一次真实正式跑的产物:gemma-4-31b @ OpenRouter
+> `wandb/bf16`(无检索闭卷,max_tokens 打满)× L0–L5 × 2 trials,四强评委面板
+> (qwen3.7-max / minimax-m3 / kimi-k2.6 / deepseek-v4-pro, 48/48 票有效)。
 
 ## 测试
 

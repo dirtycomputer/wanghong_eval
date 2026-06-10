@@ -1,5 +1,6 @@
-"""CLI behaviours: early-stop skip reporting + probe-only `probe` command."""
+"""CLI behaviours: early-stop reporting, probe-only `probe`, web export."""
 
+import json
 import logging
 from pathlib import Path
 
@@ -68,6 +69,32 @@ def test_probe_command_is_probe_only(tmp_path, capsys, monkeypatch):
     out = capsys.readouterr().out
     assert rc == 0
     assert "探针洁净" in out
+
+
+def test_export_web_emits_parseable_bundle(tmp_path):
+    # run → export-web: data.js 必须是合法 JS 赋值且 JSON 负载完整 (prover+eval 配对)。
+    rc1 = main(_argv(
+        tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
+        "--models", "open-precutoff-weak", "--hints", "0,1", "--trials", "1",
+    ))
+    out = tmp_path / "site" / "data.js"
+    rc2 = main(_argv(tmp_path, "export-web", "--out", str(out)))
+    assert rc1 == 0 and rc2 == 0
+    text = out.read_text(encoding="utf-8")
+    prefix = "window.BE_DATA = "
+    assert text.startswith(prefix)
+    data = json.loads(text[len(prefix):].strip().rstrip(";"))
+    assert len(data["results"]) == 2
+    assert data["leaderboard"] and data["leaderboard"][0]["points"]
+    assert data["tasks"]["kakeya_3d_wang_zahl"]["rubric"]
+    for r in data["results"]:
+        assert r["eval"] is not None and r["prover"]["job_id"] == r["eval"]["job_id"]
+
+
+def test_export_web_empty_results_fails_cleanly(tmp_path, capsys):
+    rc = main(_argv(tmp_path, "export-web", "--out", str(tmp_path / "data.js")))
+    assert rc == 1
+    assert "为空" in capsys.readouterr().out
 
 
 def test_probe_command_reports_contamination(tmp_path, capsys):
