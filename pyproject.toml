@@ -19,6 +19,8 @@ dev = ["pytest>=7.0"]
 
 [project.scripts]
 breakthrough-eval = "breakthrough_eval.cli:main"
+# 时间冻结 arXiv 的 stdio MCP server (CLI harness 的唯一外部信息源, plan §3.2)
+arxiv-frozen-mcp = "breakthrough_eval.arxiv_mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -11,6 +11,12 @@
 # 已通过。confidence 标 medium。
 #
 # API key 从环境变量 OPENROUTER_KEY 读取, 不写进任何文件。
+#
+# 同一模型 × 三个 harness (plan §7: harness = model + scaffold + toolset):
+#   gemma-4-31b          纯模型 + search_arxiv 工具 (OpenRouter 原生 tool-calling)
+#   gemma-4-31b-opencode opencode CLI harness (冻结 arXiv MCP, 禁 webfetch/websearch/bash)
+#   gemma-4-31b-hermes   Hermes Agent harness (冻结 arXiv MCP, toolsets 清空, 每 job 隔离 HOME)
+# 三者的探针都直连裸模型 (污染是模型属性, 与 harness 无关)。
 models:
   - name: gemma-4-31b
     cutoff_date: 2025-01-31          # 模型卡 "January 2025" 的保守上界 (月末)
@@ -23,5 +29,29 @@ models:
       scaffold_version: "openrouter"
       max_tool_calls: 3
       temperature: 0.3
-      max_tokens: 1536      # 较低的 prove token 预算 → gemma ~12 tok/s 下更快
+      max_tokens: 8192      # 实测 gemma 证明 ~2k tok, 8192 防截断 (provider 须支持 tools)
       probe_max_tokens: 400
+
+  - name: gemma-4-31b-opencode
+    cutoff_date: 2025-01-31
+    cutoff_confidence: medium
+    open_source: true
+    capability_tier: research
+    provider: opencode
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "opencode"
+      probe_max_tokens: 400
+      timeout_seconds: 1800
+
+  - name: gemma-4-31b-hermes
+    cutoff_date: 2025-01-31
+    cutoff_confidence: medium
+    open_source: true
+    capability_tier: research
+    provider: hermes
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "hermes"
+      probe_max_tokens: 400
+      timeout_seconds: 1800

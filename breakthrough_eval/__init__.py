@@ -23,13 +23,17 @@ from .eval.mock import MockJudge, _factory as _mock_judge_factory
 from .eval.openrouter_judge import _factory as _openrouter_judge_factory, openrouter_judge
 from .prover.base import register_backend
 from .prover.codex import CodexProverBackend, _factory as _codex_factory
+from .prover.hermes import HermesProverBackend, _factory as _hermes_factory
 from .prover.mock import MockProverBackend, _factory as _mock_prover_factory
+from .prover.opencode import OpenCodeProverBackend, _factory as _opencode_factory
 from .prover.openrouter import OpenRouterProverBackend, _factory as _openrouter_prover_factory
 
 register_backend("mock", _mock_prover_factory)
 register_backend("codex", _codex_factory)
 register_backend("local-vllm", _codex_factory)  # codex backend points at local vLLM
 register_backend("openrouter", _openrouter_prover_factory)  # real model via OpenRouter
+register_backend("opencode", _opencode_factory)  # opencode CLI harness (冻结 arXiv MCP)
+register_backend("hermes", _hermes_factory)  # Hermes Agent harness (冻结 arXiv MCP)
 register_judge("mock", _mock_judge_factory)
 register_judge("openrouter", _openrouter_judge_factory)  # real strong judge via OpenRouter
 
@@ -66,6 +70,8 @@ __all__ = [
     "openrouter_judge",
     "MockProverBackend",
     "CodexProverBackend",
+    "OpenCodeProverBackend",
+    "HermesProverBackend",
     "OpenRouterProverBackend",
     "Leaderboard",
     "ResultStore",
