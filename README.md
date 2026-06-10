@@ -1,6 +1,6 @@
 # 通用「突破复现」评测系统 (breakthrough-eval)
 
-把 Hassabis 的 **Einstein Test** 工程化为一个**可 scale up 的数学突破复现 benchmark**：
+本项目把 Hassabis 的 **Einstein Test** 工程化为一个**可 scale up 的数学突破复现 benchmark**：
 Controller 量产 `(突破问题, golden proof, rubric, hint 阶梯)`，PROVER 在**断网 + 时间冻结
 arXiv** 下**先过探针再应考**，EVAL 用**强评委 + rubric** 给出 win rate，leaderboard 的真正
 信息量落在**「需要多少 hint 才解得出」这条难度曲线**上。
