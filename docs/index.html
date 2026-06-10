@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>王虹测试 — breakthrough-eval 可视化</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;🧭&lt;/text&gt;&lt;/svg&gt;">
+</head>
+<body>
+<header id="hdr">
+  <div class="wrap">
+    <h1>🧭 breakthrough-eval <span class="thin">·</span> 突破复现评测可视化</h1>
+    <p id="hdr-meta" class="muted"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav id="toc">
+    <a href="#overview">概览</a>
+    <a href="#pipeline">流水线</a>
+    <a href="#curve">难度曲线</a>
+    <a href="#matrix">Job 矩阵</a>
+    <a href="#detail-sec">Job 详情</a>
+    <a href="#task-sec">任务卡</a>
+  </nav>
+
+  <section id="overview">
+    <h2>概览 <span class="sub" id="overview-sub"></span></h2>
+    <div id="cards" class="cards"></div>
+  </section>
+
+  <section id="pipeline">
+    <h2>评测流水线 <span class="sub">probe → prove → audit → eval</span></h2>
+    <div id="pipe" class="pipe"></div>
+  </section>
+
+  <section id="curve">
+    <h2>难度曲线 <span class="sub">需要多少 hint 才解得出 (plan §5/§7)</span></h2>
+    <div id="curve-chart" class="chartbox"></div>
+    <p class="muted small">实线 = 整体有效率 (solve rate, 多评委多数决);虚线 = rubric 平均覆盖率;
+    小点 = 每个 trial 的覆盖率。点击下方矩阵任一 cell 查看该 run 的完整过程。</p>
+  </section>
+
+  <section id="matrix">
+    <h2>Job 矩阵 <span class="sub">task × model × hint × trial,点击查看详情</span></h2>
+    <div id="matrix-grid"></div>
+    <div class="legend" id="matrix-legend"></div>
+  </section>
+
+  <section id="detail-sec">
+    <h2>Job 详情 <span class="sub" id="detail-title">← 在上方矩阵选择一个 cell</span></h2>
+    <div id="detail" class="hidden">
+      <div id="detail-head"></div>
+      <div class="tabs" id="detail-tabs">
+        <button data-tab="eval" class="on">⚖️ 评审</button>
+        <button data-tab="proof">📜 证明</button>
+        <button data-tab="probe">🕵️ 探针</button>
+        <button data-tab="audit">🔍 审计与用量</button>
+      </div>
+      <div id="tab-eval" class="tabpane"></div>
+      <div id="tab-proof" class="tabpane hidden"></div>
+      <div id="tab-probe" class="tabpane hidden"></div>
+      <div id="tab-audit" class="tabpane hidden"></div>
+    </div>
+  </section>
+
+  <section id="task-sec">
+    <h2>任务卡 <span class="sub">TaskSpec — 纯数据驱动 (plan §2)</span></h2>
+    <div id="task-card"></div>
+  </section>
+</main>
+
+<footer class="wrap muted small">
+  <p>由 <code>python -m breakthrough_eval export-web</code> 生成静态数据;
+  页面零依赖,可直接部署到 GitHub Pages。
+  <span id="gen-at"></span></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

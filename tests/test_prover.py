@@ -58,6 +58,48 @@ def test_reproducible(task):
     assert r1.proof_text == r2.proof_text
 
 
+def test_run_probes_only_never_enters_prove_phase(task):
+    # `probe` 子命令的入口: 只跑探针电池, 绝不触发 (昂贵的) 证明阶段。
+    backend = MockProverBackend(MockProverConfig(capability=0.7))
+    prove_calls = {"n": 0}
+    orig = backend.run
+
+    def counting(ctx):
+        if ctx.phase == "prove":
+            prove_calls["n"] += 1
+        return orig(ctx)
+
+    backend.run = counting
+    runner = ProverRunner(backend, InMemoryArxivSource(task.retrieval_cutoff))
+    res = runner.run_probes(task, Job(task_id=task.task_id, model="m", hint_level=0, trial=0))
+    assert len(res.probe_responses) == len(task.contamination_probes)
+    assert not res.contaminated
+    assert prove_calls["n"] == 0
+    assert res.structured_output is None and res.raw_output == ""
+
+
+def test_run_probes_flags_contamination(task):
+    runner = _runner(task, capability=0.7, contaminated=True)
+    res = runner.run_probes(task, Job(task_id=task.task_id, model="m", hint_level=0, trial=0))
+    assert res.contaminated
+
+
+def test_probe_phase_error_recorded_not_raised(task):
+    # 探针阶段的后端异常 (网络/provider) 记录为 error 而非向上炸掉整个批次;
+    # 电池不完整 → 无法判定 clean → 不进证明阶段。
+    class Boom(MockProverBackend):
+        def run(self, ctx):
+            if ctx.phase == "probe":
+                raise RuntimeError("network down")
+            return super().run(ctx)
+
+    runner = ProverRunner(Boom(MockProverConfig()), InMemoryArxivSource(task.retrieval_cutoff))
+    res = runner.run(task, Job(task_id=task.task_id, model="m", hint_level=0, trial=0))
+    assert res.error is not None and "network down" in res.error
+    assert not res.contaminated
+    assert res.structured_output is None and res.raw_output == ""
+
+
 def test_parse_structured_roundtrip():
     text = (
         "# Claimed Proof\n## 1. 思路总览\nidea\n## 2. 关键引理与论证\nlemmas\n"

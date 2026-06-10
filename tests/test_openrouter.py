@@ -38,7 +38,9 @@ def _client(transport):
     return OpenRouterClient(model="x", api_key="k", transport=transport)
 
 
-def test_client_requires_key():
+def test_client_requires_key(monkeypatch):
+    # api_key=None 会回退读环境变量; 删掉它, 测试才与运行环境无关。
+    monkeypatch.delenv("OPENROUTER_KEY", raising=False)
     c = OpenRouterClient(model="x", api_key=None)
     assert not c.available()
     with pytest.raises(LLMError):

@@ -377,6 +377,10 @@ class EvalResult(BaseModel):
     agreement: float = Field(1.0, description="评委一致性 (平均 pairwise Cohen's κ).")
     needs_human_review: bool = False
     excluded: bool = False  # mirrors ProverRunResult.excluded
+    errored: bool = Field(
+        False,
+        description="基础设施错误 (网络/后端异常) 的作废 run: 不评、不计入 solve_rate (≠ 模型没解出来).",
+    )
 
     @property
     def rubric_coverage(self) -> float:

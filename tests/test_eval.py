@@ -64,6 +64,29 @@ def test_excluded_run_scored_excluded(task):
     assert not res.overall_valid
 
 
+def test_errored_run_skips_judges_and_is_void(task):
+    # 基础设施错误的 run 作废: 不送评委 (省 API), 标 errored 而非 excluded/0 分。
+    from breakthrough_eval.models import ProverRunResult
+
+    calls = {"n": 0}
+
+    class CountingJudge(MockJudge):
+        def judge(self, *a, **kw):
+            calls["n"] += 1
+            return super().judge(*a, **kw)
+
+    pr = ProverRunResult(
+        job_id="j", task_id=task.task_id, model="m", hint_level=0, trial=0,
+        harness="h", error="LLMError: 网络错误",
+    )
+    ev = Evaluator([CountingJudge()])
+    res = ev.evaluate(pr, task)
+    assert res.errored
+    assert not res.excluded
+    assert not res.overall_valid and res.judges == []
+    assert calls["n"] == 0
+
+
 def test_llm_judge_parses_injected_client(task):
     payload = {
         "item_verdicts": [

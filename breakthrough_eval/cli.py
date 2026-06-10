@@ -6,6 +6,7 @@ Subcommands:
   list-models  列出 registry 里的 model 及其对某 task 的资格
   run          展开 job 矩阵并跑通 Controller→PROVER→EVAL→分数, 落盘
   leaderboard  从 results 目录聚合并渲染榜单 + 难度曲线
+  export-web   导出可视化站点数据 (docs/data.js, 供 GitHub Pages)
   probe        只跑污染探针 (probe-then 的 probe 段)
   diff-check   差分 sanity check (冻结 vs 突破后 arXiv)
 """
@@ -140,20 +141,28 @@ def cmd_run(args) -> int:
     print(f"展开 {len(matrix.jobs)} 个 job; 跳过 {len(matrix.skipped)} 个:")
     for tid, m, reason in matrix.skipped:
         print(f"  · skip {tid}/{m}: {reason}")
+    n_pre_skips = len(matrix.skipped)
 
     results = controller.run(
         matrix,
         early_stop_on_contamination=not args.no_early_stop,
         max_workers=args.workers,
     )
-    contaminated = sum(1 for pr, _ in results if pr.contaminated)
-    valid = sum(1 for _, ev in results if ev.overall_valid and not ev.excluded)
-    print(f"\n完成 {len(results)} 个 run: {valid} 个整体有效, {contaminated} 个判污染。")
-    print(f"产物已落盘到 {args.results_dir}/。运行 `leaderboard` 查看榜单。")
+    # Early-stop appends further skips to matrix.skipped during the run.
+    run_skips = matrix.skipped[n_pre_skips:]
+    if run_skips:
+        print(f"\n运行中早停跳过 {len(run_skips)} 个 job:")
+        for tid, m, reason in run_skips:
+            print(f"  · skip {tid}/{m}: {reason}")
 
-    if matrix.skipped:
-        # report post-run early-stop skips too
-        pass
+    contaminated = sum(1 for pr, _ in results if pr.contaminated)
+    errors = sum(1 for pr, _ in results if pr.error is not None)
+    valid = sum(1 for _, ev in results if ev.overall_valid and not ev.excluded)
+    print(
+        f"\n完成 {len(results)} 个 run: {valid} 个整体有效, {contaminated} 个判污染, "
+        f"{errors} 个基础设施错误 (作废, 不计入 solve_rate)。"
+    )
+    print(f"产物已落盘到 {args.results_dir}/。运行 `leaderboard` 查看榜单。")
     return 0
 
 
@@ -176,6 +185,20 @@ def cmd_leaderboard(args) -> int:
     return 0
 
 
+def cmd_export_web(args) -> int:
+    from .webexport import build_site_data, write_data_js
+
+    data = build_site_data(args.results_dir, args.tasks_dir)
+    if not data["results"]:
+        print(f"results 目录 {args.results_dir} 为空, 先跑 `run`。")
+        return 1
+    out = write_data_js(data, args.out)
+    n = len(data["results"])
+    print(f"已导出 {n} 个 run 的可视化数据 → {out}")
+    print("本地预览: python -m http.server -d docs  (然后访问 http://localhost:8000)")
+    return 0
+
+
 def cmd_probe(args) -> int:
     from .models import Job
     from .prover.runner import ProverRunner
@@ -186,12 +209,15 @@ def cmd_probe(args) -> int:
     source = controller.source_factory(task.retrieval_cutoff)
     runner = ProverRunner(backend, source)
     job = Job(task_id=args.task, model=args.model, hint_level=0, trial=0)
-    result = runner.run(task, job)
+    result = runner.run_probes(task, job)  # probe-only: 不进入 (昂贵的) 证明阶段
     print(f"探针结果 — {args.model} @ {args.task}:")
     for pr in result.probe_responses:
         flag = "❌ 泄露" if pr.leaked else "✅ 干净"
         hits = f" 命中:{pr.matched_indicators}" if pr.matched_indicators else ""
         print(f"  [{flag}] {pr.probe_id} ({pr.kind.value}){hits}")
+    if result.error is not None and not result.contaminated:
+        print(f"结论: 探针电池未跑完 (基础设施错误), 无法判定: {result.error}")
+        return 1
     print("结论:", "污染除名" if result.contaminated else "探针洁净, 可计入正式分")
     return 0
 
@@ -251,6 +277,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     lb = sub.add_parser("leaderboard", help="渲染榜单")
     lb.set_defaults(func=cmd_leaderboard)
+
+    ew = sub.add_parser("export-web", help="导出可视化站点数据 (docs/data.js, 供 GitHub Pages)")
+    ew.add_argument("--out", default="docs/data.js", help="输出路径 (默认 docs/data.js)")
+    ew.set_defaults(func=cmd_export_web)
 
     pr = sub.add_parser("probe", help="只跑污染探针")
     pr.add_argument("--task", required=True)

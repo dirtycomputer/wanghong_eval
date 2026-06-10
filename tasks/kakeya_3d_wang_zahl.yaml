@@ -17,7 +17,8 @@ problem_statement: |
   证明它们的并集体积 ≳ 1 (up to logs)。也可用 Wolff 公理版表述。
 problem_framing_notes: |
   题面只陈述「T 之前公认的开放问题状态」。不得出现 Wang–Zahl 的方法名、
-  "convex set volume estimate"、"多尺度归纳结构定理" 等会指向答案的字眼。
+  其标题式的体积估计表述、或突破特有结构定理的名称等会指向答案的字眼
+  (具体禁词以 contamination_probes 的 leak_indicators 为准, validate 会扫描题面与本段)。
 
 # —— golden proof (评测基准, 不给 PROVER, 只给 EVAL) ——
 golden_proof:
