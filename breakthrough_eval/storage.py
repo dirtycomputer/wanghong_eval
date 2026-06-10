@@ -30,6 +30,20 @@ class ResultStore:
         path.write_text(result.model_dump_json(indent=2), encoding="utf-8")
         return path
 
+    # ---- run metadata (运行配置, 供 leaderboard/前端展示) ------------------ #
+    def save_run_meta(self, meta: dict) -> Path:
+        path = self.root / "run_meta.json"
+        path.write_text(
+            json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        return path
+
+    def load_run_meta(self) -> dict | None:
+        path = self.root / "run_meta.json"
+        if not path.exists():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
     def load_prover_all(self) -> list[ProverRunResult]:
         return [
             ProverRunResult.model_validate_json(p.read_text(encoding="utf-8"))

@@ -47,6 +47,11 @@ h2 .sub { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 8
 .card.bad .v { color: var(--bad); }
 .card.warn .v { color: var(--warn); }
 
+#config-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+#config-card .cfg-h { font-size: 14.5px; margin: 14px 0 8px; }
+#config-card table.vmatrix { font-size: 12.5px; }
+#config-card .legend { margin-top: 12px; }
+
 .pipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
 .stage { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; position: relative; }
 .stage h3 { margin: 0 0 6px; font-size: 14px; }
