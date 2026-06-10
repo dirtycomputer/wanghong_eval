@@ -49,11 +49,14 @@ def validate_taskspec(path: str | Path) -> list[str]:
     for item in spec.rubric:
         if not item.indicators:
             issues.append(f"⚠️ rubric {item.id} 没有 indicators: mock 评委无法机检该项。")
-    framing = spec.problem_framing_notes + " " + spec.problem_statement
+    framing = (spec.problem_statement + " " + spec.problem_framing_notes).lower()
+    flagged: set[str] = set()
     for probe in spec.contamination_probes:
         for ind in probe.leak_indicators:
-            if ind.lower() in spec.problem_statement.lower():
+            if ind.lower() in framing and ind.lower() not in flagged:
+                flagged.add(ind.lower())
                 issues.append(
-                    f"⚠️ 题面疑似泄露探针关键词 '{ind}' (problem_statement 不应指向答案)。"
+                    f"⚠️ 题面疑似泄露探针关键词 '{ind}' "
+                    "(problem_statement/problem_framing_notes 不应指向答案)。"
                 )
     return issues

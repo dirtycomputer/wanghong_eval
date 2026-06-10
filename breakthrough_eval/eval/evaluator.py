@@ -59,6 +59,18 @@ class Evaluator:
                 excluded=True,
                 needs_human_review=False,
             )
+        if result.error is not None:
+            # Infra failure (网络/后端异常): the run is void. Don't burn judge
+            # calls on an empty proof, and don't count it as a model failure —
+            # the leaderboard drops errored runs from solve_rate (plan §10 诚实).
+            log.info("eval %s: 跳过评审 (基础设施错误: %s)", result.job_id, result.error)
+            return EvalResult(
+                job_id=result.job_id,
+                task_id=task.task_id,
+                total_items=len(task.rubric),
+                errored=True,
+                needs_human_review=False,
+            )
         return self.evaluate_text(result.job_id, task, result.proof_text)
 
     def evaluate_text(self, job_id: str, task: TaskSpec, proof_text: str) -> EvalResult:

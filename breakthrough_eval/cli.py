@@ -140,20 +140,28 @@ def cmd_run(args) -> int:
     print(f"展开 {len(matrix.jobs)} 个 job; 跳过 {len(matrix.skipped)} 个:")
     for tid, m, reason in matrix.skipped:
         print(f"  · skip {tid}/{m}: {reason}")
+    n_pre_skips = len(matrix.skipped)
 
     results = controller.run(
         matrix,
         early_stop_on_contamination=not args.no_early_stop,
         max_workers=args.workers,
     )
-    contaminated = sum(1 for pr, _ in results if pr.contaminated)
-    valid = sum(1 for _, ev in results if ev.overall_valid and not ev.excluded)
-    print(f"\n完成 {len(results)} 个 run: {valid} 个整体有效, {contaminated} 个判污染。")
-    print(f"产物已落盘到 {args.results_dir}/。运行 `leaderboard` 查看榜单。")
+    # Early-stop appends further skips to matrix.skipped during the run.
+    run_skips = matrix.skipped[n_pre_skips:]
+    if run_skips:
+        print(f"\n运行中早停跳过 {len(run_skips)} 个 job:")
+        for tid, m, reason in run_skips:
+            print(f"  · skip {tid}/{m}: {reason}")
 
-    if matrix.skipped:
-        # report post-run early-stop skips too
-        pass
+    contaminated = sum(1 for pr, _ in results if pr.contaminated)
+    errors = sum(1 for pr, _ in results if pr.error is not None)
+    valid = sum(1 for _, ev in results if ev.overall_valid and not ev.excluded)
+    print(
+        f"\n完成 {len(results)} 个 run: {valid} 个整体有效, {contaminated} 个判污染, "
+        f"{errors} 个基础设施错误 (作废, 不计入 solve_rate)。"
+    )
+    print(f"产物已落盘到 {args.results_dir}/。运行 `leaderboard` 查看榜单。")
     return 0
 
 
@@ -186,12 +194,15 @@ def cmd_probe(args) -> int:
     source = controller.source_factory(task.retrieval_cutoff)
     runner = ProverRunner(backend, source)
     job = Job(task_id=args.task, model=args.model, hint_level=0, trial=0)
-    result = runner.run(task, job)
+    result = runner.run_probes(task, job)  # probe-only: 不进入 (昂贵的) 证明阶段
     print(f"探针结果 — {args.model} @ {args.task}:")
     for pr in result.probe_responses:
         flag = "❌ 泄露" if pr.leaked else "✅ 干净"
         hits = f" 命中:{pr.matched_indicators}" if pr.matched_indicators else ""
         print(f"  [{flag}] {pr.probe_id} ({pr.kind.value}){hits}")
+    if result.error is not None and not result.contaminated:
+        print(f"结论: 探针电池未跑完 (基础设施错误), 无法判定: {result.error}")
+        return 1
     print("结论:", "污染除名" if result.contaminated else "探针洁净, 可计入正式分")
     return 0
 

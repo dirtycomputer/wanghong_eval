@@ -77,60 +77,89 @@ class ProverRunner:
         self.source = source
         self.allowed_hosts = allowed_hosts or {ARXIV_MCP_HOST}
 
+    def _new_result(self, task: TaskSpec, job: Job) -> ProverRunResult:
+        return ProverRunResult(
+            job_id=job.job_id,
+            task_id=task.task_id,
+            model=job.model,
+            hint_level=job.hint_level,
+            trial=job.trial,
+            harness=self.backend.harness_fingerprint(job.model),
+        )
+
+    def _probe_phase(self, task: TaskSpec, job: Job, result: ProverRunResult) -> None:
+        """Run the probe battery into ``result``.
+
+        A backend failure (network/provider) sets ``result.error`` and leaves the
+        battery incomplete: the caller must neither treat the run as probed-clean
+        nor cache the partial battery.
+        """
+        log.info("job %s: 探针阶段 (%d 个探针)", job.job_id, len(task.contamination_probes))
+        for probe in task.contamination_probes:
+            ctx = ProverContext(
+                task=task,
+                job=job,
+                phase="probe",
+                system=PROBE_SYSTEM_PROMPT,
+                user=probe_prompt(task, probe.id),
+                source=self.source,
+                allowed_hosts=self.allowed_hosts,
+                probe_id=probe.id,
+            )
+            t0 = time.perf_counter()
+            try:
+                resp = self.backend.run(ctx)
+            except Exception as exc:  # noqa: BLE001 - record and surface
+                result.error = f"探针 {probe.id}: {type(exc).__name__}: {exc}"
+                log.error("job %s: 探针阶段异常: %s", job.job_id, result.error)
+                return
+            pr = evaluate_probe(probe, resp.text)
+            result.probe_responses.append(pr)
+            result.usage.input_tokens += resp.usage.input_tokens
+            result.usage.output_tokens += resp.usage.output_tokens
+            result.usage.wall_seconds += resp.usage.wall_seconds or (time.perf_counter() - t0)
+            log.info(
+                "  探针 %s (%s): %s%s",
+                probe.id, probe.kind.value,
+                "❌ 泄露" if pr.leaked else "✅ clean",
+                f" 命中={pr.matched_indicators}" if pr.matched_indicators else "",
+            )
+
+    def run_probes(self, task: TaskSpec, job: Job) -> ProverRunResult:
+        """Probe-only entry (CLI ``probe`` 子命令): never enters the prove phase."""
+        result = self._new_result(task, job)
+        self._probe_phase(task, job, result)
+        if any_leaked(result.probe_responses):
+            result.contaminated = True
+            log.warning("job %s: 探针命中关键创新 → 判污染除名", job.job_id)
+        return result
+
     def run(
         self,
         task: TaskSpec,
         job: Job,
         probe_responses: list | None = None,
     ) -> ProverRunResult:
-        harness = self.backend.harness_fingerprint(job.model)
-        result = ProverRunResult(
-            job_id=job.job_id,
-            task_id=task.task_id,
-            model=job.model,
-            hint_level=job.hint_level,
-            trial=job.trial,
-            harness=harness,
-        )
+        result = self._new_result(task, job)
 
         # 1. Probe phase ------------------------------------------------- #
         # Contamination is a property of (model, task), not of the hint level,
         # so the Controller probes once and passes the cached responses here
         # (plan §8.3). Only run probes when none were supplied.
         if probe_responses is None:
-            log.info("job %s: 探针阶段 (%d 个探针)", job.job_id, len(task.contamination_probes))
-            for probe in task.contamination_probes:
-                ctx = ProverContext(
-                    task=task,
-                    job=job,
-                    phase="probe",
-                    system=PROBE_SYSTEM_PROMPT,
-                    user=probe_prompt(task, probe.id),
-                    source=self.source,
-                    allowed_hosts=self.allowed_hosts,
-                    probe_id=probe.id,
-                )
-                t0 = time.perf_counter()
-                resp = self.backend.run(ctx)
-                pr = evaluate_probe(probe, resp.text)
-                result.probe_responses.append(pr)
-                result.usage.input_tokens += resp.usage.input_tokens
-                result.usage.output_tokens += resp.usage.output_tokens
-                result.usage.wall_seconds += resp.usage.wall_seconds or (time.perf_counter() - t0)
-                log.info(
-                    "  探针 %s (%s): %s%s",
-                    probe.id, probe.kind.value,
-                    "❌ 泄露" if pr.leaked else "✅ clean",
-                    f" 命中={pr.matched_indicators}" if pr.matched_indicators else "",
-                )
+            self._probe_phase(task, job, result)
         else:
             result.probe_responses = list(probe_responses)
             log.debug("job %s: 复用缓存探针 (%d)", job.job_id, len(probe_responses))
 
         if any_leaked(result.probe_responses):
             # 探针命中 → 该 (model, task) 判污染, 不计入正式分 (plan §3.3, §8.3).
+            # 即使探针电池因异常不完整, 已有的泄露证据也成立。
             result.contaminated = True
             log.warning("job %s: 探针命中关键创新 → 判污染除名", job.job_id)
+            return result
+        if result.error is not None:
+            # 探针电池不完整 (基础设施错误): 无法判定 clean, 不进入证明阶段。
             return result
 
         # 2. Prove phase ------------------------------------------------- #

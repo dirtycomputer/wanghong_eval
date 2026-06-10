@@ -113,6 +113,90 @@ def test_probes_cached_per_model_task(tasks, registry, task):
     assert probe_calls["n"] == len(task.contamination_probes)
 
 
+def test_partial_probe_battery_not_cached(tasks, registry, task):
+    # 探针阶段首跑出错 → 不缓存半截电池; 后续 job 重跑完整探针并正常证明。
+    from breakthrough_eval.prover.mock import MockProverBackend, MockProverConfig
+
+    backend = MockProverBackend(MockProverConfig(capability=0.6))
+    state = {"probe_calls": 0, "failed_once": False}
+    orig = backend.run
+
+    def flaky(ctx):
+        if ctx.phase == "probe":
+            state["probe_calls"] += 1
+            if not state["failed_once"]:
+                state["failed_once"] = True
+                raise RuntimeError("transient network error")
+        return orig(ctx)
+
+    backend.run = flaky
+    ctrl = _controller(tasks, registry)
+    ctrl._backend_cache["open-precutoff-strong"] = backend
+    matrix = ctrl.expand_job_matrix(
+        [task.task_id], model_names=["open-precutoff-strong"], hint_levels=[0], trials=2
+    )
+    results = ctrl.run(matrix)
+    assert len(results) == 2
+    first, second = results[0][0], results[1][0]
+    assert first.error is not None and "transient" in first.error
+    assert second.error is None and second.structured_output is not None
+    # 首个 job 只发出 1 次 (失败的) 探针调用; 第二个 job 重跑完整电池而非复用半截缓存。
+    assert state["probe_calls"] == 1 + len(task.contamination_probes)
+    # 错误 run 的 eval 是作废 (errored), 不是 0 分的「模型失败」也不是污染除名。
+    assert results[0][1].errored and not results[0][1].excluded
+
+
+def test_leaderboard_drops_errored_runs_from_solve_rate():
+    # 网络抖动 ≠ 模型没解出来: errored trial 不进 solve_rate 分母, 单列计数。
+    from breakthrough_eval.models import EvalResult, ProverRunResult
+
+    def _pair(level, trial, valid=False, error=None):
+        jid = f"t::m::L{level}::t{trial}"
+        pr = ProverRunResult(
+            job_id=jid, task_id="t", model="m", hint_level=level, trial=trial,
+            harness="m+mock-v", error=error,
+        )
+        ev = EvalResult(
+            job_id=jid, task_id="t", overall_valid=valid,
+            passed_items=int(valid), total_items=1, errored=error is not None,
+        )
+        return pr, ev
+
+    p0, e0 = _pair(0, 0, valid=True)
+    p1, e1 = _pair(0, 1, error="LLMError: timeout")
+    board = Leaderboard.build([p0, p1], [e0, e1], max_hint_level=1)
+    row = board.rows[0]
+    assert row.points[0].solve_rate == 1.0  # 1/1 clean, 而不是 1/2
+    assert row.points[0].n_errors == 1
+    assert row.error_count == 1
+    assert row.probe_cleanliness == 1.0 and not row.removed
+    assert "错误" in board.render_main_table()
+
+
+def test_level_with_only_errored_trials_feeds_no_auc_point():
+    # 某 hint 级全部 errored → 无证据, 不向 AUC 喂假 0 点。
+    from breakthrough_eval.models import EvalResult, ProverRunResult
+
+    def _pair(level, valid=False, error=None):
+        jid = f"t::m::L{level}::t0"
+        pr = ProverRunResult(
+            job_id=jid, task_id="t", model="m", hint_level=level, trial=0,
+            harness="m+mock-v", error=error,
+        )
+        ev = EvalResult(
+            job_id=jid, task_id="t", overall_valid=valid,
+            passed_items=int(valid), total_items=1, errored=error is not None,
+        )
+        return pr, ev
+
+    p0, e0 = _pair(0, valid=True)
+    p1, e1 = _pair(1, error="LLMError: timeout")
+    board = Leaderboard.build([p0, p1], [e0, e1], max_hint_level=1)
+    row = board.rows[0]
+    assert row.hint_auc == 1.0  # 只有 L0 的 1.0; 不被 L1 的假 0 拉成 0.5
+    assert [p.n_errors for p in row.points] == [0, 1]
+
+
 def test_parallel_matches_sequential(tasks, registry, task):
     # Parallel execution must produce the same aggregated leaderboard as serial
     # (mock backend is deterministic per job_id).

@@ -132,7 +132,11 @@ class Controller:
         log.info("▶ job %s 开始", job.job_id)
         t0 = time.perf_counter()
         prover_result = runner.run(task, job, probe_responses=cached_probes)
-        if cached_probes is None:
+        if cached_probes is None and len(prover_result.probe_responses) == len(
+            task.contamination_probes
+        ):
+            # Only cache a *complete* battery: a probe-phase infra error leaves a
+            # partial one, and caching it would let later jobs skip real probing.
             self._probe_cache[key] = prover_result.probe_responses
 
         eval_result = self.evaluator.evaluate(prover_result, task)
