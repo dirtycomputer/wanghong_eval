@@ -126,12 +126,58 @@ _KAKEYA_CORPUS: list[ArxivPaper] = [
 ]
 
 
+# Sphere-packing slice for the Klartag task: legal pre-T toolbox (Cohn–Elkies,
+# Viazovska, Venkatesh, CJMS) plus the contaminating post-T Klartag paper.
+_PACKING_CORPUS: list[ArxivPaper] = [
+    ArxivPaper(
+        arxiv_id="math/0110009",
+        title="New upper bounds on sphere packings I",
+        authors=["Cohn", "Elkies"],
+        submission_date=date(2001, 10, 30),
+        abstract="Linear programming bounds for sphere packing densities in all dimensions.",
+    ),
+    ArxivPaper(
+        arxiv_id="1212.6184",
+        title="A note on sphere packings in high dimension",
+        authors=["Venkatesh"],
+        submission_date=date(2012, 12, 26),
+        abstract="Improved lower bounds for lattice sphere packings in special dimensions via cyclotomic structure.",
+    ),
+    ArxivPaper(
+        arxiv_id="1603.04246",
+        title="The sphere packing problem in dimension 8",
+        authors=["Viazovska"],
+        submission_date=date(2016, 3, 14),
+        abstract="Modular forms construct the magic function solving sphere packing in dimension eight.",
+    ),
+    ArxivPaper(
+        arxiv_id="2312.10026",
+        title="A new lower bound for sphere packing",
+        authors=["Campos", "Jenssen", "Michelen", "Sahasrabudhe"],
+        submission_date=date(2023, 12, 15),
+        abstract="Amorphous sphere packings of density c n log n / 2^n via graph theoretic methods.",
+    ),
+    # ---- POST-CUTOFF, CONTAMINATING (Klartag task): must stay frozen out.
+    ArxivPaper(
+        arxiv_id="2504.05042",
+        title="Lattice packing of spheres in high dimensions using a stochastically evolving ellipsoid",
+        authors=["Klartag"],
+        submission_date=date(2025, 4, 7),
+        abstract=(
+            "A stochastically evolving ellipsoid constructs lattice sphere packings "
+            "of density c n^2 / 2^n, the first superlinear improvement over Rogers."
+        ),
+    ),
+]
+
+
 class InMemoryArxivSource(ArxivFrozenSource):
     """Deterministic mock corpus (default backing for tests and the mock prover)."""
 
     def __init__(self, cutoff: date, corpus: Optional[list[ArxivPaper]] = None):
         super().__init__(cutoff)
-        self._papers = list(corpus if corpus is not None else _KAKEYA_CORPUS)
+        self._papers = list(corpus if corpus is not None
+                            else _KAKEYA_CORPUS + _PACKING_CORPUS)
 
     def _corpus(self) -> list[ArxivPaper]:
         return self._papers

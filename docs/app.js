@@ -85,6 +85,25 @@
     $("#overview-sub").textContent ||= "";
   }
 
+  // ---------- cross-task aggregate (Bradley–Terry) ----------
+  function renderAggregate() {
+    const agg = D.aggregate;
+    if (!agg || !agg.length) { $("#aggregate").classList.add("hidden"); return; }
+    $("#aggregate").classList.remove("hidden");
+    let html = `<table class="vmatrix"><tr><th>联赛</th><th>Rank</th><th>Harness</th>` +
+      `<th>BT 分 (组首=100)</th><th>胜 (平=0.5)</th><th>场次</th><th>参赛任务</th></tr>`;
+    let rank = 0, lastComp = null;
+    for (const r of agg) {
+      rank = r.component === lastComp ? rank + 1 : 1;
+      lastComp = r.component;
+      html += `<tr><td class="c">${String.fromCharCode(65 + r.component)}</td>` +
+        `<td class="c"><b>${rank}</b></td><td><code>${esc(r.player)}</code></td>` +
+        `<td class="c">${r.bt_score.toFixed(1)}</td><td class="c">${r.wins}</td>` +
+        `<td class="c">${r.games}</td><td class="small">${r.tasks.map(esc).join(", ")}</td></tr>`;
+    }
+    $("#aggregate-table").innerHTML = html + "</table>";
+  }
+
   // ---------- run config (PROVER × EVAL) ----------
   const REDLINE_BY_PROVIDER = {
     openrouter: "search_arxiv 原生工具 (tool-calling); 只路由支持 tools 的 provider; 无 web 工具",
@@ -527,7 +546,7 @@
 
   // ---------- boot ----------
   function renderAll() {
-    renderHeader(); renderCards(); renderConfig(); renderPipeline(); renderCurve(); renderMatrix(); renderTask();
+    renderHeader(); renderCards(); renderAggregate(); renderConfig(); renderPipeline(); renderCurve(); renderMatrix(); renderTask();
     $("#detail").classList.add("hidden");
     $("#detail-title").textContent = "← 在上方矩阵选择一个 cell";
     const m = location.hash.match(/^#job=(.+)$/);

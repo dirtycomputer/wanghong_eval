@@ -2,6 +2,7 @@
 
 Subcommands:
   validate     校验一个/一批 TaskSpec
+  task-qa      task 的单元测试: golden 锚定 + 探针自测 (生产流水线验收门)
   list-tasks   列出已加载的 task
   list-models  列出 registry 里的 model 及其对某 task 的资格
   run          展开 job 矩阵并跑通 Controller→PROVER→EVAL→分数, 落盘
@@ -214,6 +215,14 @@ def cmd_leaderboard(args) -> int:
             continue
         print(board.render_difficulty_curve(row.harness, row.task_id))
         print()
+    # 跨 task 聚合: ≥2 个 task 且 ≥2 个 harness 时给 Bradley–Terry 总榜。
+    task_ids = {r.task_id for r in board.rows}
+    players = {r.harness for r in board.rows if not r.removed}
+    if len(task_ids) >= 2 and len(players) >= 2:
+        from .aggregate import AggregateBoard
+
+        print("# 跨 task 总榜 (Bradley–Terry, 仅共同任务两两比较; 不连通分联赛)\n")
+        print(AggregateBoard.build(board.rows).render_table())
     return 0
 
 
@@ -228,6 +237,49 @@ def cmd_export_web(args) -> int:
     n = len(data["results"])
     print(f"已导出 {n} 个 run 的可视化数据 → {out}")
     print("本地预览: python -m http.server -d docs  (然后访问 http://localhost:8000)")
+    return 0
+
+
+def cmd_task_qa(args) -> int:
+    from .taskqa import run_task_qa
+
+    tasks = load_all_tasks(args.tasks_dir)
+    chosen = [tasks[args.task]] if args.task else list(tasks.values())
+    evaluator = Evaluator(_parse_judges(getattr(args, "judges", None)))
+    probe_judge = _parse_probe_judge(getattr(args, "probe_judge", None))
+    rc = 0
+    for task in chosen:
+        report = run_task_qa(task, evaluator, probe_judge=probe_judge)
+        print(report.render())
+        print()
+        if not report.passed:
+            rc = 1
+    return rc
+
+
+def cmd_draft_task(args) -> int:
+    from .draft import draft_task, save_draft
+    from .llm_client import OpenRouterClient
+
+    example = Path(args.example).read_text(encoding="utf-8")
+    notes = Path(args.context_file).read_text(encoding="utf-8") if args.context_file else ""
+    client = OpenRouterClient(model=args.model, max_tokens=args.max_tokens, timeout=1800)
+    text, issues = draft_task(
+        title=args.title, golden_arxiv=args.golden_arxiv,
+        breakthrough_date=args.breakthrough_date, retrieval_cutoff=args.retrieval_cutoff,
+        context_notes=notes, example_yaml=example, client=client,
+    )
+    out_path = args.out or (
+        f"tasks/drafts/draft_{args.golden_arxiv.replace('.', '_').replace('/', '_')}.yaml"
+    )
+    out = save_draft(text, out_path)
+    print(f"草稿已写入 {out}")
+    if issues:
+        print("⚠️ 草稿未过红线校验 (保留待人工修订):")
+        for i in issues:
+            print(f"   {i}")
+    else:
+        print("✅ 草稿通过红线校验。下一步: 人工终审 → 移入 tasks/ → `task-qa` 验收。")
     return 0
 
 
@@ -318,6 +370,24 @@ def build_parser() -> argparse.ArgumentParser:
     ew = sub.add_parser("export-web", help="导出可视化站点数据 (docs/data.js, 供 GitHub Pages)")
     ew.add_argument("--out", default="docs/data.js", help="输出路径 (默认 docs/data.js)")
     ew.set_defaults(func=cmd_export_web)
+
+    dt = sub.add_parser("draft-task", help="用强模型起草 TaskSpec 草稿 (生产流水线·起草工位)")
+    dt.add_argument("--title", required=True, help="突破标题")
+    dt.add_argument("--golden-arxiv", required=True, help="golden 论文 arXiv id")
+    dt.add_argument("--breakthrough-date", required=True)
+    dt.add_argument("--retrieval-cutoff", required=True)
+    dt.add_argument("--model", default="deepseek/deepseek-v4-pro", help="起草模型 (OpenRouter id)")
+    dt.add_argument("--context-file", default=None, help="背景材料文件 (选题人笔记)")
+    dt.add_argument("--example", default="tasks/kakeya_3d_wang_zahl.yaml", help="few-shot 示例 spec")
+    dt.add_argument("--out", default=None, help="输出路径 (默认 tasks/drafts/<id>.yaml)")
+    dt.add_argument("--max-tokens", type=int, default=16384)
+    dt.set_defaults(func=cmd_draft_task)
+
+    tq = sub.add_parser("task-qa", help="task 的单元测试: golden 锚定 + 探针自测 (上线验收门)")
+    tq.add_argument("--task", default=None, help="task_id (默认全部)")
+    tq.add_argument("--judges", default=None, help="同 run --judges (golden 锚定用)")
+    tq.add_argument("--probe-judge", default=None, help="同 run --probe-judge (语义层校准用)")
+    tq.set_defaults(func=cmd_task_qa)
 
     pr = sub.add_parser("probe", help="只跑污染探针")
     pr.add_argument("--task", required=True)

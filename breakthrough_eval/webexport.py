@@ -68,6 +68,14 @@ def build_site_data(
         }
         for pr in sorted(provers, key=lambda p: (p.task_id, p.model, p.hint_level, p.trial))
     ]
+    # 跨 task 聚合 (≥2 task 且 ≥2 非除名 harness 时)。
+    from .aggregate import AggregateBoard
+
+    aggregate = None
+    if len({r.task_id for r in board.rows}) >= 2 and \
+            len({r.harness for r in board.rows if not r.removed}) >= 2:
+        aggregate = [asdict(r) for r in AggregateBoard.build(board.rows).rows]
+
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "tasks": {tid: t.model_dump(mode="json") for tid, t in sorted(tasks.items())},
@@ -75,6 +83,7 @@ def build_site_data(
         "results": results,
         "registry": registry_entries,
         "run_meta": run_meta,
+        "aggregate": aggregate,
     }
 
 

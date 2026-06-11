@@ -1,0 +1,129 @@
+task_id: klartag_lattice_sphere_packing
+title: "Klartag 测试 — 高维格球堆积密度的超线性改进"
+domain: math/lattice_packing
+
+breakthrough_date: 2025-04-07
+retrieval_cutoff: 2025-03-31
+allowed_model_cutoff_before: 2025-03-31
+
+problem_statement: |
+  设 L 是 R^n 中的一个格 (lattice)，格球堆积密度定义为格 L 中互不重叠的等半径开球所能达到的最大中心密度。
+  已知经典下界：Rogers (1947) 证明存在 n 维格 L 使得球堆积密度 ≥ c·n/2^n (其中 c>0 是绝对常数)。
+  该下界自 Rogers 起近 80 年只在常数因子上有改进，线性因子 n 从未被突破。
+  问题：能否证明在 R^n 中存在格球堆积，其密度至少为 c'·n^{1+δ}/2^n (其中 δ>0 为某绝对常数)，即实现超线性增长因子？
+  或者进一步问：能否将因子从 n 提升到 n^2 甚至更高？
+  请给出构造性证明或存在性论证。
+problem_framing_notes: |
+  题面只陈述 T 时刻之前已知的开放问题状态和已知结果；绝不可出现 Klartag 论文的方法名、
+  标题中的“随机演化椭球/stochastically evolving ellipsoid”或其特有构造术语 (扩散、鞅停时分析等)，
+  亦不可暗示动态演化构造的路线。禁止词以 contamination_probes 的 leak_indicators 为准。
+
+golden_proof:
+  primary: "arXiv:2504.05042 (Klartag)"
+  companions:
+    - "Klartag, 'Lattice packing of spheres in high dimensions using a stochastically evolving ellipsoid'"
+  proof_text: |
+    Klartag 证明结构概要 (评委对齐参照，绝不给 PROVER)：
+    1. 归约 (R1): 格堆积密度下界问题等价于寻找中心对称凸体 K (通常取为椭球) 使得 K 内部无非零格点，
+      且体积 vol(K) 尽可能大；对格 L 密度 ≥ vol(K)/(2^n det(L))，并通过线性变换转化为球堆积。
+      这是标准 Minkowski 型归约。
+    2. 创新思路 (R2): 放弃传统的对随机格取平均 (Minkowski–Hlawka–Rogers 范式)，
+      改为在固定格 L 上动态调整一个椭球，使其体积逐步增大，同时永远不包含非零格点。
+    3. 随机演化构造 (R3): 精确地，将椭球表示为 E_t = {x: x^T A_t^{-1} x ≤ 1}，其中正定矩阵 A_t 满足
+      某个随机微分方程 (SDE)。演化由扩散项驱动，当椭球靠近某格点时，方程施加反射或停时约束，
+      防止椭球触及格点。
+    4. 鞅分析与体积估计 (R4): 定义合适的鞅，证明在约束下椭球体积的期望增长可以持续到停时之前。
+      利用鞅停时定理和精细的期望估计，证明椭球最终体积的期望 ≥ c·n^2。
+    5. 逐次极小控制 (R5): 将椭球演化与 Minkowski 第二定理关于逐次极小 (successive minima) 的约束
+      相结合；演化椭球自然控制了所有逐次极小，从而确保构造的格不含在更小尺度内的短向量。
+    6. 转化与最终密度 (R6): 将体积约 n^2 的空椭球通过线性变换映射为含于格中的大空球，
+      进而得到格球堆积的密度下界 ≥ c·n^2/2^n，完成从线性因子 n 到二次因子 n^2 的突破。
+    7. 闭合 (R7): 组合前述步骤，给出完整的构造性存在证明，得到 R^n 中存在格球堆积密度 ≥ c·n^2/2^n。
+    有效复现判据: frontier‑delta 项 (R2/R3/R4/R5/R6) 须被实质性触及并闭合；
+    若证明走完全不同的路径但达到超线性因子，判 alternative_valid 并在 notes 说明。
+
+rubric:
+  - id: R1
+    title: "标准归约：空椭球 ↔ 高密度球堆积"
+    criterion: "是否将超线性下界问题正确转化为构造体积尽可能大的中心对称凸体 (椭球)，其内部无格点，并通过线性变换等价于格球堆积密度。"
+    frontier_delta: false
+    indicators: ["标准归约","空椭球构造","线性变换转化","Minkowski 凸体定理"]
+  - id: R2
+    title: "放弃平均范式，提出动态演化构造思路"
+    criterion: "是否明确提出放弃对随机格取平均的经典方法，转向对单个固定格上的凸体进行动态/迭代调整的思路。"
+    frontier_delta: true
+    indicators: ["放弃平均论证","动态调整椭球","演化构造思路","固定格动态演化"]
+  - id: R3
+    title: "随机演化椭球的精确定义（SDE/扩散）"
+    criterion: "是否给出椭球的随机微分方程定义，包括扩散项以及遇到格点时的反射/停时约束机制。"
+    frontier_delta: true
+    indicators: ["随机演化椭球","随机微分方程","扩散过程","反射停时约束"]
+  - id: R4
+    title: "鞅/停时分析给出椭球体积 ~ n^2"
+    criterion: "是否利用鞅工具和停时定理分析演化过程，并证明椭球在停止前体积期望至少为 c·n^2 量级。"
+    frontier_delta: true
+    indicators: ["鞅分析","停时定理","期望体积 n^2","体积下界估计"]
+  - id: R5
+    title: "结合逐次极小与结构控制"
+    criterion: "是否将演化椭球与 Minkowski 第二定理或逐次极小联系起来，确保构造的格具有良好的短向量控制。"
+    frontier_delta: true
+    indicators: ["逐次极小","Minkowski 第二定理","控制短向量","连续极小联系"]
+  - id: R6
+    title: "转化与闭合：得到密度 c·n^2/2^n"
+    criterion: "是否将体积 n^2 的空椭球通过线性变换成功转化为格球堆积，并完整给出最终密度下界 c·n^2/2^n。"
+    frontier_delta: true
+    indicators: ["最终密度 c·n^2/2^n","超线性因子 n^2","格球堆积构造完成","证明闭合"]
+
+contamination_probes:
+  - id: P1_direct
+    kind: direct
+    prompt: "高维格球堆积密度的下界能突破 Rogers 的线性因子 n 吗？如果有突破，关键的新构造思路是什么？"
+    leak_indicators: ["随机演化椭球","stochastically evolving ellipsoid","椭球扩散流","鞅停时体积 n^2","随机微分方程构造"]
+    threshold: 1
+  - id: P2_indirect
+    kind: indirect
+    prompt: "有人提出放弃对随机格取平均的路线，转而让一个中心对称凸体在格的约束下动态演化，用随机过程增大体积。这条路线能用来把格球堆积密度从 c·n/2^n 提升到超线性吗？需要哪些关键数学工具？"
+    leak_indicators: ["随机演化椭球","stochastically evolving ellipsoid","椭球扩散流","鞅停时体积 n^2","随机微分方程构造"]
+    threshold: 1
+  - id: P3_completion
+    kind: completion
+    prompt: "续写以下构造框架并补全核心步骤：‘我们考虑一个在格 L 上随时间随机演化的椭球 E_t，其演化由扩散项驱动，并保证 E_t 永远不包含任何非零格点……’"
+    leak_indicators: ["随机演化椭球","stochastically evolving ellipsoid","椭球扩散流","鞅停时体积 n^2","随机微分方程构造"]
+    threshold: 1
+
+hint_ladder:
+  - level: 0
+    label: L0
+    ratio: 0.0
+    content: ""
+    reveals_rubric_items: []
+  - level: 1
+    label: L1
+    ratio: 0.15
+    content: "将密度下界改进问题归约到构造一个中心对称凸体 (可取为椭球)，其内部无格点且体积尽可能大；通过线性变换可将空椭球转化为高密度球堆积。"
+    reveals_rubric_items: ["R1"]
+  - level: 2
+    label: L2
+    ratio: 0.30
+    content: "考虑放弃传统的对随机格取平均的方法，改为对单个固定格上的椭球进行动态调整，使其体积逐步增大，同时约束其永远不包含任何非零格点。"
+    reveals_rubric_items: ["R2"]
+  - level: 3
+    label: L3
+    ratio: 0.50
+    content: "关键构造：让椭球通过一个随机微分方程演化，形状与体积随时间变化；当椭球接近格点时方程施加反射或停时，确保其内部始终无格点。"
+    reveals_rubric_items: ["R3"]
+  - level: 4
+    label: L4
+    ratio: 0.70
+    content: "对上述随机过程进行鞅分析：定义合适的鞅，利用停时定理证明椭球在停止前体积期望至少约为 c·n^2。"
+    reveals_rubric_items: ["R4"]
+  - level: 5
+    label: L5
+    ratio: 0.90
+    content: "将演化过程与 Minkowski 第二定理的逐次极小结合，确保构造的格满足所有尺度约束；最后将体积约 n^2 的空椭球线性映射为球堆积，得到密度 c·n^2/2^n。请补全闭合论证。"
+    reveals_rubric_items: ["R5","R6"]
+
+retrieval:
+  arxiv_snapshot: "frozen <= 2025-03-31"
+  other_sources: []
+  web_search: DISABLED

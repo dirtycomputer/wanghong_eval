@@ -18,6 +18,7 @@
 <main class="wrap">
   <nav id="toc">
     <a href="#overview">概览</a>
+    <a href="#aggregate">总榜</a>
     <a href="#config">运行配置</a>
     <a href="#pipeline">流水线</a>
     <a href="#curve">难度曲线</a>
@@ -29,6 +30,13 @@
   <section id="overview">
     <h2>概览 <span class="sub" id="overview-sub"></span></h2>
     <div id="cards" class="cards"></div>
+  </section>
+
+  <section id="aggregate" class="hidden">
+    <h2>跨 task 总榜 <span class="sub">Bradley–Terry · 仅共同任务两两比较 · 比较图不连通时分联赛</span></h2>
+    <div id="aggregate-table"></div>
+    <p class="muted small">合格模型集随时间锚不齐,直接平均 hint-AUC 不可比;两两比较指标为
+    字典序 (hint-AUC > earned 峰值 > cov-AUC),平局各记 0.5,污染除名不参赛。</p>
   </section>
 
   <section id="config">
