@@ -246,6 +246,42 @@ python -m http.server -d docs            # 本地预览 → http://localhost:800
 > `wandb/bf16`(无检索闭卷,max_tokens 打满)× L0–L5 × 2 trials,四强评委面板
 > (qwen3.7-max / minimax-m3 / kimi-k2.6 / deepseek-v4-pro, 48/48 票有效)。
 
+## 任务生产流水线(scale 的主维度)
+
+每个 task 的合格窗口随时间关闭(新模型对旧突破永远不合格),benchmark 必须**持续摄入新突破**:
+
+```bash
+# 1. 起草: 强模型 (站在 EVAL 侧, 允许知道答案) + 王虹测试 few-shot → tasks/drafts/
+python -m breakthrough_eval draft-task \
+  --title "Klartag 测试 — 高维格球堆积密度的超线性改进" \
+  --golden-arxiv 2504.05042 --breakthrough-date 2025-04-07 \
+  --retrieval-cutoff 2025-03-31 --context-file notes.md
+
+# 2. 人工终审: 修探针自我泄题/题面指向答案等, 移入 tasks/
+# 3. 自动验收: 红线 + golden 锚定 + 探针自测 (+ 语义层校准)
+python -m breakthrough_eval validate tasks/<id>.yaml
+python -m breakthrough_eval task-qa --task <id> \
+  --probe-judge openrouter:deepseek/deepseek-v4-pro
+```
+
+`task-qa` 是 task 的单元测试:**golden 锚定**(金标证明走评委管线必须满分)、
+**探针可触发**(合成泄露样本必须报警,抓 threshold 配置死探针)、**探针不误杀**
+(诚实回答 + 复述题面绝不触发,抓过宽指示词)、**语义层校准**(golden 概要喂探针
+必须被语义评审抓住、诚实回答必须放行)、hint 阶梯完整性。
+
+第二个任务 `klartag_lattice_sphere_packing`(2025-04 高维格球堆积 n² 突破)就是按这条
+流水线生产的:deepseek 起草一次过红线;人工终审修了 4 处(P2 探针把答案递给模型、
+题面预设 n² 目标值、泄露词过长、概要编号越界);`validate` 的泄露词扫描当场抓到草稿
+framing notes 字面引用禁词;语义校准 3/3 探针命中 golden 概要、放行诚实回答。
+
+## 跨 task 总榜(Bradley–Terry)
+
+合格模型集随时间锚**不齐**(模型 A 合格 10 个任务、模型 B 只合格 3 个),直接平均
+hint-AUC 不可比。`leaderboard` 在 ≥2 个 task 时自动追加 BT 总榜:只在双方**共同参赛**
+的 task 上两两比较(字典序 hint-AUC > earned 峰值 > cov-AUC,平局各记 0.5),
+MM 迭代拟合实力分;**比较图不连通时按连通分量分联赛,绝不跨组排名**——没有共同
+任务的新旧模型之间不存在合法比较路径(持续上新任务正是为了架桥)。
+
 ## 测试
 
 ```bash
