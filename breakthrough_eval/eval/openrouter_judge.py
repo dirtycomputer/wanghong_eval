@@ -39,6 +39,21 @@ def openrouter_judge(model: str, name: str | None = None, **client_kwargs) -> LL
     )
 
 
+def openrouter_probe_judge(model: str, name: str | None = None, **client_kwargs):
+    """语义级探针泄露评审 (contamination.SemanticProbeJudge) 的 OpenRouter 接线。
+
+    探针判定走 temperature=0 (除名级裁决须确定性)。
+    """
+    from ..contamination import SemanticProbeJudge
+
+    client_kwargs.setdefault("temperature", 0.0)
+    client_kwargs.setdefault("max_tokens", 2048)
+    return SemanticProbeJudge(
+        complete=make_openrouter_complete(model, **client_kwargs),
+        name=name or f"semantic-probe:{model}",
+    )
+
+
 def _factory(**kwargs) -> LLMJudge:
     if "model" not in kwargs:
         raise KeyError("openrouter judge 需要 model (e.g. deepseek/deepseek-v4-pro)")

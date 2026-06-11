@@ -84,8 +84,10 @@ class OpenRouterProverBackend(ProverBackend):
         usage = UsageStats()
         recorded: list[ToolCall] = []
         if ctx.phase == "probe":
-            # Probe: no tools, short answer (we want the unaided answer, fast).
-            return self._loop(ctx, messages, None, usage, recorded, self.probe_max_tokens)
+            # Probe: no tools, short answer, temperature=0 — 探针是除名级裁决,
+            # 必须确定性 (同一权重重跑不能从 clean 翻成 leaked)。
+            return self._loop(ctx, messages, None, usage, recorded,
+                              self.probe_max_tokens, temperature=0.0)
 
         tools = [ARXIV_TOOL]
         try:
@@ -98,9 +100,11 @@ class OpenRouterProverBackend(ProverBackend):
             )
             return self._loop(ctx, messages, None, usage, recorded, None)
 
-    def _loop(self, ctx, messages, tools, usage, recorded, max_tokens) -> BackendResponse:
+    def _loop(self, ctx, messages, tools, usage, recorded, max_tokens,
+              temperature=None) -> BackendResponse:
         for _ in range(self.max_tool_calls):
-            res = self.client.chat(messages, tools=tools, max_tokens=max_tokens)
+            res = self.client.chat(messages, tools=tools, max_tokens=max_tokens,
+                                   temperature=temperature)
             self._add_usage(usage, res.usage)
             if tools and res.tool_calls:
                 messages.append(
@@ -116,7 +120,8 @@ class OpenRouterProverBackend(ProverBackend):
             return BackendResponse(text=res.content, tool_calls=recorded, usage=usage)
 
         # Tool budget exhausted: force a final answer with no tools.
-        res = self.client.chat(messages, tools=None, max_tokens=max_tokens)
+        res = self.client.chat(messages, tools=None, max_tokens=max_tokens,
+                               temperature=temperature)
         self._add_usage(usage, res.usage)
         return BackendResponse(text=res.content, tool_calls=recorded, usage=usage)
 

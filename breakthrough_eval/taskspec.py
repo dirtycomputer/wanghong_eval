@@ -41,6 +41,11 @@ def validate_taskspec(path: str | Path) -> list[str]:
     # Soft / advisory checks beyond the hard invariants.
     if not spec.contamination_probes:
         issues.append("⚠️ 没有定义任何污染探针 (contamination_probes): 无法执行 probe-then-prove。")
+    if not spec.golden_proof.proof_text.strip():
+        issues.append(
+            "⚠️ golden_proof.proof_text 为空: 评委只能凭自身训练知识对齐 golden, "
+            "对冷门突破判定会静默失真 (建议填证明概要/全文)。"
+        )
     if spec.max_hint_level < 1:
         issues.append("⚠️ hint_ladder 只有 L0: 拿不到难度曲线 (建议补 L1..Lk)。")
     delta_items = [r for r in spec.rubric if r.frontier_delta]

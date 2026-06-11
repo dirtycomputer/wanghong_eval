@@ -13,6 +13,7 @@ Two of the four defence lines live here as reusable functions:
 
 from __future__ import annotations
 
+import json
 import re
 from datetime import date
 
@@ -51,6 +52,80 @@ def evaluate_probe(probe: ContaminationProbe, response_text: str) -> ProbeRespon
 def any_leaked(probe_responses: list[ProbeResponse]) -> bool:
     """任一探针命中关键创新 → 判污染 (plan §8.3)."""
     return any(p.leaked for p in probe_responses)
+
+
+# --------------------------------------------------------------------------- #
+# Semantic probe judging (plan §8.3 升级): 关键词是下限, 这里抓换措辞的实质复现
+# --------------------------------------------------------------------------- #
+PROBE_JUDGE_SYSTEM = """\
+你是污染审计员。被审计的模型其训练截止在该数学突破公布**之前**, 正常情况下它不应
+知道这个突破。请判断它对探针问题的回答是否「泄露」—— 即实质性复现/指认了突破的
+关键创新, **即便措辞与参考关键词完全不同**。
+
+判定要点:
+- 算泄露: 表现出对突破内容的事实性知识 —— 声称该问题已被解决并给出与真实证明
+  一致的特有结构/路线; 指认真实作者、时间或论文; 对参考关键创新的同义转述。
+- 不算泄露: 诚实表示不知道/未解决; 给出泛泛的、领域常识级的猜想或思路
+  (独立的数学直觉不是污染); 与真实证明无关的错误尝试。
+- 探针是除名级裁决: 拿不准时判不泄露 (关键词命中另有一票否决兜底)。
+
+只输出一个 JSON 对象, 不要 markdown 代码块:
+{"leaked": true/false, "evidence": "不超过 60 字的判定依据", "confidence": 0.0-1.0}
+"""
+
+
+def build_probe_judge_prompt(task, probe: ContaminationProbe, response_text: str) -> str:
+    deltas = "\n".join(
+        f"- {r.id}: {r.title} — {r.criterion}" for r in task.rubric if r.frontier_delta
+    )
+    return (
+        f"# 突破\n{task.title} (golden: {task.golden_proof.primary})\n\n"
+        f"# 突破的关键创新 (判定参照)\n{deltas}\n"
+        f"参考泄露措辞 (同义转述也算): {', '.join(probe.leak_indicators)}\n\n"
+        f"# 探针问题 ({probe.kind.value})\n{probe.prompt}\n\n"
+        f"# 被审计模型的回答\n{response_text}\n"
+    )
+
+
+class SemanticProbeJudge:
+    """LLM 语义级泄露评审。注入 ``complete(system, user) -> str`` (返回 JSON)。
+
+    解析失败时弃权 (返回不泄露 + 留痕): 探针的保守方向是不冤杀,
+    关键词一票否决仍然兜底。
+    """
+
+    def __init__(self, complete, name: str = "semantic-probe", max_parse_retries: int = 1):
+        self._complete = complete
+        self.name = name
+        self.max_parse_retries = max_parse_retries
+
+    def describe(self) -> dict:
+        info = {"name": self.name, "kind": "SemanticProbeJudge"}
+        client = getattr(self._complete, "client", None)
+        if client is not None:
+            info.update(model=client.model, max_tokens=client.max_tokens,
+                        temperature=client.temperature)
+        return info
+
+    def assess(self, task, probe: ContaminationProbe, response_text: str) -> tuple[bool, str]:
+        user = build_probe_judge_prompt(task, probe, response_text)
+        last_err = ""
+        for _ in range(self.max_parse_retries + 1):
+            try:
+                raw = self._complete(PROBE_JUDGE_SYSTEM, user)
+                start, end = raw.find("{"), raw.rfind("}")
+                if start == -1 or end == -1:
+                    raise ValueError(f"找不到 JSON: {raw[:120]!r}")
+                data = json.loads(raw[start:end + 1])
+                leaked = bool(data.get("leaked", False))
+                notes = (
+                    f"{'命中' if leaked else 'clean'} "
+                    f"(conf={data.get('confidence', '?')}): {data.get('evidence', '')}"
+                )
+                return leaked, notes
+            except Exception as exc:  # noqa: BLE001 - 弃权而非中断
+                last_err = f"{type(exc).__name__}: {exc}"
+        return False, f"语义评审弃权 (输出无法解析): {last_err[:160]}"
 
 
 # --------------------------------------------------------------------------- #

@@ -45,10 +45,21 @@ def build_judge_prompt(task: TaskSpec, proof_text: str, golden: GoldenProof) -> 
         '"justification": "...", "cited_lines": [3,4], "confidence": 0.8}], '
         '"overall_valid": false, "alternative_valid": false, "notes": "..."}'
     )
+    # Golden 全文/概要显式注入: 评委不应只凭训练记忆对齐 golden —— 对冷门突破,
+    # 「评委恰好背过这篇论文」这个隐式假设会静默失效。
+    golden_block = f"# Golden proof (仅对齐参照)\n{golden.primary}\n"
+    if golden.companions:
+        golden_block += "companions: " + "; ".join(golden.companions) + "\n"
+    if golden.proof_text.strip():
+        golden_block += f"\n## Golden 证明概要/全文\n{golden.proof_text.strip()}\n"
+    else:
+        golden_block += (
+            "\n(注意: 未提供 golden 证明全文。请凭你对该文献的知识判定, "
+            "并在 notes 中注明此局限。)\n"
+        )
     return (
         f"# 定理\n{task.problem_statement}\n\n"
-        f"# Golden proof (仅对齐参照)\n{golden.primary}\n"
-        + ("companions: " + "; ".join(golden.companions) + "\n" if golden.companions else "")
+        + golden_block
         + f"\n# Rubric (逐条判定)\n{rubric_lines}\n\n"
         f"# Prover 产物 (带行号)\n{numbered}\n\n"
         f"# 输出 JSON schema\n{schema}\n"

@@ -71,11 +71,20 @@ class Evaluator:
                 errored=True,
                 needs_human_review=False,
             )
-        return self.evaluate_text(result.job_id, task, result.proof_text)
+        return self.evaluate_text(
+            result.job_id, task, result.proof_text, hint_level=result.hint_level
+        )
 
-    def evaluate_text(self, job_id: str, task: TaskSpec, proof_text: str) -> EvalResult:
+    def evaluate_text(
+        self, job_id: str, task: TaskSpec, proof_text: str, hint_level: int = 0
+    ) -> EvalResult:
         item_ids = [r.id for r in task.rubric]
         delta_ids = {r.id for r in task.rubric if r.frontier_delta}
+        # earned vs given (plan §5): ≤hint_level 已累积揭示的 item 不算模型挣到的。
+        revealed: set[str] = set()
+        for h in task.hint_ladder:
+            if h.level <= hint_level:
+                revealed.update(h.reveals_rubric_items)
 
         all_verdicts = [j.judge(task, proof_text, task.golden_proof) for j in self.judges]
         # Judges whose output couldn't be parsed abstain (don't vote), but force
@@ -93,6 +102,8 @@ class Evaluator:
                 item_disagreement.add(iid)
 
         passed_items = sum(1 for ok in consensus.values() if ok)
+        earned_ids = [i for i in item_ids if i not in revealed]
+        earned_passed = sum(1 for i in earned_ids if consensus.get(i))
         overall_votes = [v.overall_valid for v in verdicts]
         overall_valid = bool(overall_votes) and sum(overall_votes) * 2 > len(overall_votes)
         alt_votes = [v.alternative_valid for v in verdicts]
@@ -108,8 +119,9 @@ class Evaluator:
         )
 
         log.info(
-            "eval %s: %d/%d items, valid=%s, κ=%.2f, review=%s%s",
-            job_id, passed_items, len(item_ids), overall_valid, agreement,
+            "eval %s: %d/%d items (earned %d/%d), valid=%s, κ=%.2f, review=%s%s",
+            job_id, passed_items, len(item_ids), earned_passed, len(earned_ids),
+            overall_valid, agreement,
             needs_review, " [评委解析失败]" if had_parse_failure else "",
         )
         return EvalResult(
@@ -119,6 +131,9 @@ class Evaluator:
             item_consensus=consensus,
             passed_items=passed_items,
             total_items=len(item_ids),
+            revealed_items=sorted(revealed),
+            earned_passed_items=earned_passed,
+            earned_total_items=len(earned_ids),
             overall_valid=overall_valid,
             alternative_valid=alternative_valid,
             agreement=agreement,
