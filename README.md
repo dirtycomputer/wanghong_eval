@@ -153,6 +153,28 @@ python -m breakthrough_eval \
 > 注意 cutoff 是厂商宣称的软日期（plan §10.6 突破日期本身也可能因 talk/流出而模糊），
 > 故 `cutoff_confidence: medium`，并以探针实测为最终判据。
 
+### CLI harness:opencode / Hermes Agent(已内置)
+
+同一模型可以换 harness 对比(plan §7:harness = model + scaffold + toolset):
+
+```bash
+python -m breakthrough_eval --registry models_registry.openrouter.yaml \
+  run --task kakeya_3d_wang_zahl \
+  --models gemma-4-31b,gemma-4-31b-opencode,gemma-4-31b-hermes --trials 2
+```
+
+- `provider: opencode` 走 `opencode run --format json`(`npm i -g opencode-ai`):
+  每 job 独立工作目录 + XDG 隔离,`tools` 配置禁用 webfetch / websearch / bash /
+  edit / write / patch(联网与改文件不进考场);
+- `provider: hermes` 走 `hermes -z` headless(NousResearch hermes-agent 安装脚本):
+  `platform_toolsets.cli: []` 清空内置工具面,且**每个 job 独立 HOME** ——
+  Hermes 的跨会话记忆/自我成长在 benchmark 里属于 trial 间状态泄漏,必须 fresh;
+- 两者唯一外部信息源都是随包安装的 **`arxiv-frozen-mcp`**(stdio MCP server,
+  plan §3.2):`CUTOFF_DATE` 在服务端硬过滤,每次检索追加 JSONL transcript,
+  跑完回读成 `ToolCall` 进 §8.4 审计 —— harness 自己说没联网不算数,transcript 才算;
+- **探针阶段一律绕过 CLI 直连裸模型**(无工具、短回答):污染是模型属性,
+  「无援作答」的语义不应被 harness 的系统提示/工具/记忆污染。
+
 ### 其它后端
 
 - **PROVER（codex exec, plan §3.2）**：把 registry 里的 `provider` 改成 `codex` / `local-vllm`，

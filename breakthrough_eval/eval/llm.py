@@ -69,6 +69,15 @@ class LLMJudge(JudgeBackend):
     def available(self) -> bool:
         return self._complete is not None
 
+    def describe(self) -> dict:
+        info = {"name": self.name, "kind": "LLMJudge",
+                "max_parse_retries": self.max_parse_retries}
+        client = getattr(self._complete, "client", None)
+        if client is not None:  # openrouter_judge 会把 client 挂上来
+            info.update(model=client.model, max_tokens=client.max_tokens,
+                        temperature=client.temperature, timeout=client.timeout)
+        return info
+
     def judge(self, task: TaskSpec, proof_text: str, golden: GoldenProof) -> JudgeVerdict:
         if self._complete is None:
             raise RuntimeError(

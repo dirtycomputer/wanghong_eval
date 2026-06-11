@@ -18,6 +18,7 @@
 <main class="wrap">
   <nav id="toc">
     <a href="#overview">概览</a>
+    <a href="#config">运行配置</a>
     <a href="#pipeline">流水线</a>
     <a href="#curve">难度曲线</a>
     <a href="#matrix">Job 矩阵</a>
@@ -28,6 +29,18 @@
   <section id="overview">
     <h2>概览 <span class="sub" id="overview-sub"></span></h2>
     <div id="cards" class="cards"></div>
+  </section>
+
+  <section id="config">
+    <h2>运行配置 <span class="sub">PROVER × EVAL 的可复现配置 (run_meta + registry)</span></h2>
+    <div id="config-card">
+      <div id="config-run" class="kv"></div>
+      <h3 class="cfg-h">🧪 PROVER / harness</h3>
+      <div id="config-prover"></div>
+      <h3 class="cfg-h">⚖️ EVAL / 评委面板</h3>
+      <div id="config-judges"></div>
+      <div id="config-rules" class="legend"></div>
+    </div>
   </section>
 
   <section id="pipeline">

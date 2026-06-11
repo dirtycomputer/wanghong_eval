@@ -26,15 +26,33 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .leaderboard import Leaderboard
+from .registry import ModelRegistry
 from .storage import ResultStore
 from .taskspec import load_all_tasks
 
 
-def build_site_data(results_dir: str | Path, tasks_dir: str | Path) -> dict:
+def build_site_data(
+    results_dir: str | Path,
+    tasks_dir: str | Path,
+    registry_path: str | Path | None = None,
+) -> dict:
     store = ResultStore(results_dir)
     provers = store.load_prover_all()
     evals = {e.job_id: e for e in store.load_eval_all()}
     tasks = load_all_tasks(tasks_dir)
+
+    # 运行配置: run_meta.json (cmd_run 自动写; 库调用方用 store.save_run_meta)。
+    run_meta = store.load_run_meta()
+    # PROVER 配置: registry 里实际被用到的条目 (含 backend_kwargs)。
+    registry_entries: dict[str, dict] = {}
+    if registry_path is not None and Path(registry_path).exists():
+        used = {pr.model for pr in provers}
+        reg = ModelRegistry.load(registry_path)
+        registry_entries = {
+            name: entry.model_dump(mode="json")
+            for name, entry in sorted(reg.entries.items())
+            if name in used
+        }
 
     max_levels = {tid: t.max_hint_level for tid, t in tasks.items()}
     board = Leaderboard.build(
@@ -55,6 +73,8 @@ def build_site_data(results_dir: str | Path, tasks_dir: str | Path) -> dict:
         "tasks": {tid: t.model_dump(mode="json") for tid, t in sorted(tasks.items())},
         "leaderboard": [asdict(row) for row in board.rows],
         "results": results,
+        "registry": registry_entries,
+        "run_meta": run_meta,
     }
 
 

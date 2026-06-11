@@ -21,6 +21,10 @@ class JudgeBackend:
     def available(self) -> bool:
         return True
 
+    def describe(self) -> dict:
+        """评委配置自述 (落 run_meta / 前端「运行配置」展示用)。"""
+        return {"name": self.name, "kind": type(self).__name__}
+
     def judge(
         self,
         task: TaskSpec,

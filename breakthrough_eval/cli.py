@@ -143,6 +143,23 @@ def cmd_run(args) -> int:
         print(f"  · skip {tid}/{m}: {reason}")
     n_pre_skips = len(matrix.skipped)
 
+    # 运行配置落盘 (供 export-web / 前端「运行配置」展示; 跑挂了也留有现场)。
+    from datetime import datetime, timezone
+
+    controller.store.save_run_meta({
+        "kind": "breakthrough-eval.run",
+        "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "registry": args.registry,
+        "task_ids": task_ids,
+        "models": models,  # null = 全部合格 model
+        "hint_levels": hints,  # null = 全部
+        "trials": args.trials,
+        "workers": args.workers,
+        "early_stop_on_contamination": not args.no_early_stop,
+        "judges": [j.describe() for j in controller.evaluator.judges],
+        "review_kappa_threshold": controller.evaluator.review_kappa_threshold,
+    })
+
     results = controller.run(
         matrix,
         early_stop_on_contamination=not args.no_early_stop,
@@ -188,7 +205,7 @@ def cmd_leaderboard(args) -> int:
 def cmd_export_web(args) -> int:
     from .webexport import build_site_data, write_data_js
 
-    data = build_site_data(args.results_dir, args.tasks_dir)
+    data = build_site_data(args.results_dir, args.tasks_dir, registry_path=args.registry)
     if not data["results"]:
         print(f"results 目录 {args.results_dir} 为空, 先跑 `run`。")
         return 1

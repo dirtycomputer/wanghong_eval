@@ -83,6 +83,89 @@
     $("#overview-sub").textContent ||= "";
   }
 
+  // ---------- run config (PROVER × EVAL) ----------
+  const REDLINE_BY_PROVIDER = {
+    openrouter: "search_arxiv 原生工具 (tool-calling); 只路由支持 tools 的 provider; 无 web 工具",
+    opencode: "arxiv-frozen MCP; 禁 webfetch/websearch/bash/edit/write/patch; 每 job 独立 cwd+XDG",
+    hermes: "arxiv-frozen MCP; platform_toolsets 清空; 每 job 独立 HOME (无跨会话记忆)",
+    codex: "config.toml: web_search=disabled + 冻结 arXiv MCP (required)",
+    mock: "离线确定性模拟 (跑通链路用)",
+  };
+
+  function renderConfig() {
+    const meta = D.run_meta || {};
+    // 运行级参数
+    const runChips = [];
+    const chip = (k, v) => `<span class="badge"><b>${esc(k)}</b> ${esc(v)}</span>`;
+    if (meta.created_at) runChips.push(chip("时间", meta.created_at));
+    if (meta.trials != null) runChips.push(chip("trials", meta.trials));
+    runChips.push(chip("hint 级", meta.hint_levels ? meta.hint_levels.join(",") : "全部 (L0–L5)"));
+    if (meta.workers != null) runChips.push(chip("workers", meta.workers));
+    if (meta.early_stop_on_contamination != null)
+      runChips.push(chip("污染早停", meta.early_stop_on_contamination ? "开" : "关"));
+    if (meta.registry) runChips.push(chip("registry", meta.registry));
+    $("#config-run").innerHTML = runChips.join("") ||
+      "<span class='muted small'>无 run_meta.json (旧版 run 产物); 以下从 registry/产物推断。</span>";
+
+    // PROVER: 每个 harness 一行 (leaderboard 行 ↔ registry 条目)
+    const reg = D.registry || {};
+    let p = `<table class="vmatrix"><tr><th>registry 名</th><th>harness 指纹</th><th>provider</th>` +
+      `<th>底层模型</th><th>cutoff (置信度)</th><th>关键参数</th><th>检索/红线</th></tr>`;
+    for (const r of rows) {
+      const sample = r.group.items[0];
+      const mname = sample ? sample.prover.model : "?";
+      const e = reg[mname];
+      const kw = e ? e.backend_kwargs : {};
+      const params = Object.entries(kw).filter(([k]) => k !== "model")
+        .map(([k, v]) => `<span class="badge">${esc(k)}=${esc(v)}</span>`).join("") || "—";
+      p += `<tr><td><code>${esc(mname)}</code></td><td><code>${esc(r.row.harness)}</code></td>` +
+        `<td>${esc(e ? e.provider : "?")}</td><td><code>${esc(kw.model || "?")}</code></td>` +
+        `<td>${e ? esc(e.cutoff_date) + ` <span class="muted">(${esc(e.cutoff_confidence)})</span>` : "—"}</td>` +
+        `<td>${params}</td>` +
+        `<td class="small">${esc(REDLINE_BY_PROVIDER[e ? e.provider : ""] || "—")}</td></tr>`;
+    }
+    p += "</table><p class='muted small' style='margin:6px 0 0'>三个 harness 的探针阶段均绕过 CLI " +
+      "直连裸模型 (无援作答, 污染是模型属性); web search 一律禁用, 唯一外部信息源是时间冻结 arXiv。</p>";
+    $("#config-prover").innerHTML = p;
+
+    // EVAL: 评委面板
+    let judges = meta.judges;
+    if (!judges || !judges.length) {
+      const sample = cur.group.items.find((x) => x.eval && x.eval.judges.length);
+      judges = sample ? sample.eval.judges.map((j) => ({ name: j.judge_name })) : [];
+    }
+    if (judges.length) {
+      let j = `<table class="vmatrix"><tr><th>评委</th><th>类型</th><th>模型</th>` +
+        `<th>max_tokens</th><th>温度</th><th>其它</th></tr>`;
+      for (const d of judges) {
+        const extra = [];
+        if (d.strictness != null) extra.push(`strictness=${d.strictness}`);
+        if (d.timeout != null) extra.push(`timeout=${d.timeout}s`);
+        if (d.max_parse_retries != null) extra.push(`解析重试=${d.max_parse_retries}`);
+        j += `<tr><td><code>${esc(d.name)}</code></td><td>${esc(d.kind || "—")}</td>` +
+          `<td><code>${esc(d.model || "—")}</code></td>` +
+          `<td>${d.max_tokens != null ? esc(d.max_tokens) : "—"}</td>` +
+          `<td>${d.temperature != null ? esc(d.temperature) : "—"}</td>` +
+          `<td class="small">${esc(extra.join(" · ")) || "—"}</td></tr>`;
+      }
+      j += "</table>";
+      $("#config-judges").innerHTML = j;
+    } else {
+      $("#config-judges").innerHTML = "<p class='muted small'>无评委配置信息。</p>";
+    }
+
+    const kappa = meta.review_kappa_threshold != null ? meta.review_kappa_threshold : 0.6;
+    $("#config-rules").innerHTML = [
+      "逐项共识 = 评委严格多数决",
+      `κ &lt; ${kappa} → 人工复核`,
+      "整体/frontier-Δ 票分歧 → 复核",
+      "评委解析失败 → 弃权 + 复核",
+      "污染/审计失败 → 除名",
+      "基础设施错误 → 作废 (不计 solve_rate)",
+      "golden 锚定: 金标证明须拿满分",
+    ].map((t) => `<span class="badge">${t}</span>`).join(" ");
+  }
+
   // ---------- pipeline ----------
   function renderPipeline() {
     const items = cur.group.items;
@@ -418,7 +501,7 @@
 
   // ---------- boot ----------
   function renderAll() {
-    renderHeader(); renderCards(); renderPipeline(); renderCurve(); renderMatrix(); renderTask();
+    renderHeader(); renderCards(); renderConfig(); renderPipeline(); renderCurve(); renderMatrix(); renderTask();
     $("#detail").classList.add("hidden");
     $("#detail-title").textContent = "← 在上方矩阵选择一个 cell";
     const m = location.hash.match(/^#job=(.+)$/);

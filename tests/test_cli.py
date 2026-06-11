@@ -89,6 +89,13 @@ def test_export_web_emits_parseable_bundle(tmp_path):
     assert data["tasks"]["kakeya_3d_wang_zahl"]["rubric"]
     for r in data["results"]:
         assert r["eval"] is not None and r["prover"]["job_id"] == r["eval"]["job_id"]
+    # 运行配置打进前端数据: registry 条目 (含 backend_kwargs) + run_meta (含评委 describe)
+    assert data["registry"]["open-precutoff-weak"]["provider"] == "mock"
+    assert "backend_kwargs" in data["registry"]["open-precutoff-weak"]
+    meta = data["run_meta"]
+    assert meta["trials"] == 1 and meta["review_kappa_threshold"] == 0.6
+    assert [j["kind"] for j in meta["judges"]] == ["MockJudge"] * 3
+    assert all("strictness" in j for j in meta["judges"])
 
 
 def test_export_web_empty_results_fails_cleanly(tmp_path, capsys):

@@ -27,6 +27,9 @@ class MockJudge(JudgeBackend):
         self.config = config or MockJudgeConfig()
         self.name = self.config.name
 
+    def describe(self) -> dict:
+        return {"name": self.name, "kind": "MockJudge", "strictness": self.config.strictness}
+
     def judge(self, task: TaskSpec, proof_text: str, golden: GoldenProof) -> JudgeVerdict:
         lines = proof_text.splitlines()
         low_lines = [ln.lower() for ln in lines]
