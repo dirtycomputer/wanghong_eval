@@ -82,6 +82,7 @@ class OpenRouterClient:
         tool_choice: Optional[str] = None,
         response_format: Optional[dict] = None,
         max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None,
     ) -> ChatResult:
         if not self.api_key:
             raise LLMError(
@@ -90,7 +91,7 @@ class OpenRouterClient:
         payload: dict = {
             "model": self.model,
             "messages": messages,
-            "temperature": self.temperature,
+            "temperature": self.temperature if temperature is None else temperature,
             "max_tokens": max_tokens or self.max_tokens,
         }
         if tools:

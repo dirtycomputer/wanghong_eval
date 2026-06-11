@@ -47,6 +47,26 @@ def test_client_requires_key(monkeypatch):
         c.chat([{"role": "user", "content": "hi"}])
 
 
+def test_probe_phase_is_deterministic_temperature_zero(task):
+    # 探针是除名级裁决: probe 调用必须 temperature=0; prove 维持采样温度。
+    tr = FakeTransport([_msg(content="不知道"), _msg(content="proof")])
+    backend = OpenRouterProverBackend(model="x", client=_client(tr))
+    from breakthrough_eval.arxiv_frozen import InMemoryArxivSource
+    from breakthrough_eval.models import Job
+
+    def ctx(phase):
+        return ProverContext(
+            task=task, job=Job(task_id=task.task_id, model="m", hint_level=0, trial=0),
+            phase=phase, system="s", user="u",
+            source=InMemoryArxivSource(task.retrieval_cutoff),
+        )
+
+    backend.run(ctx("probe"))
+    backend.run(ctx("prove"))
+    assert tr.calls[0]["temperature"] == 0.0   # probe 锁 0
+    assert tr.calls[1]["temperature"] == 0.3   # prove 用客户端默认
+
+
 def test_client_parses_response():
     c = _client(FakeTransport([_msg(content="hello", pt=3, ct=4)]))
     res = c.chat([{"role": "user", "content": "hi"}])

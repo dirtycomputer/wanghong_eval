@@ -1,5 +1,5 @@
 window.BE_DATA = {
- "generated_at": "2026-06-11T06:07:20+00:00",
+ "generated_at": "2026-06-11T11:02:13+00:00",
  "tasks": {
   "kakeya_3d_wang_zahl": {
    "task_id": "kakeya_3d_wang_zahl",
@@ -15,7 +15,8 @@ window.BE_DATA = {
     "companions": [
      "Tao 博客 2025-02-25 (induction on scales 解读)",
      "Guth, arXiv:2505.07695 (proof 综述, 列出核心 ingredient)"
-    ]
+    ],
+    "proof_text": "Wang–Zahl 证明结构概要 (评委对齐参照, 绝不给 PROVER):\n1. 离散化 (对应 R1): 把猜想归约为 δ⁻² 根 δ-分离方向单位 δ-管并集的体积下界\n   ≳ 1 (up to logs); 也可用 Wolff 公理化的管族表述。\n2. 核心障碍 (R2): 识别海森堡群式构型 —— 近似满足三维双线性关系、低维/纯代数\n   方法无法排除的管簇, 是此前所有方法 (bush/hairbrush/多项式法) 卡住的地方。\n3. 组织骨架 (R3): induction on scales —— 在每个尺度对管簇聚类做估计并向更粗\n   尺度归纳, 归纳假设在尺度间传递。\n4. 关键重构 (R4): 把命题加强为「凸集并集的体积估计」这一更强等价表述\n   (论文标题路线), 加强后的命题才能让尺度归纳闭合。\n5. 结构刻画 (R5): 管族在多尺度下呈 sticky (方向相近的管聚团) / grainy\n   (局部呈平板状颗粒) 聚簇结构, 给出二者的定量刻画。\n6. 关键结构定理 (R6): 任一非满维反例必然落入 grainy 或海森堡型两类之一,\n   而结构定理对两类分别导出矛盾, 完成分类闭合。\n7. 闭合 (R7): 组合 1–6 完成归纳, 得到 R³ Kakeya 集的 Hausdorff 维数与\n   Minkowski 维数均为 3。\n有效复现的判据: frontier-delta 项 (R2/R4/R5/R6/R7) 须被实质性触及并闭合;\n若 prover 走完全不同但有效的路径, 判 alternative_valid 并在 notes 说明。\n"
    },
    "rubric": [
     {
@@ -209,7 +210,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.14285714285714285
     },
     {
      "hint_level": 1,
@@ -218,7 +220,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 2,
@@ -227,7 +230,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 3,
@@ -236,7 +240,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.2857142857142857,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 4,
@@ -245,7 +250,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.5,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 5,
@@ -254,7 +260,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.42857142857142855,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": null
     }
    ],
    "hint_auc": 0.0,
@@ -262,6 +269,7 @@ window.BE_DATA = {
    "l0_pass_at_k": false,
    "lowest_solvable_hint": null,
    "peak_rubric_coverage": 0.5,
+   "peak_earned_coverage": 0.14285714285714285,
    "probe_cleanliness": 1.0,
    "removed": false,
    "cost_units": 0.884,
@@ -279,7 +287,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.14285714285714285
     },
     {
      "hint_level": 1,
@@ -288,7 +297,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 2,
@@ -297,7 +307,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 3,
@@ -306,7 +317,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.21428571428571427,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 4,
@@ -315,7 +327,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.42857142857142855,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 5,
@@ -324,7 +337,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.42857142857142855,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": null
     }
    ],
    "hint_auc": 0.0,
@@ -332,6 +346,7 @@ window.BE_DATA = {
    "l0_pass_at_k": false,
    "lowest_solvable_hint": null,
    "peak_rubric_coverage": 0.42857142857142855,
+   "peak_earned_coverage": 0.14285714285714285,
    "probe_cleanliness": 1.0,
    "removed": false,
    "cost_units": 37.633,
@@ -349,7 +364,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.07142857142857142,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.07142857142857142
     },
     {
      "hint_level": 1,
@@ -358,7 +374,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 2,
@@ -367,7 +384,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.14285714285714285,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 3,
@@ -376,7 +394,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.21428571428571427,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 4,
@@ -385,7 +404,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.42857142857142855,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
     },
     {
      "hint_level": 5,
@@ -394,7 +414,8 @@ window.BE_DATA = {
      "n_errors": 0,
      "solve_rate": 0.0,
      "mean_coverage": 0.3571428571428571,
-     "pass_at_k": false
+     "pass_at_k": false,
+     "mean_earned_coverage": null
     }
    ],
    "hint_auc": 0.0,
@@ -402,6 +423,7 @@ window.BE_DATA = {
    "l0_pass_at_k": false,
    "lowest_solvable_hint": null,
    "peak_rubric_coverage": 0.42857142857142855,
+   "peak_earned_coverage": 0.07142857142857142,
    "probe_cleanliness": 1.0,
    "removed": false,
    "cost_units": 0.87,
@@ -425,21 +447,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -830,7 +858,10 @@ window.BE_DATA = {
     "agreement": 0.49999999999999956,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 1,
+    "earned_total_items": 7
    }
   },
   {
@@ -848,21 +879,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -1177,7 +1214,10 @@ window.BE_DATA = {
     "agreement": 0.49999999999999956,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 1,
+    "earned_total_items": 7
    }
   },
   {
@@ -1195,21 +1235,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -1531,7 +1577,12 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -1549,21 +1600,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -1904,7 +1961,12 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -1922,21 +1984,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -2293,7 +2361,13 @@ window.BE_DATA = {
     "agreement": 0.49999999999999956,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -2311,21 +2385,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -2707,7 +2787,13 @@ window.BE_DATA = {
     "agreement": 0.7941176470588234,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -2725,21 +2811,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -3103,7 +3195,15 @@ window.BE_DATA = {
     "agreement": 0.6178020615360769,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -3121,21 +3221,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -3482,7 +3588,15 @@ window.BE_DATA = {
     "agreement": 0.5757575757575758,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -3500,21 +3614,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -3881,7 +4001,17 @@ window.BE_DATA = {
     "agreement": 0.681818181818182,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -3899,21 +4029,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -4282,7 +4418,17 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -4300,21 +4446,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -4722,7 +4874,18 @@ window.BE_DATA = {
     "agreement": 0.86,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   },
   {
@@ -4740,21 +4903,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（即 $\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维数为 3）**尚未被完全证明**。\n\n目前最接近的结果是：\n1. **有限场版本**：在有限域 $\\mathbb{F}_q^3$ 上已由 Zeev Dvir 证明（利用多项式方法）。\n2. **欧几里得空间版本**：目前已知 $\\mathbb{R}^3$ 中 Kakeya 集的维数 $\\ge 2.5$（由 Katz 和 Tao 等人通过多线性 Kakeya 估计和算术组合方法推进）。\n\n关键难点在于如何处理线段在空间中极其复杂的重叠结构，目前的工具（如 Fourier 限制估计、Kakeya 最大函数估计）还不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常对应于简单的组合几何计数，这在 $\\mathbb{R}^2$ 中通过 Besicovitch 投影定理或简单的重叠估计可以实现，但在 $\\mathbb{R}^3$ 中，由于存在**高度相交的管状结构（如 Kakeya 针组）**，简单的体积下界估计无法排除分形维数低于 3 的可能性。\n\n如果要强行构建关键引理，它必须能够量化**“不同方向的管子在尺度 $\\delta$ 下的重叠程度”**。关键引理的形式通常是对 $\\delta$-管集合 $\\mathcal{T}$ 的体积下界估计：\n$$\\text{Vol}\\left( \\bigcup_{T \\in \\mathcal{T}} T \\right) \\gtrsim \\delta^{\\epsilon} \\cdot (\\text{某种关于方向分布的量})$$\n但在 $\\mathbb{R}^3$ 中，这种估计需要借助**多项式方法 (Polynomial Method)** 或 **Kakeya 最大函数估计** 才能突破，单纯的尺度归纳无法处理管子在空间中复杂的几何相交模式。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写：『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）或 $\\ell^2$ 离散化方法，通过控制管子在不同方向上的相交程度，证明其体积下界为 $\\Omega(\\delta^\\epsilon)$。**』\n\n**特有的结构定理：**\n该证明的核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。它指出：若一组 $\\delta$-管在空间中沿近似正交的方向分布，则这些管子的重叠程度受限于其几何结构的乘积，从而给出其并集的体积下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -5138,7 +5307,18 @@ window.BE_DATA = {
     "agreement": 0.8478260869565216,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   },
   {
@@ -5156,21 +5336,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -5520,7 +5706,10 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 1,
+    "earned_total_items": 7
    }
   },
   {
@@ -5538,21 +5727,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -5967,7 +6162,10 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 1,
+    "earned_total_items": 7
    }
   },
   {
@@ -5985,21 +6183,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -6386,7 +6590,12 @@ window.BE_DATA = {
     "agreement": 0.49999999999999956,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -6404,21 +6613,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -6767,7 +6982,12 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -6785,21 +7005,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -7153,7 +7379,13 @@ window.BE_DATA = {
     "agreement": 0.36274509803921545,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -7171,21 +7403,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -7610,7 +7848,13 @@ window.BE_DATA = {
     "agreement": 0.36274509803921545,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -7628,21 +7872,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -8008,7 +8258,15 @@ window.BE_DATA = {
     "agreement": 0.538568549949624,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -8026,21 +8284,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -8405,7 +8669,15 @@ window.BE_DATA = {
     "agreement": 0.681818181818182,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -8423,21 +8695,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -8822,7 +9100,17 @@ window.BE_DATA = {
     "agreement": 0.5517072233114212,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -8840,21 +9128,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -9252,7 +9546,17 @@ window.BE_DATA = {
     "agreement": 0.716111111111111,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -9270,21 +9574,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -9675,7 +9985,18 @@ window.BE_DATA = {
     "agreement": 0.6655555555555556,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   },
   {
@@ -9693,21 +10014,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想（$\\mathbb{R}^3$ 中 Kakeya 集的豪斯多夫维度为 3）**尚未被完全证明**。\n\n目前已知的结果是：在 $\\mathbb{R}^3$ 中，Kakeya 集的维度至少为 $2.5$（由 Katz 和 Tao 证明），且在某些特定条件下（如使用有限场 $\\mathbb{F}_q$ 的类比）已被证明。\n\n关键的挑战在于处理“重叠”问题，目前的思路主要集中在**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 和**波前集分析**，但仍不足以填补到 3 维的差距。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线**不能**直接走通。\n\n传统的“体积估计 + 尺度归纳”在 $\\mathbb{R}^2$ 中有效（通过 Besicovitch 集合的构造或 Kakeya 针集分析），但在 $\\mathbb{R}^3$ 及更高维度中，简单的体积估计无法克服**方向集中度**的问题。\n\n如果强行尝试，关键引理必须是关于**“多尺度方向分布”**的量化估计，形式类似于：\n> 若一组线段在尺度 $r$ 上的方向分布足够分散，则其并集的体积下界 $\\text{Vol}(\\cup L_i) \\gtrsim \\sum \\text{Vol}(L_i) \\cdot (\\text{某种重叠因子})^{-1}$。\n\n然而，由于 Kakeya 集合允许线段在极小尺度上高度重叠（如在 $\\mathbb{R}^3$ 中沿某个平面方向），简单的尺度归纳无法排除这种病态情况。证明 $\\mathbb{R}^n$ Kakeya 满维通常需要更强大的工具，如 **Kakeya 最大函数估计**、**多线性 Kakeya 估计** 或 **算术组合论（Sum-product phenomenon）**。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多尺度分析与算术组合（如 Sum-Product 估计）来控制管簇在不同尺度上的重叠程度，从而证明其 Hausdorff 维数至少为 3。**』\n\n**特有的结构定理：**\n其核心结构定理是 **Kakeya 最大函数估计 (Kakeya Maximal Function Estimate)** 或 **管簇的 $\\delta$-离散化结构定理**。具体而言，它指出：若一组 $\\delta$-管在方向上足够分散，则其并集的体积满足 $\\text{Vol}(\\bigcup T_i) \\gtrsim \\delta^\\epsilon \\cdot (\\text{方向分布的某种测度})$。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -10087,7 +10414,18 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   },
   {
@@ -10105,21 +10443,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -10450,7 +10794,10 @@ window.BE_DATA = {
     "agreement": 0.3333333333333328,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 7
    }
   },
   {
@@ -10468,21 +10815,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -10835,7 +11188,10 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 1,
+    "earned_total_items": 7
    }
   },
   {
@@ -10853,21 +11209,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -11215,7 +11577,12 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -11233,21 +11600,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -11563,7 +11936,12 @@ window.BE_DATA = {
     "agreement": 1.0,
     "needs_human_review": false,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
    }
   },
   {
@@ -11581,21 +11959,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -11934,7 +12318,13 @@ window.BE_DATA = {
     "agreement": 0.36274509803921545,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -11952,21 +12342,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -12289,7 +12685,13 @@ window.BE_DATA = {
     "agreement": 0.7254901960784311,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 5
    }
   },
   {
@@ -12307,21 +12709,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -12673,7 +13081,15 @@ window.BE_DATA = {
     "agreement": 0.6552352166162907,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -12691,21 +13107,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -13040,7 +13462,15 @@ window.BE_DATA = {
     "agreement": 0.599899248236844,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
    }
   },
   {
@@ -13058,21 +13488,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -13427,7 +13863,17 @@ window.BE_DATA = {
     "agreement": 0.715473801560758,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -13445,21 +13891,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -13839,7 +14291,17 @@ window.BE_DATA = {
     "agreement": 0.6804347826086956,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 1
    }
   },
   {
@@ -13857,21 +14319,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -14257,7 +14725,18 @@ window.BE_DATA = {
     "agreement": 0.6552352166162906,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   },
   {
@@ -14275,21 +14754,27 @@ window.BE_DATA = {
       "kind": "direct",
       "response_text": "三维 Kakeya 猜想**尚未被完全证明**（即尚未证明其 Hausdorff 维数等于 3）。\n\n目前最接近的结果是证明了其 **Minkowski 维数**为 3。关键思路是通过**多线性 Kakeya 估计 (Multilinear Kakeya estimates)** 以及结合**波面分析 (Wave packet analysis)** 和 **$\\ell^2$ 解耦理论 (Decoupling theory)** 来控制线段重叠的量。虽然这些工具在 $\\mathbb{R}^n$ 中取得了重大突破，但将 Minkowski 维数结果提升至 Hausdorff 维数仍存在技术障碍。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P2_indirect",
       "kind": "indirect",
       "response_text": "这条路线在 $\\mathbb{R}^3$ 中**不能直接走通**。\n\n传统的“体积估计 + 尺度归纳”通常依赖于某种形式的**多线性 Kakeya 估计**或**正交性**。但在 $\\mathbb{R}^3$ 中，由于存在“薄片”结构（例如，许多线段可以几乎平行地分布在一个极薄的平板内），简单的体积归纳无法排除这种低维集中现象。\n\n如果非要构建关键引理，它必须是**多线性**的（Multilinear Kakeya Lemma），形式大致为：\n$$\\int_{\\mathbb{R}^n} \\prod_{i=1}^n \\left( \\sum_{T \\in \\mathcal{T}_i} \\chi_{T} \\right)^{\\frac{1}{n-1}} dx \\lesssim \\prod_{i=1}^n |\\mathcal{T}_i|^{\\frac{1}{n-1}}$$\n其中 $\\mathcal{T}_i$ 是方向近似正交的线段族。\n\n**结论：** 仅靠单线性体积估计和尺度归纳无法证明满维，必须引入多线性估计或使用 Guth 的多项式方法（Polynomial Method）来处理空间分布。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      },
      {
       "probe_id": "P3_completion",
       "kind": "completion",
       "response_text": "续写如下：\n\n『我们将三维 Kakeya 归约为 $\\delta$-管并集体积下界，并**利用多线性 Kakeya 估计（Multilinear Kakeya Estimate）结合 $\\ell^2$ 离散化分析，将管的重叠程度转化为对空间频率分布的控制。**』\n\n**特有的结构定理：**\n其核心结构定理是 **多线性 Kakeya 定理 (Multilinear Kakeya Theorem)**。该定理指出：若一组 $\\delta$-管在方向上满足近似正交（transversality），则它们的交集在 $L^{n/(n-1)}$ 范数下具有可控的上界，从而通过这种几何横截性将局部重叠转化为全局体积的下界。",
       "matched_indicators": [],
-      "leaked": false
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": ""
      }
     ],
     "structured_output": {
@@ -14664,7 +15149,18 @@ window.BE_DATA = {
     "agreement": 0.6764548494983277,
     "needs_human_review": true,
     "excluded": false,
-    "errored": false
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6",
+     "R7"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
    }
   }
  ],

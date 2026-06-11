@@ -21,11 +21,30 @@ problem_framing_notes: |
   (具体禁词以 contamination_probes 的 leak_indicators 为准, validate 会扫描题面与本段)。
 
 # —— golden proof (评测基准, 不给 PROVER, 只给 EVAL) ——
+# proof_text 是注入评委 prompt 的结构化概要: 评委不应只凭训练记忆对齐 golden。
 golden_proof:
   primary: "arXiv:2502.17655 (Wang, Zahl)"
   companions:
     - "Tao 博客 2025-02-25 (induction on scales 解读)"
     - "Guth, arXiv:2505.07695 (proof 综述, 列出核心 ingredient)"
+  proof_text: |
+    Wang–Zahl 证明结构概要 (评委对齐参照, 绝不给 PROVER):
+    1. 离散化 (对应 R1): 把猜想归约为 δ⁻² 根 δ-分离方向单位 δ-管并集的体积下界
+       ≳ 1 (up to logs); 也可用 Wolff 公理化的管族表述。
+    2. 核心障碍 (R2): 识别海森堡群式构型 —— 近似满足三维双线性关系、低维/纯代数
+       方法无法排除的管簇, 是此前所有方法 (bush/hairbrush/多项式法) 卡住的地方。
+    3. 组织骨架 (R3): induction on scales —— 在每个尺度对管簇聚类做估计并向更粗
+       尺度归纳, 归纳假设在尺度间传递。
+    4. 关键重构 (R4): 把命题加强为「凸集并集的体积估计」这一更强等价表述
+       (论文标题路线), 加强后的命题才能让尺度归纳闭合。
+    5. 结构刻画 (R5): 管族在多尺度下呈 sticky (方向相近的管聚团) / grainy
+       (局部呈平板状颗粒) 聚簇结构, 给出二者的定量刻画。
+    6. 关键结构定理 (R6): 任一非满维反例必然落入 grainy 或海森堡型两类之一,
+       而结构定理对两类分别导出矛盾, 完成分类闭合。
+    7. 闭合 (R7): 组合 1–6 完成归纳, 得到 R³ Kakeya 集的 Hausdorff 维数与
+       Minkowski 维数均为 3。
+    有效复现的判据: frontier-delta 项 (R2/R4/R5/R6/R7) 须被实质性触及并闭合;
+    若 prover 走完全不同但有效的路径, 判 alternative_valid 并在 notes 说明。
 
 # —— rubric: 沿 frontier delta 切分关键创新点 (plan §4.1) ——
 # frontier_delta=true 标记「突破本身的关键创新」(要测模型能否自己跨过);

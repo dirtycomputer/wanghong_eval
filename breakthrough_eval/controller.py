@@ -58,6 +58,7 @@ class Controller:
         store: Optional[ResultStore] = None,
         source_factory: SourceFactory = default_source_factory,
         backend_specs: Optional[dict[str, BackendSpec]] = None,
+        probe_judge=None,
     ):
         self.tasks = tasks
         self.registry = registry
@@ -65,10 +66,20 @@ class Controller:
         self.store = store
         self.source_factory = source_factory
         self.backend_specs = backend_specs or {}
+        self.probe_judge = probe_judge  # 语义级探针泄露评审 (可选)
         self._backend_cache: dict[str, ProverBackend] = {}
-        # Probe results cached per (task_id, model): contamination is per
-        # (model, task), so we probe once and reuse across hint levels/trials.
+        # Probe results cached per (task_id, 底层模型权重): contamination is a
+        # property of the *weights*, not of the harness/registry alias — 同一
+        # 模型挂三个 harness 只探一次, 也保证同权重判定一致 (plan §8.3)。
         self._probe_cache: dict[tuple[str, str], list] = {}
+
+    def _probe_key(self, job: Job) -> tuple[str, str]:
+        """探针缓存键: 优先 backend_kwargs.model (真实权重 id), 否则 registry 名。"""
+        entry = self.registry.entries.get(job.model)
+        ident = job.model
+        if entry is not None and entry.backend_kwargs.get("model"):
+            ident = str(entry.backend_kwargs["model"])
+        return (job.task_id, ident)
 
     # ------------------------------------------------------------------ #
     def backend_for(self, model: str) -> ProverBackend:
@@ -124,10 +135,11 @@ class Controller:
     def run_job(self, job: Job) -> tuple[ProverRunResult, EvalResult]:
         task = self.tasks[job.task_id]
         source = self.source_factory(task.retrieval_cutoff)
-        runner = ProverRunner(self.backend_for(job.model), source)
+        runner = ProverRunner(self.backend_for(job.model), source,
+                              probe_judge=self.probe_judge)
 
-        # Probe once per (model, task); reuse across hint levels/trials (plan §8.3).
-        key = (job.task_id, job.model)
+        # Probe once per (task, 权重); reuse across harnesses/hints/trials (plan §8.3).
+        key = self._probe_key(job)
         cached_probes = self._probe_cache.get(key)
         log.info("▶ job %s 开始", job.job_id)
         t0 = time.perf_counter()
@@ -225,7 +237,7 @@ class Controller:
             # deliberately bypassing the audit/exclusion guard (the point is to
             # see whether feeding post-T literature lets it solve at all).
             source = self.source_factory(cutoff)
-            runner = ProverRunner(backend, source)
+            runner = ProverRunner(backend, source, probe_judge=self.probe_judge)
             valids = 0
             for trial in range(trials):
                 job = Job(task_id=task_id, model=model, hint_level=hint_level, trial=trial)

@@ -32,6 +32,11 @@ class GoldenProof(BaseModel):
         default_factory=list,
         description="辅助 EVAL / rubric 构建的二手源 (综述、博客解读等).",
     )
+    proof_text: str = Field(
+        "",
+        description="证明全文或结构化概要, 注入评委 prompt 做对齐 (绝不给 PROVER)。"
+        "缺省时评委只能凭自身训练知识判定 —— 对冷门突破会失真, validate 会警告.",
+    )
 
 
 class RubricItem(BaseModel):
@@ -263,7 +268,11 @@ class ProbeResponse(BaseModel):
     kind: ProbeKind
     response_text: str
     matched_indicators: list[str] = Field(default_factory=list)
-    leaked: bool = False
+    leaked: bool = False  # 最终裁决 (关键词命中 或 语义评审命中)
+    semantic_leak: bool = Field(
+        False, description="语义评审判定的实质复现 (抓关键词之外的换措辞泄露).")
+    semantic_notes: str = Field(
+        "", description="语义评审的证据/弃权说明 (审计留痕).")
 
 
 class ToolCall(BaseModel):
@@ -382,8 +391,24 @@ class EvalResult(BaseModel):
         description="基础设施错误 (网络/后端异常) 的作废 run: 不评、不计入 solve_rate (≠ 模型没解出来).",
     )
 
+    # earned vs given (plan §5): hint 已揭示的 item 不算模型「挣到」的。
+    revealed_items: list[str] = Field(
+        default_factory=list,
+        description="该 hint 级 (累积 ≤level) 已向 PROVER 揭示方向的 rubric items.",
+    )
+    earned_passed_items: int = 0
+    earned_total_items: int = Field(
+        0, description="未被 hint 揭示的 item 数 (earned 的分母); 0 = 全部已揭示, earned 无定义.")
+
     @property
     def rubric_coverage(self) -> float:
         if self.total_items == 0:
             return 0.0
         return self.passed_items / self.total_items
+
+    @property
+    def earned_coverage(self) -> float | None:
+        """在 hint 尚未揭示的 item 里自己挣到的比例 (难度曲线的「真」信号)。"""
+        if self.earned_total_items == 0:
+            return None
+        return self.earned_passed_items / self.earned_total_items

@@ -26,13 +26,15 @@ log = logging.getLogger(__name__)
 
 
 def probe_via_api(ctx: ProverContext, client: OpenRouterClient, max_tokens: int) -> BackendResponse:
-    """探针阶段: 直连裸模型, 无工具、短回答 (plan §3.3 的「无援」语义)。"""
+    """探针阶段: 直连裸模型, 无工具、短回答、temperature=0 (plan §3.3 的「无援」语义;
+    探针是除名级裁决, 必须确定性)。"""
     res = client.chat(
         [
             {"role": "system", "content": ctx.system},
             {"role": "user", "content": ctx.user},
         ],
         max_tokens=max_tokens,
+        temperature=0.0,
     )
     pt, ct = OpenRouterClient.usage_tokens(res.usage)
     return BackendResponse(

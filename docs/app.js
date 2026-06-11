@@ -74,6 +74,8 @@
       card("L0 冷启 pass@k", r.l0_pass_at_k ? "✅" : "0%", r.l0_pass_at_k ? "good" : ""),
       card("最低可解 hint", lowest, lowest === "—" ? "" : "good"),
       card("rubric 峰值覆盖", pct(r.peak_rubric_coverage)),
+      card("earned 峰值 (hint 未揭示部分)",
+        r.peak_earned_coverage != null ? pct(r.peak_earned_coverage) : "—"),
       card("探针洁净度", r.removed ? "❌ 除名" : (clean ? "✅ clean" : pct(r.probe_cleanliness)),
         r.removed ? "bad" : (clean ? "good" : "warn")),
       card("人工复核", String(r.needs_review_count), r.needs_review_count ? "warn" : ""),
@@ -152,6 +154,18 @@
       $("#config-judges").innerHTML = j;
     } else {
       $("#config-judges").innerHTML = "<p class='muted small'>无评委配置信息。</p>";
+    }
+
+    // 语义级探针评审 (可选配置)
+    if (meta.probe_judge) {
+      const pj = meta.probe_judge;
+      $("#config-judges").innerHTML +=
+        `<p class="small" style="margin:8px 0 0">🕵️ 探针语义评审: <code>${esc(pj.name)}</code>` +
+        (pj.model ? ` (model=${esc(pj.model)}, temp=${esc(pj.temperature)})` : "") +
+        ` — 关键词命中仍一票否决, 语义评审抓换措辞的实质复现; 弃权不冤杀。</p>`;
+    } else if (D.run_meta) {
+      $("#config-judges").innerHTML +=
+        `<p class="muted small" style="margin:8px 0 0">🕵️ 探针评审: 仅关键词匹配 (未配置语义评审 --probe-judge)。</p>`;
     }
 
     const kappa = meta.review_kappa_threshold != null ? meta.review_kappa_threshold : 0.6;
@@ -236,12 +250,22 @@
         `<title>L${p.hint_level} ${key === "solve_rate" ? "solve" : "coverage"} ${pct(p[key])}` +
         ` (${p.n_trials} trials${p.n_excluded ? `, ${p.n_excluded} 排除` : ""}${p.n_errors ? `, ${p.n_errors} 错误` : ""})</title></circle>`).join("");
     s += line("mean_coverage", "#2563eb", true);
+    // earned 覆盖率: 跳过 null (该级全部已被 hint 揭示, 无可挣项)。
+    const epts = pts.filter((p) => p.mean_earned_coverage != null);
+    if (epts.length) {
+      s += `<polyline fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="2 4" ` +
+        `points="${epts.map((p) => `${x(p.hint_level)},${y(p.mean_earned_coverage)}`).join(" ")}"/>` +
+        epts.map((p) => `<circle cx="${x(p.hint_level)}" cy="${y(p.mean_earned_coverage)}" r="4" fill="#16a34a">` +
+          `<title>L${p.hint_level} earned ${pct(p.mean_earned_coverage)} (hint 未揭示部分)</title></circle>`).join("");
+    }
     s += line("solve_rate", "#dc2626", false);
-    s += `<g font-size="12"><rect x="${W - 218}" y="${T}" width="200" height="44" rx="8" fill="#fff" stroke="#e3e7ee"/>
-      <line x1="${W - 206}" y1="${T + 14}" x2="${W - 176}" y2="${T + 14}" stroke="#dc2626" stroke-width="2.5"/>
-      <text x="${W - 170}" y="${T + 18}">solve rate (整体有效率)</text>
-      <line x1="${W - 206}" y1="${T + 32}" x2="${W - 176}" y2="${T + 32}" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 4"/>
-      <text x="${W - 170}" y="${T + 36}">rubric 覆盖率</text></g>`;
+    s += `<g font-size="12"><rect x="${W - 238}" y="${T}" width="220" height="62" rx="8" fill="#fff" stroke="#e3e7ee"/>
+      <line x1="${W - 226}" y1="${T + 14}" x2="${W - 196}" y2="${T + 14}" stroke="#dc2626" stroke-width="2.5"/>
+      <text x="${W - 190}" y="${T + 18}">solve rate (整体有效率)</text>
+      <line x1="${W - 226}" y1="${T + 32}" x2="${W - 196}" y2="${T + 32}" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <text x="${W - 190}" y="${T + 36}">rubric 覆盖率 (含 hint 白送)</text>
+      <line x1="${W - 226}" y1="${T + 50}" x2="${W - 196}" y2="${T + 50}" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="2 4"/>
+      <text x="${W - 190}" y="${T + 54}">earned (自己挣到的)</text></g>`;
     s += "</svg>";
     $("#curve-chart").innerHTML = s;
   }
@@ -358,9 +382,11 @@
 
     html += `<table class="vmatrix"><tr><th class="item-t">rubric item</th>` +
       judges.map((j) => `<th>${esc(judgeShort(j.judge_name))}</th>`).join("") + `<th>共识</th></tr>`;
+    const revealed = new Set(e.revealed_items || []);
     for (const item of items) {
       html += `<tr><td class="item-t"><b>${esc(item.id)}</b> ${esc(item.title)} ` +
-        (item.frontier_delta ? `<span class="badge delta">frontier Δ</span>` : "") + `</td>`;
+        (item.frontier_delta ? `<span class="badge delta">frontier Δ</span>` : "") +
+        (revealed.has(item.id) ? `<span class="badge warn" title="该级 hint 已揭示此项方向: 不计入 earned">hint 已揭示</span>` : "") + `</td>`;
       for (let k = 0; k < judges.length; k++) {
         const v = vmap[k][item.id];
         if (judges[k].parse_failed) html += `<td class="c muted">—</td>`;

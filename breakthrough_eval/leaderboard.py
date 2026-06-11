@@ -30,6 +30,9 @@ class HintPoint:
     solve_rate: float  # fraction of clean trials judged overall_valid
     mean_coverage: float  # mean rubric coverage over clean trials
     pass_at_k: bool  # any clean trial valid
+    # 在 hint 尚未揭示的 item 里挣到的覆盖率均值; None = 全部已揭示/无数据。
+    # (给 hint 白送的项不算 —— coverage 的「真」难度信号, plan §5)
+    mean_earned_coverage: float | None = None
 
 
 @dataclass
@@ -42,6 +45,7 @@ class LeaderboardRow:
     l0_pass_at_k: bool = False
     lowest_solvable_hint: int | None = None
     peak_rubric_coverage: float = 0.0
+    peak_earned_coverage: float | None = None  # earned 的峰值; None = 无可挣项数据
     probe_cleanliness: float = 1.0  # 1 - excluded/completed (errored runs 不进分母)
     removed: bool = False  # 污染除名
     cost_units: float = 0.0
@@ -111,10 +115,13 @@ class Leaderboard:
                 cost += sum(p.usage.cost_units for p, _ in pairs)
                 review += sum(1 for _, e in clean if e.needs_human_review)
 
+                earned_vals = []
                 if clean:
                     solve_rate = sum(1 for _, e in clean if e.overall_valid) / len(clean)
                     mean_cov = sum(e.rubric_coverage for _, e in clean) / len(clean)
                     pass_k = any(e.overall_valid for _, e in clean)
+                    earned_vals = [e.earned_coverage for _, e in clean
+                                   if e.earned_coverage is not None]
                     x = level / inferred_max if inferred_max else 0.0
                     solve_points.append((x, solve_rate))
                     cov_points.append((x, mean_cov))
@@ -122,9 +129,11 @@ class Leaderboard:
                     # 该级没有任何 clean trial: 没有证据, 不向 AUC 喂假 0 点。
                     solve_rate = mean_cov = 0.0
                     pass_k = False
+                mean_earned = (sum(earned_vals) / len(earned_vals)) if earned_vals else None
 
                 row.points.append(
-                    HintPoint(level, len(pairs), n_excl, n_err, solve_rate, mean_cov, pass_k)
+                    HintPoint(level, len(pairs), n_excl, n_err, solve_rate, mean_cov,
+                              pass_k, mean_earned)
                 )
 
                 if level == 0:
@@ -132,6 +141,10 @@ class Leaderboard:
                 if pass_k and row.lowest_solvable_hint is None:
                     row.lowest_solvable_hint = level
                 row.peak_rubric_coverage = max(row.peak_rubric_coverage, mean_cov)
+                if mean_earned is not None and (
+                    row.peak_earned_coverage is None or mean_earned > row.peak_earned_coverage
+                ):
+                    row.peak_earned_coverage = mean_earned
 
             row.hint_auc = _auc(solve_points)
             row.hint_auc_coverage = _auc(cov_points)
@@ -161,23 +174,24 @@ class Leaderboard:
     def render_main_table(self) -> str:
         header = (
             "| Rank | Harness | Task | hint-AUC ↑ | cov-AUC | L0 pass@k | "
-            "最低可解 hint | rubric 峰值 | 探针洁净度 | 复核 | 错误 | 成本 |"
+            "最低可解 hint | rubric 峰值 | earned 峰值 | 探针洁净度 | 复核 | 错误 | 成本 |"
         )
-        sep = "|" + "---|" * 12
+        sep = "|" + "---|" * 13
         lines = [header, sep]
         for i, r in enumerate(self.rows, 1):
             if r.removed:
                 lines.append(
-                    f"| — | {r.harness} | {r.task_id} | — | — | — | — | — | "
+                    f"| — | {r.harness} | {r.task_id} | — | — | — | — | — | — | "
                     f"❌ 污染除名 | — | {r.error_count} | {r.cost_units:.1f} |"
                 )
                 continue
             lowest = f"L{r.lowest_solvable_hint}" if r.lowest_solvable_hint is not None else "—"
             clean = "✅ clean" if r.probe_cleanliness >= 1.0 else f"⚠️ {r.probe_cleanliness:.0%}"
+            earned = f"{r.peak_earned_coverage:.0%}" if r.peak_earned_coverage is not None else "—"
             lines.append(
                 f"| {i} | {r.harness} | {r.task_id} | {r.hint_auc:.3f} | "
                 f"{r.hint_auc_coverage:.3f} | {'✅' if r.l0_pass_at_k else '0%'} | "
-                f"{lowest} | {r.peak_rubric_coverage:.0%} | {clean} | "
+                f"{lowest} | {r.peak_rubric_coverage:.0%} | {earned} | {clean} | "
                 f"{r.needs_review_count} | {r.error_count} | {r.cost_units:.1f} |"
             )
         return "\n".join(lines)
@@ -186,11 +200,14 @@ class Leaderboard:
         points = self.difficulty_curve(harness, task_id)
         if not points:
             return f"(无数据: {harness} / {task_id})"
-        lines = [f"难度曲线 — {harness} @ {task_id}", "hint  solve_rate  coverage  bar"]
+        lines = [f"难度曲线 — {harness} @ {task_id}",
+                 "hint  solve_rate  coverage  earned  bar"]
         for p in points:
             bar = "█" * int(round(p.solve_rate * 20))
+            earned = (f"{p.mean_earned_coverage:>5.2f}"
+                      if p.mean_earned_coverage is not None else "    —")
             lines.append(
                 f"L{p.hint_level}    {p.solve_rate:>5.2f}      "
-                f"{p.mean_coverage:>5.2f}    {bar}"
+                f"{p.mean_coverage:>5.2f}   {earned}    {bar}"
             )
         return "\n".join(lines)

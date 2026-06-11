@@ -71,12 +71,26 @@ def _parse_judges(spec: str | None) -> list[JudgeBackend]:
     return judges
 
 
+def _parse_probe_judge(spec: str | None):
+    """``--probe-judge openrouter:<model>`` → SemanticProbeJudge (None = 仅关键词)。"""
+    if not spec:
+        return None
+    if spec.startswith("openrouter:"):
+        from .eval.openrouter_judge import openrouter_probe_judge
+
+        return openrouter_probe_judge(spec.split(":", 1)[1])
+    raise SystemExit(f"未知 probe-judge spec: '{spec}' (用 openrouter:<model>)")
+
+
 def _build_controller(args) -> Controller:
     tasks = load_all_tasks(args.tasks_dir)
     registry = ModelRegistry.load(args.registry)
     evaluator = Evaluator(_parse_judges(getattr(args, "judges", None)))
     store = ResultStore(args.results_dir)
-    return Controller(tasks=tasks, registry=registry, evaluator=evaluator, store=store)
+    return Controller(
+        tasks=tasks, registry=registry, evaluator=evaluator, store=store,
+        probe_judge=_parse_probe_judge(getattr(args, "probe_judge", None)),
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -158,6 +172,7 @@ def cmd_run(args) -> int:
         "early_stop_on_contamination": not args.no_early_stop,
         "judges": [j.describe() for j in controller.evaluator.judges],
         "review_kappa_threshold": controller.evaluator.review_kappa_threshold,
+        "probe_judge": controller.probe_judge.describe() if controller.probe_judge else None,
     })
 
     results = controller.run(
@@ -224,7 +239,7 @@ def cmd_probe(args) -> int:
     task = controller.tasks[args.task]
     backend = controller.backend_for(args.model)
     source = controller.source_factory(task.retrieval_cutoff)
-    runner = ProverRunner(backend, source)
+    runner = ProverRunner(backend, source, probe_judge=controller.probe_judge)
     job = Job(task_id=args.task, model=args.model, hint_level=0, trial=0)
     result = runner.run_probes(task, job)  # probe-only: 不进入 (昂贵的) 证明阶段
     print(f"探针结果 — {args.model} @ {args.task}:")
@@ -290,6 +305,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="评委: mock / mock:0.5 / openrouter:<model> (逗号分隔; 默认 mock 三评委面板)",
     )
+    r.add_argument(
+        "--probe-judge",
+        default=None,
+        help="语义级探针泄露评审: openrouter:<model> (关键词命中仍一票否决; 默认仅关键词)",
+    )
     r.set_defaults(func=cmd_run)
 
     lb = sub.add_parser("leaderboard", help="渲染榜单")
@@ -302,6 +322,7 @@ def build_parser() -> argparse.ArgumentParser:
     pr = sub.add_parser("probe", help="只跑污染探针")
     pr.add_argument("--task", required=True)
     pr.add_argument("--model", required=True)
+    pr.add_argument("--probe-judge", default=None, help="同 run --probe-judge")
     pr.set_defaults(func=cmd_probe)
 
     dc = sub.add_parser("diff-check", help="差分 sanity check")

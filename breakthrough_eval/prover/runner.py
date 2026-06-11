@@ -72,10 +72,14 @@ class ProverRunner:
         backend: ProverBackend,
         source: ArxivFrozenSource,
         allowed_hosts: set[str] | None = None,
+        probe_judge=None,
     ):
         self.backend = backend
         self.source = source
         self.allowed_hosts = allowed_hosts or {ARXIV_MCP_HOST}
+        # 语义级泄露评审 (contamination.SemanticProbeJudge): 关键词命中仍一票否决,
+        # 这里抓换措辞的实质复现; None = 仅关键词 (离线默认)。
+        self.probe_judge = probe_judge
 
     def _new_result(self, task: TaskSpec, job: Job) -> ProverRunResult:
         return ProverRunResult(
@@ -114,15 +118,27 @@ class ProverRunner:
                 log.error("job %s: 探针阶段异常: %s", job.job_id, result.error)
                 return
             pr = evaluate_probe(probe, resp.text)
+            if not pr.leaked and self.probe_judge is not None:
+                # 关键词 clean → 语义评审二查 (换措辞的实质复现)。
+                try:
+                    sem_leaked, sem_notes = self.probe_judge.assess(task, probe, resp.text)
+                except Exception as exc:  # noqa: BLE001 - 语义评审异常不应中断探针
+                    sem_leaked, sem_notes = False, f"语义评审异常: {type(exc).__name__}: {exc}"
+                    log.warning("job %s: 探针 %s 语义评审异常: %s", job.job_id, probe.id, sem_notes)
+                pr.semantic_leak = sem_leaked
+                pr.semantic_notes = sem_notes
+                if sem_leaked:
+                    pr.leaked = True
             result.probe_responses.append(pr)
             result.usage.input_tokens += resp.usage.input_tokens
             result.usage.output_tokens += resp.usage.output_tokens
             result.usage.wall_seconds += resp.usage.wall_seconds or (time.perf_counter() - t0)
             log.info(
-                "  探针 %s (%s): %s%s",
+                "  探针 %s (%s): %s%s%s",
                 probe.id, probe.kind.value,
                 "❌ 泄露" if pr.leaked else "✅ clean",
                 f" 命中={pr.matched_indicators}" if pr.matched_indicators else "",
+                " [语义]" if pr.semantic_leak else "",
             )
 
     def run_probes(self, task: TaskSpec, job: Job) -> ProverRunResult:
