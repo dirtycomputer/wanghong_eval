@@ -137,6 +137,7 @@ tr = mcp["environment"]["ARXIV_MCP_TRANSCRIPT"]
 open(tr, "a").write(json.dumps({"tool": "search_arxiv", "query": "q1",
     "returned": [{"arxiv_id": "0807.2256", "submission_date": "2008-07-14"}]}) + "\\n")
 assert "--model" in sys.argv and "openrouter/google/gemma-4-31b-it" in sys.argv
+assert "--pure" in sys.argv                      # 红线+稳定性: 跳过外部插件
 print(json.dumps({"type": "text", "text": "# Claimed Proof\\n## 1. 思路总览\\nfake"}))
 """
 

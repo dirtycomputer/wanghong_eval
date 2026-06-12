@@ -199,6 +199,7 @@ class OpenCodeProverBackend(ProverBackend):
             prompt = ctx.system + "\n\n" + ctx.user
             cmd = [
                 self.opencode_bin, "run",
+                "--pure",  # 跳过外部插件: 其启动期无超时拉取会经代理间歇性死锁 (实测根因)
                 "--model", f"openrouter/{self.model}",
                 "--format", "json",
                 prompt,
