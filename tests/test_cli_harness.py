@@ -182,3 +182,44 @@ def test_cli_backend_unavailable_raises_clearly(task):
         assert "opencode" in str(exc)
     else:  # pragma: no cover
         raise AssertionError("expected RuntimeError")
+
+
+FAKE_OPENCODE_BOOTHANG = """#!/usr/bin/env python3
+import os, sys, time, json
+marker = os.environ["HANG_MARKER"]
+if not os.path.exists(marker):           # 第一次: 模拟启动死锁 (零输出地睡)
+    open(marker, "w").write("hung once")
+    time.sleep(60)
+    sys.exit(1)
+print(json.dumps({"type": "text", "text": "# Claimed Proof\\nrecovered"}))
+"""
+
+
+def test_opencode_boot_hang_detected_and_retried(task, monkeypatch, tmp_path):
+    # 启动死锁 (零输出) 必须在 boot_timeout 内被看门狗识别并重试成功。
+    _install_fake_bin(tmp_path, "opencode", FAKE_OPENCODE_BOOTHANG, monkeypatch)
+    monkeypatch.setenv("HANG_MARKER", str(tmp_path / "hang.marker"))
+    backend = OpenCodeProverBackend(
+        model="google/gemma-4-31b-it", client=_fake_client(),
+        boot_timeout_seconds=2, timeout_seconds=30, max_boot_retries=1,
+    )
+    import time
+    t0 = time.time()
+    resp = backend.run(_ctx(task, "prove"))
+    assert "recovered" in resp.text
+    assert time.time() - t0 < 25  # 死锁被 2s 看门狗掐掉, 而不是烧满 60s
+
+
+def test_opencode_boot_hang_gives_up_after_retries(task, monkeypatch, tmp_path):
+    _install_fake_bin(tmp_path, "opencode",
+                      "#!/usr/bin/env python3\nimport time\ntime.sleep(60)\n", monkeypatch)
+    backend = OpenCodeProverBackend(
+        model="x", client=_fake_client(),
+        boot_timeout_seconds=1, timeout_seconds=10, max_boot_retries=1,
+    )
+    try:
+        backend.run(_ctx(task, "prove"))
+    except RuntimeError as exc:
+        assert "启动死锁" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected RuntimeError")

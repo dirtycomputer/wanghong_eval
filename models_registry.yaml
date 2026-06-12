@@ -43,7 +43,7 @@ models:
       model: "google/gemma-4-31b-it"
       scaffold_version: "opencode"
       probe_max_tokens: 400
-      timeout_seconds: 1800
+      timeout_seconds: 900   # 实测正常 job ≤7min; 已知它在部分任务上会挂死, 降超时少烧 worker
 
   - name: gemma-4-31b-hermes
     cutoff_date: 2025-01-31

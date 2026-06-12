@@ -1,0 +1,313 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L1::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向tube并集体积估计。",
+          "cited_lines": [
+            4,
+            29
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全篇未提及Heisenberg group或海森堡型构型障碍。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在多项式分区中提及普通归纳，未用尺度归纳作骨架。",
+          "cited_lines": [
+            47
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及Wang-Zahl的凸集并集体积估计这一更强表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未讨论sticky或grains等多尺度聚簇结构。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "缺失区分grainy与海森堡型情形的关键结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "步骤5的闭合证明为空洞断言，无实质推导，属自信胡话。",
+          "cited_lines": [
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅罗列经典方法，完全缺失Wang-Zahl证明的核心创新，且最终闭合步骤为空洞断言。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述离散化: δ⁻²根δ-分离方向δ-管并集体积≥δ^ε (lines 4, 29)。",
+          "cited_lines": [
+            4,
+            29
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及海森堡群/Heisenberg构型，此关键障碍完全缺失。",
+          "cited_lines": [
+            6,
+            8,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在line 24/47提'归纳法'，但未建立Tao所述多尺度induction on scales骨架，无scale分离与递推结构。",
+          "cited_lines": [
+            24,
+            47,
+            53
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未将问题重构为凸集并集体积估计，始终停留在tube框架。",
+          "cited_lines": [
+            29,
+            53
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未出现sticky或grains多尺度聚簇结构的任何刻画。",
+          "cited_lines": [
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型分情形讨论的结构定理。",
+          "cited_lines": [
+            40,
+            45,
+            50
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "步骤5完全手挥（'通过对D的选取和对δ的迭代'），未闭合归纳，关键量未受控。",
+          "cited_lines": [
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该'证明'实为Kakeya猜想的思路综述/草稿，而非严格证明。引理1中L^3极大函数估计(line 14)等价于猜想本身却被当作已知；algebraic surface分析(line 50)断言管子在曲面上投影~√δ是错误的；缺少Wang-Zahl全部核心创新(海森堡构型、sticky/grains、凸体重构、多尺度归纳)。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行4、29正确给出δ^{-2}根δ-分离管的并集体积≳δ^ε的离散化目标。",
+          "cited_lines": [
+            4,
+            29
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未出现Heisenberg型构型或相关障碍分析。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅行24、47泛称归纳法，未建立induction on scales尺度归纳骨架。",
+          "cited_lines": [
+            24,
+            47,
+            53
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计或Wang-Zahl标题式更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未出现sticky、grains或多尺度聚簇结构的任何刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy情形与海森堡型分情形的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行52-54为空洞断言，未真正组合前述步骤闭合得到满维3。",
+          "cited_lines": [
+            52,
+            53,
+            54,
+            57
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明未触及Wang-Zahl核心框架，沿用旧工具且论证空洞，未能有效处理三维Kakeya满维障碍。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "将猜想正确归约为 δ-tube 并集体积的弱下界 ≳_ε δ^ε, 等价于满维 3。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及或处理 Heisenberg 构型这一核心障碍。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用 induction on scales 作为组织骨架。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计这一更强表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合 grainy 与海森堡型的结构定理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明未闭合, 依赖经典方法无法达到维数 3。",
+          "cited_lines": [
+            53,
+            54,
+            55
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该证明基于经典的 Wolff hairbrush 与 Guth 多项式分区，但未实现三维 Kakeya 猜想的完全证明，缺少 modern 证明的关键要素如海森堡构型、尺度归纳、凸集并集估计等。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

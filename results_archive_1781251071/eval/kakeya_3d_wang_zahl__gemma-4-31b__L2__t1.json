@@ -1,0 +1,355 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L2::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管并集体积下界。",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出Heisenberg构型及其导致局部高度重叠的障碍。",
+          "cited_lines": [
+            42,
+            43,
+            44,
+            45
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "使用多项式分区而非尺度归纳作为组织骨架。",
+          "cited_lines": [
+            8,
+            12,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未涉及sticky或grains等多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型的结构定理，承认未闭合。",
+          "cited_lines": [
+            52,
+            53
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "结论为条件推导，明确承认未能排除拟代数构型，未闭合。",
+          "cited_lines": [
+            47,
+            48,
+            52,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明未完成，作者明确承认未能闭合Heisenberg构型障碍，且缺失induction on scales等核心骨架。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将猜想归约为 δ⁻² 根 δ-分离方向 tube 并集体积 ≳δ⁻ᵉ（线4-6）",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "提及 Heisenberg 构型（线42-45）但未处理，线53承认未能排除其压制作用",
+          "cited_lines": [
+            42,
+            43,
+            44,
+            45,
+            53
+          ],
+          "confidence": 0.92
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文无尺度归纳骨架，仅用多项式分区组织论证",
+          "cited_lines": [
+            30,
+            31,
+            32
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未给出凸集并集体积估计的更强等价表述",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无 sticky/grains 多尺度聚簇结构，仅提 Hairbrush 与横截/代数二分",
+          "cited_lines": [
+            22,
+            23,
+            24,
+            25,
+            34,
+            37
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合 grainy 与 Heisenberg 情形的结构定理，线53显式承认未闭合",
+          "cited_lines": [
+            48,
+            49,
+            52,
+            53
+          ],
+          "confidence": 0.98
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "prover 在线53明确标注'未能闭合'，证明未完成",
+          "cited_lines": [
+            49,
+            50,
+            52,
+            53
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 给出的仅为不完整草稿，核心 ingredient（R3 尺度归纳、R5 grains、R6 闭合分情形结构定理）全部缺失，且自身承认证明未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为 δ⁻² 根 δ-分离 tube 并集体积问题，第5行指数符号有误。",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 0.6
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅识别 Heisenberg 障碍（第43行），未给出处理方案，反标注开放（第53行）。",
+          "cited_lines": [
+            42,
+            43,
+            53
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用 induction on scales 作为组织骨架（第8–13行策略无此内容）。",
+          "cited_lines": [
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集（convex set unions）的更强等价表述。",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未涉及 sticky / grains 多尺度 tube 聚簇结构。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "缺失将 grainy 与海森堡型分情形闭合的关键结构定理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明未闭合：第53行自认 Heisenberg 构型排除步骤仍开放。",
+          "cited_lines": [
+            52,
+            53
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 采用传统多项式分区+多线性 Kakeya 路径，未使用 Wang–Zahl 的 induction on scales、convex set 及 grainy 结构方法，且自认未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根方向分离的δ-tube并集体积≳1",
+          "cited_lines": [
+            4,
+            5
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅意识到Heisenberg构型是障碍但未处理，且承认未能闭合",
+          "cited_lines": [
+            42,
+            52,
+            53
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳组织证明，而是多项式分区等",
+          "cited_lines": [
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未涉及凸集并集体积估计",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无sticky/grains刻画",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整个证明未闭合，承认未能排除所有构型",
+          "cited_lines": [
+            52,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover尝试写出证明但最后承认步骤未闭合，实际上没有完整证明三维Kakeya猜想。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.7941176470588234,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2"
+  ],
+  "earned_total_items": 5,
+  "earned_passed_items": 0
+}

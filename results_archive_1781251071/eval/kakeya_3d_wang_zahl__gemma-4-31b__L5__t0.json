@@ -1,0 +1,399 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L5::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管的体积下界问题。",
+          "cited_lines": [
+            5,
+            18,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡构型是导致体积小的核心障碍。",
+          "cited_lines": [
+            9,
+            47,
+            48
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用从δ到δ^{1/2}的尺度归纳作为骨架。",
+          "cited_lines": [
+            10,
+            35,
+            36
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "完全未提及凸集并集体积估计这一关键等价表述。",
+          "cited_lines": [
+            3
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "给出了Grainy/Sticky多尺度聚簇结构的刻画。",
+          "cited_lines": [
+            12,
+            25,
+            42
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "错误断言满方向集不能是海森堡构型，属事实错误。",
+          "cited_lines": [
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "纯断言且基于R6错误，未提供实质推导以闭合归纳。",
+          "cited_lines": [
+            57,
+            58,
+            61
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明在R6处出现严重数学事实错误（误认海森堡构型不能包含满方向集），且缺失R4核心重构，整体为无效大纲。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约: δ⁻²根δ-分离方向管并集体积≳δ^ε, 见行5,18,30",
+          "cited_lines": [
+            5,
+            18,
+            30
+          ],
+          "confidence": 0.92
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡构型为核心障碍, 见行9,26,48-49",
+          "cited_lines": [
+            9,
+            26,
+            48,
+            49
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "显式采用尺度归纳骨架, 从δ到δ^{1/2}递推, 见行10,35-36,58-61",
+          "cited_lines": [
+            10,
+            35,
+            36,
+            58,
+            59,
+            60,
+            61
+          ],
+          "confidence": 0.88
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及Wang–Zahl凸集并集体积等价表述, 始终停留在标准tube框架",
+          "cited_lines": [
+            5,
+            17,
+            18,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "提及grainy/sticky但无精确定义或关键刻画, 仅是标签",
+          "cited_lines": [
+            12,
+            25,
+            42,
+            43,
+            44,
+            45
+          ],
+          "confidence": 0.82
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "二分法仅叙述, 两种情形均无实质论证(Heisenberg处理尤其空洞), 见行23-26,48-55",
+          "cited_lines": [
+            23,
+            24,
+            25,
+            26,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "闭合依赖未证实的R5/R6, 递推终止论证不充分, 满维结论无法成立",
+          "cited_lines": [
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+          ],
+          "confidence": 0.88
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "此为高层次的证明策略大纲, 正确识别了离散化、海森堡障碍、尺度归纳等核心要素, 但缺少Wang–Zahl凸集重述、sticky/grainy的精确定义、以及两种情形(二分法)的实质论证, 关键步骤均为断言而非证明, 不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第5、18行正确归约为δ⁻²根δ-分离管并集体积≳δ^ε。",
+          "cited_lines": [
+            5,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第9、48行识别海森堡构型为核心障碍并设专门步骤。",
+          "cited_lines": [
+            9,
+            48
+          ],
+          "confidence": 0.6
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "第10、36-40行采用尺度归纳，定义δ→δ^{1/2}演化与分类。",
+          "cited_lines": [
+            10,
+            36,
+            37,
+            38,
+            39,
+            40
+          ],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及凸集并集体积估计，仅停留在δ-管并集。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "虽命名grainy/sticky，但无多尺度聚簇的数学刻画。",
+          "cited_lines": [
+            12,
+            25,
+            43,
+            44,
+            45
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "引理3仅为断言式分情形，无精确陈述与证明。",
+          "cited_lines": [
+            23,
+            24,
+            25,
+            26,
+            27
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第59-62行递推空洞，无具体数学内容，未有效闭合。",
+          "cited_lines": [
+            59,
+            60,
+            61,
+            62
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅为标准纲领的重述，缺乏所有关键步骤的数学实质与可核查论证。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "ç¬¬5è¡æç¡®å°çæ³å½çº¦ä¸ºÎ´â»Â²æ ¹æ¹åÎ´-åç¦»çåä½Î´-ç®¡å¹¶éä½ç§¯â³Î´^Îµï¼ç¬¦åR1æ åã",
+          "cited_lines": [
+            5
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "ç¬¬9è¡æåºæµ·æ£®å ¡æåæ¯åéç¢ï¼ç¬¬48-50è¡è¿ä¸æ­¥æè¿°åä»£æ°åï¼æè¯å°å¹¶å¤çäºè¯¥éç¢ã",
+          "cited_lines": [
+            9,
+            48,
+            49,
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "ç¬¬10è¡æç¡®éç¨å°ºåº¦å½çº³ï¼ç¬¬35-38è¡å®ä¹Q(Î´)å¹¶ååå°ºåº¦Ï=Î´^{1/2}ï¼ä½ä¸ºç»ç»éª¨æ¶ã",
+          "cited_lines": [
+            10,
+            35,
+            36,
+            37,
+            38
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "åæªæåå°é®é¢éæä¸ºå¸éå¹¶éçä½ç§¯ä¼°è®¡ï¼ä¹æªç»åºWangâZahlæ é¢å¼çæ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "ä»å¨ç¬¬12ã43è¡æåGrainy/Stickyèç°ï¼ä½æªç»åºå¤å°ºåº¦èç°ç»æçåå»ç»ï¼ç¼ºä¹åå®ä¹æå¼çã",
+          "cited_lines": [
+            12,
+            43
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "ç¬¬23-26è¡æåºç»æäºåï¼ä½æªç»åºé­ågrainyä¸æµ·æ£®å ¡åæå½¢çç»æå®çååè¯æï¼ä»æ¦è¿°ã",
+          "cited_lines": [
+            23,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "ç¬¬57-62è¡ä»ç»åºéæ¨ä¸ç­å¼åç»è®ºå£°æï¼æªå±ç¤ºå¦ä½ç»åR1âR6é­åå½çº³å¾å°ç»´æ°3çåè®ºè¯ã",
+          "cited_lines": [
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Proveräº§ç©ä»æä¾äºé«å±æ¬¡çæè·¯æ¦è¿°åå¼çå£°æï¼ç¼ºä¹R4ãR5ãR6æè¦æ±çåæé ãå»ç»åé­åè¯æï¼å æ­¤æ´ä½è®ºè¯ä¸æç«ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.86,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+  ],
+  "earned_total_items": 0,
+  "earned_passed_items": 0
+}

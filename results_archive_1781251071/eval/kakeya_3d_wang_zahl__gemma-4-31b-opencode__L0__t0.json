@@ -1,0 +1,314 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L0::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将问题离散化为delta管并集体积估计。",
+          "cited_lines": [
+            5
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未识别海森堡型构型，仅泛泛提及Besicovitch结构。",
+          "cited_lines": [
+            23
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "完全未提及或使用尺度归纳(induction on scales)。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计或等价强表述。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认存在The Gap，未能闭合证明得到维数3。",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover明确承认证明未闭合，仅给出部分思路，未完成证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "L5 正确提出 N≈δ⁻²,但 L17 将目标写成 ≳δ^ε 而非 ≳1(up to logs),目标量级错误",
+          "cited_lines": [
+            5,
+            17
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "L23 只提 'Besicovitch-like 变体',未识别 Heisenberg 群构型这一关键障碍",
+          "cited_lines": [
+            23
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文无尺度归纳骨架,仅分 '步骤 A/B',非 induction on scales",
+          "cited_lines": [
+            15,
+            19
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未得到 Wang–Zahl 标题式的凸集并集体积估计,无此更强等价表述",
+          "cited_lines": [
+            10,
+            15
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "L20 仅泛泛说 '小球迷密',未给出 sticky/grains 多尺度聚簇结构",
+          "cited_lines": [
+            20
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无 grainy vs 海森堡型分情形闭合的结构定理",
+          "cited_lines": [
+            10,
+            22
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "L22-23 明确承认 '未闭合点',仅达 dim_H≥2.5,未证满维 3",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "prover 在 L22-23 自我承认证明未闭合,且目标量级 L17 写错(≳δ^ε 而非 ≳1);关键结构(R2–R6)均缺失,非有效替代路径。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4-5行将问题归约为δ^{-2}根δ-分离δ-管并集体积估计，第17行给出下界目标。",
+          "cited_lines": [
+            4,
+            5,
+            17
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "第23行仅泛谈'高度结构化'重叠，未提及海森堡群或海森堡型构型。",
+          "cited_lines": [
+            23
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未出现尺度归纳(induction on scales)或类似多尺度迭代框架。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未将问题重构为凸集并集体积估计，无Wang–Zahl标题式等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未刻画sticky、grains或多尺度聚簇结构。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy情形与海森堡型的分情形结构定理及闭合论证。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第22-23行明确标注'未闭合点'，承认无法排除关键重叠，未得满维。",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅给出经典方法概述并自陈存在本质gap，未涉及Wang–Zahl证明的核心机制（尺度归纳、凸集重构、grainy/heisenberg结构定理），故不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "Incorrect reduction: claimed volume ≳ δ^ε, not ≳ 1 up to logs.",
+          "cited_lines": [
+            4,
+            5,
+            17
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "Mentions only Besicovitch-like, not Heisenberg group, and does not handle it.",
+          "cited_lines": [
+            23
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "No induction on scales mentioned anywhere in the proof.",
+          "cited_lines": [
+            10,
+            23
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "No convex-set union formulation or Wang–Zahl equivalent statement.",
+          "cited_lines": [
+            10,
+            23
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "No sticky/grains multi-scale clustering described.",
+          "cited_lines": [
+            10,
+            23
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "No structural theorem closing grainy and Heisenberg cases.",
+          "cited_lines": [
+            10,
+            23
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Explicitly acknowledges gap; does not close to full dimension 3.",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "The prover does not present a valid proof; it describes known approaches and explicitly acknowledges a gap, thus failing to prove the theorem.",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": false,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 0,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.3333333333333328,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_total_items": 7,
+  "earned_passed_items": 0
+}

@@ -1,0 +1,309 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L2::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第5和22行正确将问题离散化为δ-tube并集体积下界估计。",
+          "cited_lines": [
+            5,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第15至16行明确识别海森堡构型为核心障碍。",
+          "cited_lines": [
+            15,
+            16
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在第26行泛泛提及递归，未采用induction on scales作为组织骨架。",
+          "cited_lines": [
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "第31行明确表示无法排除海森堡型结构，未给出闭合的结构定理。",
+          "cited_lines": [
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第33行明确承认下界未能提升到3，归纳未闭合，证明失败。",
+          "cited_lines": [
+            33
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover明确承认猜想未被证明且无法闭合到3，仅复述了部分已知结果，证明完全失败。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Lines 5,22 正确归约为 δ⁻² 根 δ-分离方向 tube 并集体积问题",
+          "cited_lines": [
+            5,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "Lines 15-16,31 明确识别海森堡构型为核心障碍",
+          "cited_lines": [
+            15,
+            16,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在 line 8,26 笼统提及递归归纳，未作为组织骨架展开",
+          "cited_lines": [
+            8,
+            26
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及 Wang-Zahl 凸集并集体积等价表述，完全缺失",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无 grainy/海森堡分情形闭合的结构定理，仅承认 gap",
+          "cited_lines": [
+            29,
+            30,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Line 33 明确承认 ≥3 未闭合，证明未达成目标",
+          "cited_lines": [
+            33
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 坦诚承认猜想未被证明，仅达到 Wolff 的 2.5 维下界，未提供任何新工具或闭合论证。缺少 Wang-Zahl 凸集并集体积重构、sticky/grains 结构、分情形闭合定理等全部核心 ingredient。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第21-22行将问题正确归约为δ⁻²根δ-分离管的并集体积≳(log)⁻ᶜ。",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "第15-16行意识到海森堡构型是障碍，但第31行承认无法处理，未闭合。",
+          "cited_lines": [
+            15,
+            16,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "第26行仅泛谈递归归纳，未将induction on scales作为组织骨架展开。",
+          "cited_lines": [
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及Wang–Zahl式的凸集并集体积估计等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未出现sticky或grains多尺度聚簇结构的刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出将grainy情形与海森堡型分情形闭合的任何结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第19、33行明确承认≥3尚未闭合，未得到满维3。",
+          "cited_lines": [
+            19,
+            33
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "prover实际未声称完成证明，仅综述了已知瓶颈（Wolff界2.5）并指出三维Kakeya猜想仍未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Step 1 给出了δ-管离散化表述：δ⁻²根方向分离的管并集体积≳(log 1/δ)^{-C}",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "只提及海森堡构型为障碍，未处理或解决该构型",
+          "cited_lines": [
+            15,
+            16
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文明明未采用尺度归纳作为组织骨架",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计的等价表述",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇刻画",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "没有grainy与海森堡分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "结论明确指出维数≥3未闭合，因此未得维数3",
+          "cited_lines": [
+            33
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 并未给出完整证明，而是概述已知方法并指出瓶颈，承认未能证明维数3。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.7254901960784311,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2"
+  ],
+  "earned_total_items": 5,
+  "earned_passed_items": 0
+}

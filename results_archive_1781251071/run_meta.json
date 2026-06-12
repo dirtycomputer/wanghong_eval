@@ -1,0 +1,65 @@
+{
+  "kind": "breakthrough-eval.run",
+  "created_at": "2026-06-11T17:17:14+00:00",
+  "registry": "models_registry.openrouter.yaml",
+  "task_ids": [
+    "kakeya_3d_wang_zahl",
+    "klartag_lattice_sphere_packing"
+  ],
+  "models": [
+    "gemma-4-31b",
+    "gemma-4-31b-opencode",
+    "gemma-4-31b-hermes"
+  ],
+  "hint_levels": null,
+  "trials": 2,
+  "workers": 4,
+  "early_stop_on_contamination": true,
+  "judges": [
+    {
+      "name": "openrouter:qwen/qwen3.7-max",
+      "kind": "LLMJudge",
+      "max_parse_retries": 1,
+      "model": "qwen/qwen3.7-max",
+      "max_tokens": 65536,
+      "temperature": 0.0,
+      "timeout": 3600
+    },
+    {
+      "name": "openrouter:minimax/minimax-m3",
+      "kind": "LLMJudge",
+      "max_parse_retries": 1,
+      "model": "minimax/minimax-m3",
+      "max_tokens": 512000,
+      "temperature": 0.0,
+      "timeout": 3600
+    },
+    {
+      "name": "openrouter:moonshotai/kimi-k2.6",
+      "kind": "LLMJudge",
+      "max_parse_retries": 1,
+      "model": "moonshotai/kimi-k2.6",
+      "max_tokens": 245760,
+      "temperature": 0.0,
+      "timeout": 3600
+    },
+    {
+      "name": "openrouter:deepseek/deepseek-v4-pro",
+      "kind": "LLMJudge",
+      "max_parse_retries": 1,
+      "model": "deepseek/deepseek-v4-pro",
+      "max_tokens": 384000,
+      "temperature": 0.0,
+      "timeout": 3600
+    }
+  ],
+  "review_kappa_threshold": 0.6,
+  "probe_judge": {
+    "name": "semantic-probe:deepseek/deepseek-v4-pro",
+    "kind": "SemanticProbeJudge",
+    "model": "deepseek/deepseek-v4-pro",
+    "max_tokens": 2048,
+    "temperature": 0.0
+  },
+  "notes": "两批次: kakeya 全阶梯×2 trials (36 job); klartag L0,L3,L5×1 trial×3 harness (9 job, 语义探针评审)"
+}

@@ -1,0 +1,360 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L1::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向tube并集体积估计。",
+          "cited_lines": [
+            6,
+            7,
+            19,
+            20
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅提及平面集中，未识别Heisenberg群构型这一核心障碍。",
+          "cited_lines": [
+            58,
+            59,
+            60
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳(induction on scales)作为证明骨架。",
+          "cited_lines": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [
+            1,
+            2,
+            3
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "完全缺失sticky/grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            1,
+            2,
+            3
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型的结构定理及证明。",
+          "cited_lines": [
+            1,
+            2,
+            3
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认未闭合Gap，未得到满维3，证明失败。",
+          "cited_lines": [
+            56,
+            60,
+            65
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅综述了部分经典结果(Wolff, Multilinear)，并在第三阶段明确承认未能闭合从2.5到3的Gap，证明未完成。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将猜想归约为 δ⁻² 根 δ-分离管并集体积 ≳ 1 (up to logs)",
+          "cited_lines": [
+            6,
+            7,
+            18,
+            19,
+            20
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及海森堡群构型，仅泛泛讨论平面集中障碍",
+          "cited_lines": [
+            51,
+            58,
+            60
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳骨架，改为 Wolff→多线性→gap 的三分结构",
+          "cited_lines": [
+            9,
+            13,
+            34,
+            51
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计这一更强等价表述",
+          "cited_lines": [
+            6,
+            7,
+            18,
+            19
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "完全未出现 sticky/grains 多尺度聚簇结构",
+          "cited_lines": [
+            17,
+            27,
+            34,
+            44
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy vs 海森堡型分情形闭合的结构定理",
+          "cited_lines": [
+            17,
+            27,
+            44,
+            51
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明未闭合：prover 明确标注 Gap 且声称猜想仍 Open（事实错误）",
+          "cited_lines": [
+            56,
+            60,
+            64,
+            65
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 明确承认证明未完成 (line 56-65)，且错误地声称 3D Kakeya 猜想仍 Open。论证仅覆盖 Wolff 的 2.5 下界和横截性情形下的多线性结果，完全缺少 Wang-Zahl 证明的核心 ingredient：尺度归纳、sticky/grains 结构、grainy 与海森堡型闭合结构定理、凸集体积估计。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ-管并集体积估计，第20行出现up-to-logs表述。",
+          "cited_lines": [
+            6,
+            7,
+            8,
+            19,
+            20
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未识别Heisenberg型构型，仅提'平面集中'，与核心障碍不符。",
+          "cited_lines": [
+            58,
+            59,
+            60
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未采用induction on scales，仅使用经典Wolff与多线性估计。",
+          "cited_lines": [
+            1,
+            65
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为Wang-Zahl式的凸集并集体积更强等价表述。",
+          "cited_lines": [
+            1,
+            65
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky、grains或多尺度聚簇结构的任何刻画。",
+          "cited_lines": [
+            1,
+            65
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy情形与海森堡型的分情形闭合结构定理。",
+          "cited_lines": [
+            1,
+            65
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确自认未闭合，称完整猜想仍Open，未得到满维3。",
+          "cited_lines": [
+            56,
+            60,
+            65
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅复述已知下界与多线性结果，完全未触及Wang-Zahl证明的核心新 ingredients。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "目标为δ^ε弱于常数下界≳1，不符归约要求",
+          "cited_lines": [
+            6,
+            7
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及海森堡型构型，仅提到平面集中",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "无尺度归纳作为骨架，仅并列经典引理",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计等价表述",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无sticky/grains多尺度聚簇刻画",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无grainy/海森堡型分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "论证未闭合，承认gap，未得到维数3",
+          "cited_lines": [
+            56,
+            58,
+            62,
+            63
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "未证明猜想，仅给出经典下界和未闭合的讨论，缺少金标准证明的核心要素。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.49999999999999956,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

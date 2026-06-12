@@ -1,0 +1,366 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L5::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ-管并集体积下界问题。",
+          "cited_lines": [
+            8,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡构型是核心障碍。",
+          "cited_lines": [
+            10,
+            24,
+            25
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "引入多尺度分析，以尺度归纳为骨架。",
+          "cited_lines": [
+            9,
+            39,
+            40
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及凸集并集体积估计这一更强表述。",
+          "cited_lines": [
+            3,
+            4,
+            5
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "定义Grainy/Sticky特性，刻画多尺度聚簇。",
+          "cited_lines": [
+            20,
+            21,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理证明依赖错误直觉，且承认简化。",
+          "cited_lines": [
+            28,
+            46,
+            64
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "文末明确承认不确定性与简化，未真正闭合。",
+          "cited_lines": [
+            52,
+            63,
+            64
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明在R4缺失核心等价表述，且在R6和R7中明确承认了论证的简化与不确定性，未能真正完成数学证明的闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将猜想归约为 δ⁻² 根 δ-分离单位 δ-管并集体积 ≳ 1",
+          "cited_lines": [
+            8,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡型构型为核心障碍并给出代数描述",
+          "cited_lines": [
+            10,
+            24,
+            25
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "以尺度归纳 ρ_j = δ^{2^{-j}} 为组织骨架",
+          "cited_lines": [
+            9,
+            40,
+            41
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未给出 Wang–Zahl 标题式凸集并集体积估计的更强等价重构",
+          "cited_lines": [],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "提及 sticky/grains 术语但无数学刻画，仅有循环模糊描述",
+          "cited_lines": [
+            20,
+            21,
+            22
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理仅作断言未证明，分解存在性无任何论证",
+          "cited_lines": [
+            28,
+            29,
+            30,
+            31,
+            64
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "闭合论证全为手动断言，prover 自承'简化论证'且未给常数",
+          "cited_lines": [
+            52,
+            53,
+            54,
+            55,
+            57,
+            64,
+            65
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "本产物仅为高层次的证明大纲/路线图，而非可验证的数学证明。R1–R3 正确识别了框架与障碍，但 R4–R7 涉及的核心技术内容（凸集并集体积等价重构、sticky/grains 精确刻画、二分结构定理的证明、归纳闭合的严格执行）全部缺失或仅以手动断言形式出现。prover 在第 64–65 行自承采用'简化论证'且未给出常数计算，进一步证实其未完成严格证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ-管并集体积估计，目标≳1",
+          "cited_lines": [
+            8,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡型构型为三维核心障碍",
+          "cited_lines": [
+            10,
+            25
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "声明采用尺度归纳并设尺度序列ρ_j",
+          "cited_lines": [
+            9,
+            40
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计的等价重构",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅命名sticky/grains，无多尺度聚簇结构的可核查刻画",
+          "cited_lines": [
+            21
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理为空洞声明，无grainy与海森堡型的闭合论证",
+          "cited_lines": [
+            29,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "组合论证为空洞枚举，未真正闭合归纳得满维",
+          "cited_lines": [
+            52,
+            57
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "缺少凸集重构(R4)与多尺度聚簇刻画(R5)，结构定理及闭合论证均为断言，无有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "引理1错误声称vol≳δ^ε即可，与标准归约vol≳1矛盾",
+          "cited_lines": [
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确提到海森堡构型并描述z=xy结构",
+          "cited_lines": [
+            10,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "设定多尺度ρ_j=δ^{2^{-j}}并使用能量泛函归纳",
+          "cited_lines": [
+            9,
+            40,
+            41
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积或等价表述",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "定义了Grainy/粘性特性并给出相交概率描述",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "仅声明二分定理，未给出证明或闭合论证",
+          "cited_lines": [
+            28,
+            29,
+            30,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "R1归约错误且R6未证明，闭合归纳不完整",
+          "cited_lines": [
+            52,
+            53,
+            54,
+            55,
+            56,
+            57
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "核心错误：引理1将体积下界标准归约误为δ^ε，无法得到维数3；结构定理未证明，整体论证不闭合。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.6655555555555556,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+  ],
+  "earned_total_items": 0,
+  "earned_passed_items": 0
+}

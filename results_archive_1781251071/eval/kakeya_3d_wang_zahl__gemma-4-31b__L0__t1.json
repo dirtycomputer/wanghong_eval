@@ -1,0 +1,298 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L0::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向tube并集体积估计。",
+          "cited_lines": [
+            7,
+            29,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "完全未提及或处理Heisenberg构型这一核心障碍。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳(induction on scales)作为证明骨架。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型情形的闭合结构定理。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行42至44及47至50为含糊断言，未真正闭合归纳得满维。",
+          "cited_lines": [
+            42,
+            43,
+            47,
+            49
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "拼凑早期已知结果，缺失核心新思想，关键步骤为含糊断言。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向δ-管并集体积下界(行7, 29-30)。",
+          "cited_lines": [
+            7,
+            29,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg型构型/海森堡群障碍这一核心困难。",
+          "cited_lines": [
+            1,
+            52
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "无尺度归纳骨架,仅直接引用Wolff和多线性估计,无induction结构。",
+          "cited_lines": [
+            26,
+            45
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未将问题重构为凸集(plates/caps)并集体积估计的更强等价形式。",
+          "cited_lines": [
+            7,
+            29
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            26,
+            52
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无grainy与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [
+            26,
+            52
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "步骤3显式留空(行42'此处需结合'),步骤4自标不确定性(行48),归纳未闭合。",
+          "cited_lines": [
+            42,
+            48
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅是已知工具(Wolff ℓ^{3/2}、Guth多线性Kakeya)的粗略拼接,未触及Wang-Zahl证明的核心难点:Heisenberg型障碍识别、尺度归纳骨架、sticky/grains聚簇、凸集并集体积重构。关键推导步骤(行42-44)显式留白,Hausdorff维数提升(行47-50)被作者自行标注为'最困难的一步'且未给出实质论证,不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第7行正确归约为δ^{-2}根δ-分离管的并集体积≳δ^ε。",
+          "cited_lines": [
+            7,
+            29,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未出现Heisenberg型构型或相关障碍分析。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未采用induction on scales，仅罗列静态引理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及Wang–Zahl式凸集并集体积估计的等价表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未刻画sticky/grains多尺度聚簇结构。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第42行推导残缺，第44行直接断言结论，未真正闭合归纳得满维3。",
+          "cited_lines": [
+            42,
+            44
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅堆砌Wolff、Guth旧估计与Katz-Tao方法，未触及Wang-Zahl核心框架，属自信胡话。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "设定目标体积 ≳ δ^ε 而非 ≳ 1，归约过弱",
+          "cited_lines": [
+            30
+          ],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "论证中完全未提及海森堡构型",
+          "cited_lines": [],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳作为组织骨架",
+          "cited_lines": [],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计",
+          "cited_lines": [],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未涉及 sticky/grains 多尺度结构",
+          "cited_lines": [],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 0.5
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "缺少核心障碍处理，整体不闭合",
+          "cited_lines": [],
+          "confidence": 0.5
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅基于多线性估计和Wolff估计，但未能处理海森堡型障碍，也未使用尺度归纳，目标设定过弱，不是有效证明。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.49999999999999956,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_total_items": 7,
+  "earned_passed_items": 1
+}

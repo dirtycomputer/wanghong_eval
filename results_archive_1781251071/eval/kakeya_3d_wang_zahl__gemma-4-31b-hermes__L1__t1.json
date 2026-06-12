@@ -1,0 +1,322 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L1::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管并集体积≳1。",
+          "cited_lines": [
+            4,
+            16,
+            17,
+            33
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未识别或处理海森堡型构型这一核心障碍。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "采用多项式分区而非induction on scales骨架。",
+          "cited_lines": [
+            26,
+            35
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计的更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认未闭合，仅得2.5+ε，未证满维3。",
+          "cited_lines": [
+            48,
+            49,
+            52
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅综述了部分已知结果(2.5+ε)，并明确承认无法完成到3的证明，未使用Wang-Zahl的核心新工具。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将维数问题归约为 δ⁻² 根 δ-分离方向管的并集体积 ≳ 1 (lines 4, 16-17, 33)。",
+          "cited_lines": [
+            4,
+            16,
+            17,
+            33
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未识别 Heisenberg group 构型为核心障碍；仅笼统提'奇异点集'，缺乏关键认知。",
+          "cited_lines": [
+            12,
+            49
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅一句提到'递归/归纳'，无尺度归纳的明确组织骨架。",
+          "cited_lines": [
+            37
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及 Wang–Zahl 标题式的凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文无 sticky/grains 多尺度聚簇结构的任何刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明显式承认未闭合：仅得 2.5+ε，lines 48-49、52 明确标注缺口，未达成 dim=3。",
+          "cited_lines": [
+            48,
+            49,
+            52
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 自身在 lines 48-49 和 52 承认仅证到 2.5+ε，dim=3 的闭合步骤缺失。证明未完成，且缺少 Wang–Zahl 证明中的关键 ingredients（sticky/grains、凸集并集体积、Heisenberg 构型处理、尺度归纳骨架等）。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离tube并集体积≳1。",
+          "cited_lines": [
+            4,
+            16,
+            17,
+            33
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及Heisenberg型构型，仅讨论代数情形平面/曲率。",
+          "cited_lines": [
+            39,
+            42,
+            49
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用induction on scales作为组织骨架，仅提递归/归纳法。",
+          "cited_lines": [
+            37
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未得到凸集并集体积估计的更强等价表述。",
+          "cited_lines": [
+            4,
+            16,
+            17,
+            33
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画。",
+          "cited_lines": [
+            20,
+            26,
+            39
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [
+            39,
+            42,
+            49
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "未闭合归纳得到维数3，反而声明尚未证明。",
+          "cited_lines": [
+            48,
+            49,
+            52
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover未证明定理，仅综述已知结果并明确承认缺失关键步骤。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为 δ⁻² 根方向 δ-分离的 tube 并集体积 ≳ 1",
+          "cited_lines": [
+            4,
+            16,
+            17
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及 Heisenberg group 式构型这一关键障碍",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用 induction on scales 作为组织骨架",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未得到凸集并集体积估计这一更强等价表述",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构刻画",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合 grainy 与海森堡型的结构定理",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认未闭合，未得到维数 3",
+          "cited_lines": [
+            48,
+            49,
+            50
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 仅概述已知下界方法并承认缺失关键步骤，未实际证明定理。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

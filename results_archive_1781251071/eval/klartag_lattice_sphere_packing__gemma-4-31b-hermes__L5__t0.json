@@ -1,0 +1,340 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L5::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将问题转化为寻找无格点大体积空椭球，并给出线性变换等价密度。",
+          "cited_lines": [
+            7,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确提出放弃传统平均法，在固定格上通过SDE驱动椭球动态演化。",
+          "cited_lines": [
+            8,
+            34
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "给出了包含漂移、扩散和反射项的SDE精确定义，约束机制完整。",
+          "cited_lines": [
+            35,
+            36,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "Line51的线性关系公式纯属编造，鞅分析缺乏实质推导，属自信胡话。",
+          "cited_lines": [
+            28,
+            51,
+            53
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅在Line50提及定理名称，无实质性联系与短向量控制的论证。",
+          "cited_lines": [
+            50
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": true,
+          "justification": "成功将体积为n^2的空椭球通过线性变换转化为球堆积并得出最终密度。",
+          "cited_lines": [
+            56,
+            57,
+            58
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 在 R4 和 R5 核心分析步骤中使用了编造的公式和 name-dropping，缺乏可核查的严格数学论证。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "引理1正确陈述空椭球→球堆积的标准归约，公式Δ=Vol(E)/(2ⁿdet(L))成立",
+          "cited_lines": [
+            7,
+            16,
+            17,
+            18,
+            19
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第8行明确放弃平均范式，改为固定格上的SDE动态演化",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "第35-40行给出SDE定义含扩散项dW_t和反射约束R_i，框架具体",
+          "cited_lines": [
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "鞅M_t定义在第28行，但关键体积估计E[V|k]≈k/V_n·det(L)仅断言无证明",
+          "cited_lines": [
+            28,
+            50,
+            51,
+            52
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅第50行一笔带过'Minkowski第二定理推广'，无逐次极小λ_i控制实质论证",
+          "cited_lines": [
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": true,
+          "justification": "第55-59行线性变换转化并得Δ≥cn²/2ⁿ，代数正确",
+          "cited_lines": [
+            55,
+            56,
+            57,
+            58,
+            59
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明结构与Klartag路径一致但关键步骤缺失：R4体积~n²的估计仅断言未证（'根据Minkowski第二定理推广'非证明），R5逐次极小控制实质缺失。鞅和SDE框架虽正确搭建，但核心定量估计未闭合，不构成完整证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将密度下界转化为空椭球体积最大化，并给出线性变换等价公式。",
+          "cited_lines": [
+            7,
+            17,
+            18,
+            19
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确提出放弃随机格平均范式，转向固定格上的动态演化调整。",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "SDE反射项无数学定义，停时表述破碎，未给出可核查的精确约束机制。",
+          "cited_lines": [
+            27,
+            35,
+            36,
+            40
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "仅断言鞅与期望下界存在，无具体可核查的鞅构造与体积期望估计。",
+          "cited_lines": [
+            26,
+            28,
+            50,
+            51,
+            53
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "完全未提及逐次极小，也未用Minkowski第二定理控制短向量结构。",
+          "cited_lines": [
+            50
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": true,
+          "justification": "形式上完成空椭球到球堆积转化并写出最终下界，但基础未证。",
+          "cited_lines": [
+            55,
+            56,
+            57,
+            58,
+            59
+          ],
+          "confidence": 0.5
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明试图复现Klartag路径，但核心创新点R3-R5均缺乏可核查的数学定义与推导，属未完成论证。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "明确将密度问题转化为构造空椭球，给出体积与密度的等价关系",
+          "cited_lines": [
+            7,
+            16,
+            17,
+            18,
+            19
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确提出放弃平均范式，转向固定格上椭球的动态演化",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "定义了椭球演化的SDE，含扩散、反射项，触碰格点时添加约束",
+          "cited_lines": [
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "仅声称利用鞅和停时定理，未给出推导或证明体积期望为n^2量级",
+          "cited_lines": [
+            26,
+            27,
+            28,
+            51,
+            52,
+            53
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅引用Minkowski第二定理，未实际将椭球演化与逐次极小结合控制",
+          "cited_lines": [
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": true,
+          "justification": "从空椭球体积下界成功推导出最终密度cn^2/2^n，完成闭合",
+          "cited_lines": [
+            56,
+            57,
+            58,
+            59
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明概要缺失了鞅分析（R4）和逐次极小控制（R5）的关键细节，未形成完整有效证明。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": true
+  },
+  "passed_items": 4,
+  "total_items": 6,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.8333333333333335,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "earned_passed_items": 0,
+  "earned_total_items": 0
+}

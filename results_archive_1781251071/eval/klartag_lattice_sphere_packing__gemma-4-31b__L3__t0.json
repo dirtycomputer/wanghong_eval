@@ -1,0 +1,414 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L3::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "引理1正确将空凸体体积与球堆积密度等价转化。",
+          "cited_lines": [
+            15,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确提出放弃对格取平均，采用动态演化构造法。",
+          "cited_lines": [
+            6,
+            7,
+            8,
+            10
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "给出了SDE形式定义、扩散项及遇格点时的反射停时机制。",
+          "cited_lines": [
+            21,
+            23,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "体积下界分析仅为启发式，未提供严格的鞅或停时定量分析。",
+          "cited_lines": [
+            30,
+            32,
+            60,
+            61
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未提及Minkowski第二定理或逐次极小以控制短向量。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "证明未严格闭合，作者文末明确承认定量转换仅为启发式。",
+          "cited_lines": [
+            55,
+            56,
+            60,
+            61
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "核心体积分析仅为启发式，缺失逐次极小控制，且作者文末明确承认证明未严格闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "引理1正确将空凸体问题等价转化为密度下界，表述清晰。",
+          "cited_lines": [
+            15,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第6、8-10行明确放弃平均范式，提出动态演化构造思路。",
+          "cited_lines": [
+            6,
+            8,
+            10
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "SDE中μ、σ未具体定义；反射/停时机制仅模糊描述为'跳跃或方向改变'，缺乏可核查的精确机制。",
+          "cited_lines": [
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "无鞅定义、无停时定理应用；n log n体积期望仅凭启发式断言（第32-33行），无严格论证。",
+          "cited_lines": [
+            32,
+            33,
+            49,
+            50,
+            51,
+            52
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未提及逐次极小或Minkowski第二定理，完全缺少短向量控制论证。",
+          "cited_lines": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "最终密度为n log n/2^n而非n²/2^n，且支撑此结论的R4、R5均未严格闭合，证明不完整。",
+          "cited_lines": [
+            55,
+            56,
+            57
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明框架（R1、R2）正确，但核心技术内容严重缺失：SDE定义含糊，无鞅/停时分析，未涉及逐次极小控制，最终密度n log n/2^n仅为启发式猜测而非严格证明。即使作为替代路径，也未达到任何超线性下界的可验证论证标准。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "在第9行及引理1（第16–18行）中将问题正确归约为构造无格点中心对称凸体，并通过线性变换联系球堆积密度。",
+          "cited_lines": [
+            9,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第6–12行明确批评传统平均范式，提出对固定格上的椭球进行动态/迭代调整的思路。",
+          "cited_lines": [
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅给出含未定义漂移μ与扩散σ的模板SDE（第22–23行），反射机制仅为定性描述（第26行），无可核查的精确数学定义。",
+          "cited_lines": [
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "第28–33行与第55行仅作启发式断言体积≈n log n，未使用鞅或停时定理，更未证明c·n²量级；第61行自承非严格。",
+          "cited_lines": [
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            55,
+            61
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未出现逐次极小（successive minima）或Minkowski第二定理，仅有泛泛的“避开格点”描述（第49–53行）。",
+          "cited_lines": [
+            49,
+            50,
+            51,
+            52,
+            53
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "最终给出的密度下界为c′·n log n/2ⁿ（第55–56行），而非rubric要求的c·n²/2ⁿ，且第61行承认关键步骤尚未严格闭合。",
+          "cited_lines": [
+            54,
+            55,
+            56,
+            57,
+            61
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅提供启发式框架，核心定量估计（SDE反射控制、体积下界）均无可核查的推导，且最终界为n log n而非n²，不满足有效复现判据。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确地将问题转化为构造内部无格点的大体积凸体，并通过线性变换等价于球堆积密度。",
+          "cited_lines": [
+            9,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确放弃随机格平均方法，转向对固定格上的椭球进行动态演化。",
+          "cited_lines": [
+            6,
+            10
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅给出形式上的SDE框架，未定义具体的漂移和扩散系数，反射机制也仅为粗略描述，缺乏精确定义。",
+          "cited_lines": [
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未使用鞅或停时定理进行分析，仅给出启发式期望体积n log n，且未达到n^2量级。",
+          "cited_lines": [
+            29,
+            30,
+            31,
+            32,
+            33
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "完全没有提及逐次极小或Minkowski第二定理，未进行短向量控制。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结论仅声称n log n下界，且基于不严格的启发式论证，未完成从体积到密度的严谨闭合。",
+          "cited_lines": [
+            54,
+            55,
+            56
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅提供启发式框架，缺乏严格的SDE定义、鞅分析及逐次极小联系，未能实现超线性突破，实际未达成有效论证。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false
+  },
+  "passed_items": 2,
+  "total_items": 6,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.8333333333333334,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "earned_passed_items": 0,
+  "earned_total_items": 3
+}

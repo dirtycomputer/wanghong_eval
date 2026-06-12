@@ -1,0 +1,341 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L3::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ-管并集体积下界问题。",
+          "cited_lines": [
+            4,
+            16
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡型构型是关键障碍。",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳法作为证明骨架。",
+          "cited_lines": [
+            6,
+            25
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计或相关更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未涉及sticky/grains等多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "使用多项式分区和2D投影，非正确的结构定理。",
+          "cited_lines": [
+            39,
+            45
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "自承闭合漏洞，2D投影论证无效，未真正闭合。",
+          "cited_lines": [
+            52,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover使用了多项式分区和2D投影的经典不完整思路，未能掌握Wang-Zahl证明中核心的grainy/sticky结构，且自承未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 4 正确将猜想归约为 δ⁻² 根 δ-分离方向单位管并集体积 ≳1 (up to logs)。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "Line 8 明确指出海森堡型构型为核心障碍，line 40 再次处理。",
+          "cited_lines": [
+            8,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "Line 6 明确采用 '尺度归纳法' 作为主攻方向，line 23-25 展开。",
+          "cited_lines": [
+            6,
+            23,
+            25
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未将问题重构为凸集并集体积估计的更强等价表述 (Wang–Zahl 标题式结果)。",
+          "cited_lines": [
+            4,
+            29
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构的关键刻画，仅粗略分为均匀/集中两类。",
+          "cited_lines": [
+            35,
+            37
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 情形与海森堡型分情形闭合的结构定理，仅有粗糙 Case A/B 分类。",
+          "cited_lines": [
+            35,
+            37,
+            39,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Line 53 显式承认证明未闭合；步骤 3-4 为手挥论证，未严格完成归纳得到满维 3。",
+          "cited_lines": [
+            50,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅为粗略证明草图，缺失 Wang–Zahl 证明的核心技术组件（凸集等价、sticky/grains 结构、分情形结构定理），且作者在 line 53 明确承认技术漏洞未闭合，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行正确离散化为δ⁻²根δ-分离tube并集体积≳1。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅提及海森堡型构型名称，未真正处理其结构；第8行描述错误（方向关系应为加法群非线性），第40-46行用多项式分区降维处理，未识别grainy/海森堡二分。",
+          "cited_lines": [
+            8,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46
+          ],
+          "confidence": 0.2
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "虽提及尺度归纳（第6,25行），但无具体归纳假设、尺度参数迭代或Tao博客所述的(induction on scales)对结构。",
+          "cited_lines": [
+            6,
+            25,
+            48
+          ],
+          "confidence": 0.3
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计的等价表述，仅停留在tube并集体积。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未定义sticky、grains、slab、grainy等聚簇结构，无多尺度刻画。",
+          "cited_lines": [],
+          "confidence": 0.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理将grainy情形与海森堡型分情形闭合；第35-38行仅分均匀/集中两类，未证闭合。",
+          "cited_lines": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "confidence": 0.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体未闭合：缺少grainy结构定理、凸集等价、尺度归纳对，且第53行自认有漏洞与争议。",
+          "cited_lines": [
+            53
+          ],
+          "confidence": 0.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "prover产物为概述性框架，缺少Wang-Zahl证明的核心技术 ingredient（grainy结构、凸集等价、尺度归纳对、闭合结构定理），且第53行自承漏洞。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将猜想表述为δ⁻²根分离方向管的并集体积≳1。",
+          "cited_lines": [
+            3,
+            4,
+            15,
+            16
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡型构型为核心障碍并描述其特征。",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳法作为组织骨架。",
+          "cited_lines": [
+            6,
+            24,
+            25,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型的分情形结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "缺少R4-R6核心部件, 归纳无法从提出的引理闭合到维数3。",
+          "cited_lines": [
+            46,
+            47,
+            52,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅具框架, 遗漏grain/sticky多尺度结构、凸并集体积估计及闭合结构定理, 归纳无效。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.681818181818182,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "earned_total_items": 3,
+  "earned_passed_items": 0
+}

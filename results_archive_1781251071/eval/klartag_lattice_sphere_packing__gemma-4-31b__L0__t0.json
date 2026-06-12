@@ -1,0 +1,290 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L0::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未转化为构造空椭球，而是直接使用分圆域理想格。",
+          "cited_lines": [
+            14,
+            15
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未放弃平均范式，仍使用对理想类群的平均值论证。",
+          "cited_lines": [
+            41
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未给出任何随机微分方程或椭球扩散演化定义。",
+          "cited_lines": [
+            3,
+            4
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未使用鞅工具或停时定理，无椭球体积期望分析。",
+          "cited_lines": [
+            3,
+            4
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未结合Minkowski第二定理或逐次极小进行结构控制。",
+          "cited_lines": [
+            14,
+            15
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "最终密度为n log log n / 2^n，未得到n^2 / 2^n。",
+          "cited_lines": [
+            33,
+            37
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": true,
+      "alternative_valid": true,
+      "notes": "Prover采用Venkatesh的分圆域理想格构造，利用单位群对称性与理想类群平均，得到n·log log n/2^n下界。此为不同但数学上完全有效的路径，成功达成超线性目标。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未显式将问题归约为构造大体积空椭球；仅引用Minkowski-Hlawka，未建立椭球↔密度的等价框架",
+          "cited_lines": [
+            12,
+            15
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提出放弃随机格平均范式，未转向动态演化思路；反而仍在用代数结构和类群平均",
+          "cited_lines": [
+            6,
+            19
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "完全未给出椭球的SDE/扩散定义，无反射或停时约束机制",
+          "cited_lines": [
+            14,
+            30
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "无鞅分析、无停时定理、无体积期望估计",
+          "cited_lines": [
+            30,
+            32
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未与Minkowski第二定理或逐次极小建立实质联系",
+          "cited_lines": [
+            27,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未将空椭球转化为格球堆积；最终结论n log log n/2^n未经证明，仅断言归于Venkatesh",
+          "cited_lines": [
+            33,
+            37,
+            41
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover的方案完全不同于Klartag的随机演化路径，试图通过分圆域代数结构（归于Venkatesh 2012）实现超线性下界。但：(1) 关键不等式n log log n/2^n未给出任何证明，仅声称'Venkatesh证明了'；(2) 所谓对称性放大效应（引理3）缺乏严格推导；(3) 该结论在Venkatesh工作中并不存在，属不可核查的断言；(4) 整体为未经证实的草图，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未将问题归约为空椭球体积最大化，亦无中心对称凸体或线性变换论述。",
+          "cited_lines": [
+            4,
+            12,
+            15
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未放弃平均范式：第19、41行仍用理想类群平均；无动态演化思路。",
+          "cited_lines": [
+            6,
+            19,
+            41
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未出现椭球、随机微分方程、扩散项或反射/停时约束机制。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未构造鞅或停时，更无体积期望增长至 c·n² 的定量估计。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅提及最短向量与单位群轨道，未触及 Minkowski 第二定理或逐次极小。",
+          "cited_lines": [
+            26,
+            27,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未通过空椭球-线性变换转化；第33行断言 n log log n 且无推导。",
+          "cited_lines": [
+            33,
+            37,
+            38
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 空泛引用 Venkatesh 2012，第33行公式突兀且无推导；该结果属周期堆积非格堆积，不可直接套用。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未将问题转化为空椭球构造，无归约步骤。",
+          "cited_lines": [
+            3,
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "声称放弃平均，但实际仍用理想类群平均，非动态演化。",
+          "cited_lines": [
+            5,
+            19
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文无椭球SDE定义、扩散项或停时约束。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "无鞅或停时分析，无体积期望n^2的证明。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未联系逐次极小或Minkowski第二定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未展示从空椭球到球堆积的转化，密度公式无推导。",
+          "cited_lines": [
+            32,
+            33
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover未给出任何rubric要求的构造或严密论证，仅概括性引用Venkatesh工作，未达成超线性下界有效证明。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": false,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false
+  },
+  "passed_items": 0,
+  "total_items": 6,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_passed_items": 0,
+  "earned_total_items": 6
+}

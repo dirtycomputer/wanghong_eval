@@ -21,6 +21,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import threading
 from pathlib import Path
 
 from ..llm_client import OpenRouterClient
@@ -93,6 +94,10 @@ def extract_text_from_events(stdout: str) -> str:
     return _ANSI_RE.sub("", stdout).strip()
 
 
+class _BootHang(RuntimeError):
+    """opencode 偶发启动死锁: 进程存活但永远不产出任何输出 (实测呈波次出现)。"""
+
+
 class OpenCodeProverBackend(ProverBackend):
     name = "opencode"
 
@@ -102,6 +107,8 @@ class OpenCodeProverBackend(ProverBackend):
         scaffold_version: str = "opencode",
         probe_max_tokens: int = 400,
         timeout_seconds: int = 1800,
+        boot_timeout_seconds: int = 90,
+        max_boot_retries: int = 2,
         opencode_bin: str = "opencode",
         client: OpenRouterClient | None = None,
     ):
@@ -109,6 +116,10 @@ class OpenCodeProverBackend(ProverBackend):
         self.scaffold_version = scaffold_version
         self.probe_max_tokens = probe_max_tokens
         self.timeout_seconds = timeout_seconds
+        # 健康启动几秒内就有 stdout banner; 超过 boot_timeout 零输出 = 启动死锁,
+        # 杀掉重试 (把 15min 超时烧损降到 90s 检测)。
+        self.boot_timeout_seconds = boot_timeout_seconds
+        self.max_boot_retries = max_boot_retries
         self.opencode_bin = opencode_bin
         # 探针直连用; CLI 自己的推理走它内置的 openrouter provider。
         self.client = client or OpenRouterClient(model=model, temperature=0.3)
@@ -126,6 +137,46 @@ class OpenCodeProverBackend(ProverBackend):
                 "opencode CLI 不可用: 请先 `npm i -g opencode-ai` (或改用其它 provider)。"
             )
         return self._prove(ctx)
+
+    def _exec_with_watchdog(self, cmd: list[str], cwd: Path, env: dict) -> str:
+        """运行 opencode, 带启动看门狗。返回 stdout; 启动死锁抛 _BootHang。"""
+        proc = subprocess.Popen(
+            cmd, cwd=cwd, env=env, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        out_buf: list[str] = []
+        err_buf: list[str] = []
+        first_output = threading.Event()
+
+        def pump(stream, buf):
+            for line in stream:
+                buf.append(line)
+                first_output.set()
+
+        threads = [
+            threading.Thread(target=pump, args=(proc.stdout, out_buf), daemon=True),
+            threading.Thread(target=pump, args=(proc.stderr, err_buf), daemon=True),
+        ]
+        for t in threads:
+            t.start()
+        try:
+            if not first_output.wait(self.boot_timeout_seconds):
+                raise _BootHang(
+                    f"opencode {self.boot_timeout_seconds}s 内零输出 (启动死锁)"
+                )
+            rc = proc.wait(timeout=self.timeout_seconds)
+        except (_BootHang, subprocess.TimeoutExpired):
+            proc.kill()
+            proc.wait()
+            raise
+        finally:
+            for t in threads:
+                t.join(timeout=5)
+        if rc != 0:
+            raise RuntimeError(
+                f"opencode run 退出码 {rc}: {(''.join(err_buf) or ''.join(out_buf))[-400:]}"
+            )
+        return "".join(out_buf)
 
     def _prove(self, ctx: ProverContext) -> BackendResponse:
         cutoff_iso = ctx.task.retrieval_cutoff.isoformat()
@@ -152,17 +203,20 @@ class OpenCodeProverBackend(ProverBackend):
                 "--format", "json",
                 prompt,
             ]
-            log.debug("opencode 启动: cwd=%s model=%s", work, self.model)
-            proc = subprocess.run(
-                cmd, cwd=work, env=env, capture_output=True, text=True,
-                timeout=self.timeout_seconds,
-            )
-            if proc.returncode != 0:
-                raise RuntimeError(
-                    f"opencode run 退出码 {proc.returncode}: "
-                    f"{(proc.stderr or proc.stdout)[-400:]}"
-                )
-            text = extract_text_from_events(proc.stdout)
+            stdout = ""
+            for attempt in range(self.max_boot_retries + 1):
+                log.debug("opencode 启动 (attempt %d): cwd=%s", attempt + 1, work)
+                try:
+                    stdout = self._exec_with_watchdog(cmd, work, env)
+                    break
+                except _BootHang as exc:
+                    if attempt >= self.max_boot_retries:
+                        raise RuntimeError(
+                            f"opencode 启动死锁, 重试 {self.max_boot_retries} 次仍失败: {exc}"
+                        ) from exc
+                    log.warning("job %s: %s, 重试 (%d/%d)", ctx.job.job_id, exc,
+                                attempt + 1, self.max_boot_retries)
+            text = extract_text_from_events(stdout)
             tool_calls = read_mcp_transcript(transcript_path)
             log.info("opencode 完成: %d 字, MCP 检索 %d 次", len(text), len(tool_calls))
             return BackendResponse(text=text, tool_calls=tool_calls, usage=UsageStats())

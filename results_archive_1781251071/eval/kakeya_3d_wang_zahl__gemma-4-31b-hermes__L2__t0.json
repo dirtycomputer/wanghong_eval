@@ -1,0 +1,328 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L2::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行正确给出了δ-tube离散化表述及体积≳1的归约。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第6行及45行正确识别了海森堡构型是提升维数的核心障碍。",
+          "cited_lines": [
+            6,
+            45
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳，仅使用了Wolff的Hairbrush论证。",
+          "cited_lines": [
+            24
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为Wang-Zahl的凸集并集体积估计这一等价表述。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型的结构定理，反而声称无法闭合。",
+          "cited_lines": [
+            53,
+            58
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确声称无法证明维数为3，未完成定理证明。",
+          "cited_lines": [
+            6,
+            58
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 声称该猜想尚未被证明，仅给出了 dim>=2.5 的 Wolff 证明，并分析了 dim=3 的障碍，完全未达成证明三维 Kakeya 猜想的目标。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "正确陈述离散化但未证明体积下界，仅列出问题形式",
+          "cited_lines": [
+            4,
+            12,
+            14
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅讨论海森堡构型是障碍，未做任何处理或排除",
+          "cited_lines": [
+            6,
+            45,
+            51
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳，仅用 Wolff hairbrush 框架",
+          "cited_lines": [
+            24,
+            36,
+            37
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计的更强等价表述",
+          "cited_lines": [
+            1,
+            60
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无 sticky/grains 多尺度聚簇结构",
+          "cited_lines": [
+            10,
+            40
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无 grainy vs 海森堡型分情形闭合的结构定理",
+          "cited_lines": [
+            41,
+            58
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明明确承认未闭合（line 58），仅证到 dim≥2.5，未达满维 3",
+          "cited_lines": [
+            8,
+            58
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 明确声明猜想未被完全证明（line 6, 58），仅复述 Wolff 的 dim≥2.5 结果并讨论障碍，未提供任何新论证来闭合 dim=3。不构成对三维 Kakeya 猜想的证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为 δ⁻² 根 δ-管并集体积 ≳ 1",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅识别海森堡构型为障碍，未给出处理或克服方法",
+          "cited_lines": [
+            6,
+            46,
+            58
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未出现 induction on scales 或尺度归纳论证",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计的等价表述",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未提及 sticky、grains 或多尺度聚簇结构",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 与海森堡型分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "仅证得下界 2.5，明确承认未闭合至满维 3",
+          "cited_lines": [
+            6,
+            8,
+            58
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 未证明定理，仅复述 Wolff 2.5 下界并分析障碍，缺失核心归纳与结构定理。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确将猜想归约为δ⁻²根方向δ-分离的tube并集体积≳1",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "识别并讨论了海森堡型构型为核心障碍",
+          "cited_lines": [
+            6,
+            46,
+            47,
+            48
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳作为骨架，仅给出Wolff的静态维数下界",
+          "cited_lines": [
+            8,
+            24,
+            39,
+            41,
+            58
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计的等价表述",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型的结构定理",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体未闭合归纳，仅给出维数2.5并声明3未解决",
+          "cited_lines": [
+            8,
+            58
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover未证明Kakeya猜想满维3，仅给出Wolff的2.5下界并分析障碍，明确承认缺口未闭合。缺乏induction on scales、凸集并集体积表述、sticky/grains结构和闭合的结构定理。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.36274509803921545,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2"
+  ],
+  "earned_total_items": 5,
+  "earned_passed_items": 0
+}

@@ -1,0 +1,377 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L5::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行8-9,21明确给出δ⁻²根δ-分离管的离散化表述。",
+          "cited_lines": [
+            8,
+            9,
+            21
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "行5,17,29-30明确识别海森堡型构型为核心障碍。",
+          "cited_lines": [
+            5,
+            17,
+            29,
+            30
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "行5,11,23,34明确采用尺度归纳法作为组织骨架。",
+          "cited_lines": [
+            5,
+            11,
+            23,
+            34
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及凸集并集体积估计或Wang-Zahl的更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "行16仅提Grainy名词，未给出sticky/grains多尺度聚簇的关键刻画。",
+          "cited_lines": [
+            16
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "行31论证模糊，行36承认未完全闭合，未证对结构定理。",
+          "cited_lines": [
+            31,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行36自承未完全闭合，整体为启发式概述，未真正close得满维。",
+          "cited_lines": [
+            34,
+            36
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅提供了证明的启发式大纲，缺乏核心难点的实质数学论证，且自承未完全闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为 δ⁻² 根 δ-分离方向管并集体积 ≳ 1 (up to logs)。",
+          "cited_lines": [
+            4,
+            9,
+            21
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡型构型为核心障碍 (line 5, 17, 30)。",
+          "cited_lines": [
+            5,
+            17,
+            30
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "提及归纳但仅空壳描述，未给出尺度间的具体归纳假设与传递。",
+          "cited_lines": [
+            5,
+            11,
+            24,
+            33
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未导出 Wang–Zahl 标题式的凸集并集体积估计，始终停留在管表述。",
+          "cited_lines": [
+            4,
+            21
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅提 'grainy' 标签 (line 16)，无 sticky/grains 多尺度聚簇结构刻画。",
+          "cited_lines": [
+            16,
+            26
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "引理3 仅陈述分情形，未证结构定理；Heisenberg 情形论证手挥且自认未闭合。",
+          "cited_lines": [
+            14,
+            17,
+            29,
+            30,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "作者 line 36 明确承认'完全排除结构化障碍仍有讨论空间'，未闭合。",
+          "cited_lines": [
+            34,
+            36
+          ],
+          "confidence": 0.98
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物为未闭合的高层草图，作者自承关键结构定理未证。缺少凸集并集等价表述、sticky/grains 刻画及闭合归纳，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行4,21正确归约到δ-管体积≳1，行9给出Hausdorff等价表述",
+          "cited_lines": [
+            4,
+            9,
+            21
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "行5指出海森堡构型是核心障碍，行15-17,29-30试图处理",
+          "cited_lines": [
+            5,
+            15,
+            16,
+            17,
+            29,
+            30
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅提及尺度归纳框架，无具体归纳假设与递推论证",
+          "cited_lines": [
+            5,
+            12,
+            24,
+            34
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未见凸集并集体积估计，缺失Wang-Zahl核心等价表述",
+          "cited_lines": [
+            4,
+            21
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅提及grainy关键词，未给出sticky/grains多尺度聚簇结构刻画",
+          "cited_lines": [
+            16,
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "行15-17空称结构定理而无证明，行31关键障碍闭合缺乏可核查论证",
+          "cited_lines": [
+            15,
+            16,
+            17,
+            30,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "基于R4-R6的空洞步骤，未真正闭合归纳得到满维",
+          "cited_lines": [
+            34,
+            36
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅堆砌关键词，核心步骤均为空洞断言或缺失，不构成有效论证。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ-管并集体积≳1问题",
+          "cited_lines": [
+            8,
+            9,
+            21,
+            34
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅泛泛提及ℓ²估计而无具体论证",
+          "cited_lines": [
+            5,
+            17,
+            29,
+            30,
+            31
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未建立归纳假设和有效传递",
+          "cited_lines": [
+            4,
+            5,
+            23,
+            24,
+            33
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积表述",
+          "cited_lines": [],
+          "confidence": 0.2
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅浅层grainy描述，无sticky/多尺度刻画",
+          "cited_lines": [
+            5,
+            16,
+            26,
+            27
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理陈述与证明，仅声明分解",
+          "cited_lines": [
+            14,
+            15,
+            16,
+            17
+          ],
+          "confidence": 0.1
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体无闭合论证，缺乏细节",
+          "cited_lines": [
+            33,
+            34
+          ],
+          "confidence": 0.1
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅作概述，未提供任何有效证明，无法达成定理。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 2,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.6552352166162906,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+  ],
+  "earned_total_items": 0,
+  "earned_passed_items": 0
+}

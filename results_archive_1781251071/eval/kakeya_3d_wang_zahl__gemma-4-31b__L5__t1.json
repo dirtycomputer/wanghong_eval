@@ -1,0 +1,375 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L5::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向tube并集体积下界。",
+          "cited_lines": [
+            4,
+            36
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡型构型为核心障碍并尝试定义。",
+          "cited_lines": [
+            8,
+            21
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳法作为证明的组织骨架。",
+          "cited_lines": [
+            7,
+            42
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "仅泛泛提及Grainy，缺失sticky及多尺度聚簇刻画。",
+          "cited_lines": [
+            9,
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "对海森堡型的处理仅为断言，无实质数学证明。",
+          "cited_lines": [
+            54,
+            56
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "作者自承仅为骨架并简化核心定理，未真正闭合。",
+          "cited_lines": [
+            65,
+            67
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 提供了正确的大纲和核心概念，但在关键步骤严重缺失实质证明，且自承未闭合，属于 hand-waving。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "归约被陈述但执行错误：L19公式错误，L38-40对‖f‖₁与δ幂次自相矛盾，未正确建立目标。",
+          "cited_lines": [
+            19,
+            38,
+            39,
+            40
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确将海森堡型构型识别为核心障碍（L8, L22）。",
+          "cited_lines": [
+            8,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "采用尺度归纳作为组织骨架（L7, L42-44），但具体递推关系未给出。",
+          "cited_lines": [
+            7,
+            42,
+            43,
+            44
+          ],
+          "confidence": 0.75
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及Wang–Zahl标题式的凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [
+            1,
+            70
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "提及grainy/structured但未给出sticky/grains多尺度聚簇结构的形式化刻画。",
+          "cited_lines": [
+            26,
+            27,
+            30
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理仅模糊陈述未证明，分情形闭合缺乏任何严格论证。",
+          "cited_lines": [
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "L62结论∫f²≲δ^{-ε}推出|∪T|≳δ^{ε}≪1，无法得到维数3；归纳未闭合。",
+          "cited_lines": [
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅为概念性骨架，关键数学细节多处错误（‖f‖₁计算、δ幂次、最终界），未真正完成任何严格论证，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "明确将猜想归约为δ^{-2}根δ-管并集体积估计（行4,36）。",
+          "cited_lines": [
+            4,
+            36
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "指出海森堡型构型为最严重障碍（行8,22）。",
+          "cited_lines": [
+            8,
+            22
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "采用尺度序列与归纳框架组织证明（行7,42-44）。",
+          "cited_lines": [
+            7,
+            42,
+            43,
+            44
+          ],
+          "confidence": 0.75
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积的更强等价表述。",
+          "cited_lines": [
+            4,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画。",
+          "cited_lines": [
+            9,
+            26,
+            47
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "仅断言结构分解，未证明grainy与海森堡型闭合定理。",
+          "cited_lines": [
+            24,
+            59
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "关键步骤均为空洞断言，未真正闭合归纳得满维。",
+          "cited_lines": [
+            62,
+            63
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅为纲领性描述，缺乏可核查的数学推导与关键结构定理的严格证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ^{-2}根δ-分离方向管并集体积≳δ^{-ε}",
+          "cited_lines": [
+            4,
+            35,
+            36,
+            38,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡型构型为核心障碍并试图处理",
+          "cited_lines": [
+            8,
+            22,
+            52
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "采用尺度序列和归纳体积增长",
+          "cited_lines": [
+            7,
+            42,
+            43,
+            44
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集的体积估计这一更强等价表述",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构的关键刻画",
+          "cited_lines": [
+            25,
+            26,
+            27
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理模糊且无证明，无法分情形闭合",
+          "cited_lines": [
+            25,
+            26,
+            27,
+            58,
+            59,
+            60
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体闭合不完整，缺失关键步骤",
+          "cited_lines": [
+            58,
+            59,
+            60,
+            61,
+            62
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "论证仅有骨架，缺少关键引理的证明和精细的多尺度聚簇结构刻画，未能完整闭合三维Kakeya猜想。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.8478260869565216,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+  ],
+  "earned_total_items": 0,
+  "earned_passed_items": 0
+}

@@ -1,0 +1,336 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L0::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "步骤A正确给出了δ-管离散化及体积下界表述。",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅提及平面或双曲面，未识别Heisenberg构型为核心障碍。",
+          "cited_lines": [
+            9,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在思路中提及多尺度分析，未将其作为证明的组织骨架。",
+          "cited_lines": [
+            8
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [
+            1,
+            44
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "完全缺失sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            1,
+            44
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出结构定理，且明确承认处理代数退化是未闭合步骤。",
+          "cited_lines": [
+            36,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明在步骤C明确标注未闭合，未能组合得到满维3。",
+          "cited_lines": [
+            36,
+            37
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明明确承认未闭合，缺失核心概念如Heisenberg构型及sticky结构。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "步骤A明确写出δ-分离方向、δ-管的离散化与体积下界目标",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg群或Heisenberg型构型，仅笼统说平面/双曲面",
+          "cited_lines": [
+            4,
+            9,
+            37
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅在概述提一句归纳/多尺度，实际步骤A-C中无尺度归纳骨架",
+          "cited_lines": [
+            8,
+            20,
+            42
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计这一更强等价表述",
+          "cited_lines": [
+            4,
+            42
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未描述sticky/grains多尺度聚簇结构，仅提波束分解",
+          "cited_lines": [
+            7,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy与Heisenberg型分情形闭合的结构定理",
+          "cited_lines": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第36-37行明确标注\"未闭合步骤\"，证明不完整",
+          "cited_lines": [
+            36,
+            37,
+            39
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover's output is an incomplete sketch. It explicitly admits the critical step (excluding algebraic-degenerate clustering) is unresolved. None of the key technical innovations of Wang-Zahl (Heisenberg group recognition, induction on scales, sticky/grains, grainy-vs-Heisenberg case split, convex set union formulation) appear in the proof.",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行21-22将问题归约为δ^{-2}根δ-分离管子的并集体积≳δ^ε（等价于≳1 up to logs）。",
+          "cited_lines": [
+            21,
+            22
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "行9,37仅泛谈低维代数簇与曲面，未识别Heisenberg群构型这一特定核心障碍。",
+          "cited_lines": [
+            9,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "行8虽提及归纳法，但全文未以induction on scales为骨架，更未使用Tao点出的“对”结构。",
+          "cited_lines": [
+            8,
+            25,
+            31
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及Wang–Zahl式的凸集并集体积估计，引理皆围绕多线性Kakeya与多项式分区。",
+          "cited_lines": [
+            12,
+            17
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未出现sticky、grains或多尺度聚簇结构的任何刻画，仅有多项式分区（行17-18）。",
+          "cited_lines": [
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理，未分grainy与海森堡型情形，步骤C（行31-35）显式未闭合。",
+          "cited_lines": [
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行36-37明确标注“[不确定/未闭合步骤]”，结论行40-42为无依据跳跃，未闭合归纳得满维。",
+          "cited_lines": [
+            36,
+            37,
+            40,
+            41,
+            42
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明者承认关键步骤未闭合，且未采用Wang-Zahl证明的核心框架（凸集体积、尺度归纳对、grainy/海森堡结构）。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管的并集体积下界δε",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及海森堡组构型或处理该关键障碍",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳骨架，仅模糊提及归纳法",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇刻画",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与海森堡型的结构定理",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体未闭合，未真正处理退化情形",
+          "cited_lines": [],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅给出轮廓，未解决海森堡型构型、多尺度聚簇等核心障碍，未能完成闭合归纳。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_total_items": 7,
+  "earned_passed_items": 1
+}

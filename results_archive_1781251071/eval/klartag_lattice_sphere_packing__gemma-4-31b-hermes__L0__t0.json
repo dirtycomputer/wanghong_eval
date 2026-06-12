@@ -1,0 +1,309 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L0::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "使用空球B(R)而非空椭球，未进行椭球归约。",
+          "cited_lines": [
+            34,
+            35,
+            46
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仍使用Siegel均值定理在模格空间取平均，未放弃平均范式。",
+          "cited_lines": [
+            14,
+            15,
+            35
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未使用随机微分方程或扩散过程定义演化。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未使用鞅或停时分析，且得到n log log n而非n^2。",
+          "cited_lines": [
+            43,
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未结合Minkowski第二定理或逐次极小进行结构控制。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "最终闭合得到n log log n / 2^n，而非n^2 / 2^n。",
+          "cited_lines": [
+            50,
+            53
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": true,
+      "alternative_valid": true,
+      "notes": "Prover提供了基于Venkatesh(2012)的有效替代证明，利用数域单位群轨道聚合得到n log log n下界，数学上成立且达成超线性目标。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Step 4 给出 Δ=vol(B(R))/(2^n·det(Λ)) 的密度-体积关系（行47-50），完成了空体→密度的归约",
+          "cited_lines": [
+            47,
+            48,
+            49,
+            50
+          ],
+          "confidence": 0.6
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仍使用 Siegel 平均值定理在 O_K-格空间上取平均（行6,16,36），未放弃平均范式",
+          "cited_lines": [
+            6,
+            16,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文无 SDE/扩散/反射/停时约束的定义，椭球随机演化完全缺失",
+          "cited_lines": [
+            13,
+            29,
+            34,
+            39
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "无鞅或停时定理分析，体积 n² 估计完全缺失",
+          "cited_lines": [
+            13,
+            29,
+            39
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未提及逐次极小或 Minkowski 第二定理，无短向量控制",
+          "cited_lines": [
+            13,
+            29,
+            39
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "仅声称 vol(S)~n·log log n 而非 n²；轨道聚类论证未经证明且数学上有误（单位根 w_K 增长与 n 无线性关系）",
+          "cited_lines": [
+            22,
+            41,
+            42,
+            43,
+            50
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 声称沿 Venkatesh (2012) 路线用圆分域单位群轨道聚类实现 n·log log n/2^n 密度，但：(1) 归因可疑，Venkatesh 2012 无此结果；(2) Siegel 均值公式中的常数 C_K 未定义且引用有误；(3) 轨道聚类论证是手挥（hand-waving），单位群在 Archimedean 赋值的绝对值可任意大，轨道点在 R^n 范数下不聚类；(4) 因子仅 log log n，远弱于 Klartag 的 n²，且关键步骤无实质证明。alternative_valid 判否。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "实质完成空区域体积到堆积密度的转化，虽无椭球表述但数学等价。",
+          "cited_lines": [
+            46,
+            48
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提出动态演化思路，仍依赖代数格空间平均而非单格迭代。",
+          "cited_lines": [
+            6,
+            7
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文无任何随机微分方程、扩散或反射停时机制。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未使用鞅与停时定理，仅通过Siegel平均估计轨道数。",
+          "cited_lines": [
+            14,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未引入Minkowski第二定理或逐次极小进行结构控制。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "最终密度为c·n log log n/2^n，未达n^2量级。",
+          "cited_lines": [
+            50,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": true,
+      "notes": "采用Venkatesh(2012)圆分域单位群路径，获n log log n/2^n超线性下界，为有效替代证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未将问题转化为构造体积尽可能大的空椭球，而是采用数域随机格平均，未提及椭球或等价几何凸体。",
+          "cited_lines": [
+            7,
+            9,
+            15,
+            35
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提出对固定格动态调整凸体的思路，而是采用对具有代数结构的格空间取平均的经典范式。",
+          "cited_lines": [
+            6,
+            7,
+            9,
+            15
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "完全未涉及椭球随机微分方程、扩散项或反射/停时约束的定义。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未使用鞅或停时定理，也未证明椭球体积期望达到 c·n^2。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未提及逐次极小或 Minkowski 第二定理，也未与演化椭球联系。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "密度下界为 c·n log log n / 2^n，非 c·n^2/2^n，且未通过空椭球转化得到。",
+          "cited_lines": [
+            50,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 声称基于 Venkatesh 的数域格平均方法，与 golden proof 的随机演化椭球路径完全不同，且未提供任何闭合超线性因子的严谨论证，构造和估计均不完整，未实现 n·log log n 的严格证明。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": false,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false
+  },
+  "passed_items": 0,
+  "total_items": 6,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.3333333333333333,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_passed_items": 0,
+  "earned_total_items": 6
+}

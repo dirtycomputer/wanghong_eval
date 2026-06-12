@@ -1,0 +1,333 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L1::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第5行正确将猜想归约为δ-分离方向的δ-管并集体积下界问题。",
+          "cited_lines": [
+            5
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅在第19行提及平面聚集，未识别并处理Heisenberg群构型这一核心障碍。",
+          "cited_lines": [
+            19
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "第7行仅泛泛提及多尺度分析，未采用尺度归纳作为证明的组织骨架。",
+          "cited_lines": [
+            7
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及或重构为Wang-Zahl的凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等tube多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型并闭合的结构定理。",
+          "cited_lines": [
+            1
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第38和41行明确承认存在Gap，未能闭合归纳得到满维3。",
+          "cited_lines": [
+            38,
+            41
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 明确承认证明存在 Gap (第38、41行)，仅复现了 Wolff 的 2.5 维下界，未完成证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 5 正确将问题离散化为 δ⁻² 根 δ-分离方向管的并集体积下界 (≳ δ^ε 等价于 ≳1 up to logs)。",
+          "cited_lines": [
+            5
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "Line 18-21 仅提及'平面聚集'，未识别 Heisenberg 群构型为核心障碍；Heisenberg 结构与平面聚集根本不同。",
+          "cited_lines": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文采用直接 L² 能量法，未使用尺度归纳骨架；Line 7 的'多尺度'仅为空泛提及无具体实施。",
+          "cited_lines": [
+            7,
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现 Wang–Zahl 标题式的凸集并集体积估计更强等价表述。",
+          "cited_lines": [
+            3,
+            4,
+            23,
+            24
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文无 sticky/grains 多尺度聚簇结构的任何刻画。",
+          "cited_lines": [
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+          ],
+          "confidence": 0.98
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "Line 41 明确承认'目前尚未能完全排除所有可能的反例结构'，无 grainy/Heisenberg 分情形闭合定理。",
+          "cited_lines": [
+            38,
+            41
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Line 41 明确声明仅证得 dim≥2.5，无法达到 3；归纳未闭合。",
+          "cited_lines": [
+            8,
+            41
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 仅完成了 Wolff 2.5 维下界的 L² 能量论证，Line 41 显式承认无法达到维数 3。缺少 induction on scales、grains/sticky 结构、Heisenberg 型分情形处理、凸集并集体积等价表述等所有 Wang–Zahl 核心 ingredient，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确给出δ^{-2}根δ-分离管的并集体积≳δ^ε等价表述",
+          "cited_lines": [
+            4,
+            5,
+            16
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅讨论平面聚集，未识别Heisenberg型构型为核心障碍",
+          "cited_lines": [
+            8,
+            19,
+            21
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅泛谈多尺度，未采用induction on scales作为证明骨架",
+          "cited_lines": [
+            7
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计的更强等价表述",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构的关键刻画",
+          "cited_lines": [
+            7,
+            35
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy与海森堡型分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认无法排除反例，未闭合归纳得到维数3",
+          "cited_lines": [
+            41
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "产物为未完成的证明尝试，未触及Wang-Zahl证明的任何核心ingredient，且最终明确承认无法得到维数3。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管的并集体积需≳1（第4-5行）",
+          "cited_lines": [
+            4,
+            5
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "prover未提及Heisenberg group构型或将其视为核心障碍",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "仅模糊提到多尺度分析，未展示induction on scales骨架",
+          "cited_lines": [
+            7
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计或更强等价表述",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy/Heisenberg分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "未尝试组合R1–R6，且声称证明未闭合（第38-41行）",
+          "cited_lines": [
+            38,
+            39,
+            40,
+            41
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "prover仅给出Wolff维数下界，识别到平面障碍但未给出任何闭合归纳论证，反而承认工具不足以排除反例。无任何Wang-Zahl证明的关键要素。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

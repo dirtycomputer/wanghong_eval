@@ -1,0 +1,374 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L0::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第6-7行及16-17行正确归约为δ-管并集体积估计。",
+          "cited_lines": [
+            6,
+            7,
+            16,
+            17
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg group或海森堡型构型这一核心障碍。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳，仅使用Wolff的Hairbrush论证。",
+          "cited_lines": [
+            10,
+            20,
+            21
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型并闭合的结构定理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "未闭合归纳，且第61行承认Hausdorff维数未解决。",
+          "cited_lines": [
+            55,
+            61
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover知识陈旧，未涉及Wang-Zahl证明的核心技术，且明确承认Hausdorff维数未解决，证明不成立。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述 δ-tube 离散版本与体积下界目标 (L7,16-18)",
+          "cited_lines": [
+            7,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "完全未提及 Heisenberg 群构型，仅笼统说'平面集中'",
+          "cited_lines": [
+            51,
+            52
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "无尺度归纳结构，仅有线性4步'步骤'非归纳骨架",
+          "cited_lines": [
+            30,
+            31,
+            42,
+            51
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计，始终只处理管状体",
+          "cited_lines": [
+            14,
+            20,
+            26
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构，仅提 Hairbrush",
+          "cited_lines": [
+            20,
+            21,
+            22,
+            23
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无 grainy 与 Heisenberg 型分情形闭合的结构定理",
+          "cited_lines": [
+            51,
+            52,
+            53
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明自认未闭合Hausdorff维数(L61)，Minkowski论证自相矛盾(L48-49)且手波",
+          "cited_lines": [
+            48,
+            49,
+            57,
+            58,
+            61
+          ],
+          "confidence": 0.98
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 给的是 Wolff 1999 二维半 (dim≥2.5) 思路的粗糙草图，而非 Wang-Zahl 2025 的完整证明。关键缺口：无尺度归纳、无 Heisenberg 障碍识别、无 sticky/grains 结构、无 grainy-vs-Heisenberg 分情形定理、Hausdorff 维数明确放弃，积分估计自认不成立 (L49)。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "仅声明δ⁻²根δ-管体积≳δ^ε，非≳1，且未正确归约。",
+          "cited_lines": [
+            6,
+            7,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "完全未提及Heisenberg型构型或Guth综述中的核心障碍。",
+          "cited_lines": [
+            9,
+            10,
+            11,
+            12
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用induction on scales，仅用单次尺度Cauchy-Schwarz与hairbrush。",
+          "cited_lines": [
+            9,
+            31,
+            32,
+            33,
+            34,
+            36,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计或Wang–Zahl标题式更强等价表述。",
+          "cited_lines": [
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无sticky、grains、多尺度聚簇结构等任何刻画。",
+          "cited_lines": [
+            20,
+            21,
+            22,
+            23,
+            24
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无grainy情形与海森堡型的分情形闭合结构定理。",
+          "cited_lines": [
+            51,
+            52,
+            53,
+            54,
+            55
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体未闭合：未处理海森堡障碍，无归纳骨架，结论仅到δ^ε且自承Minkowski维数。",
+          "cited_lines": [
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover产物为1999年Wolff hairbrush论证的粗糙复述，未触及2025年Wang–Zahl证明的任何核心新 ingredient（induction on scales、凸集等价、sticky/grains结构、Heisenberg构型闭合）。且自身论证存在严重漏洞：第48行积分计算错误，第58行结论与第17行目标矛盾（δ^ε vs ≳1），第61行自行承认未证Hausdorff维数。整体不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "æ­£ç¡®å½çº¦ä¸ºÎ´â»Â²æ ¹Î´-åç¦»æ¹åç®¡å¹¶éä½ç§¯â³1 (up to logs)ã",
+          "cited_lines": [
+            6,
+            7,
+            16,
+            17
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "æªæåæå¤çHeisenberg groupå¼æåè¿ä¸æ ¸å¿éç¢ã",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "æªéç¨induction on scalesä½ä¸ºç»ç»éª¨æ¶ã",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "æªå¾å°å¸éå¹¶éä½ç§¯ä¼°è®¡è¿ä¸æ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "æªç»åºsticky/grainså¤å°ºåº¦èç°ç»æçåå»ç»ã",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "æªç»åºé­ågrainyä¸æµ·æ£®å ¡åæå½¢çç»æå®çã",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 0.99
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "æªé­åR1âR6å¾å°ç»´æ°3ï¼ä»å£°ç§°Minkowskiç»´æ°3ä½è®ºè¯ä¸å®æ´ã",
+          "cited_lines": [
+            6,
+            48,
+            49,
+            54,
+            55,
+            58
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Proveräº§ç©ä»å¤è¿°Wolffçç»åMinkowskiç»´æ°3ç»æï¼æªåWangâZahlè¯æçæ ¸å¿è¦ç´ ï¼Heisenbergæåãå°ºåº¦å½çº³ãå¸éå¹¶éãsticky/grainsç»æå®çï¼ï¼å æ­¤æªè¾¾æå®ççå®æ´è¯æã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.49999999999999956,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_total_items": 7,
+  "earned_passed_items": 1
+}

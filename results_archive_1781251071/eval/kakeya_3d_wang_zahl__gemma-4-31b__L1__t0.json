@@ -1,0 +1,307 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L1::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行4和30正确将猜想归约为δ⁻²根δ-分离方向tube并集体积下界问题。",
+          "cited_lines": [
+            4,
+            30
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg group构型及其作为核心障碍的处理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳，而是直接尝试L^p积分估计，缺乏归纳骨架。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集体积估计这一更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "缺乏区分并闭合grainy与海森堡型情形的关键结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行59错误断言Wolff估计可控制L2积分得满维，属数学胡话。",
+          "cited_lines": [
+            59
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明在R1离散化正确，但后续完全偏离现代Kakeya证明的核心结构，并在行59用错误的L^p估计强行断言得到满维，属于自信的胡话。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述δ⁻²根δ-分离方向tube并集体积≳δ⁻ᵉ (行4, 30)",
+          "cited_lines": [
+            4,
+            30
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg构型或海森堡型障碍",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "无尺度归纳结构，框架为Cauchy-Schwarz+Wolff估计直接套用",
+          "cited_lines": [
+            32,
+            33
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计，Wang–Zahl标题式表述完全缺失",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无分情形闭合的结构定理，grainy/Heisenberg型未区分",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "L³/²估计仅被断言引用未证；行57混淆Wolff 2.5结果与dim=3；手波得出Vol≳1/log，无闭合论证",
+          "cited_lines": [
+            57,
+            59,
+            62
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅是Wolff时代(2.5维)思路的粗糙重述，所有Wang–Zahl核心新工具(尺度归纳、grainy/Heisenberg分情形、凸集重构)均缺失，核心估计被hand-wave，关键步骤实质上未经证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离tube并集体积下界，符号笔误但目标正确。",
+          "cited_lines": [
+            4,
+            30
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全文未提及Heisenberg群、海森堡型构型或相关障碍。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未使用induction on scales，仅复述Wolff传统单尺度Lp估计。",
+          "cited_lines": [
+            6,
+            57
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计或Wang–Zahl式更强等价表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文无sticky、grains或多尺度聚簇结构刻画。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy情形与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "误称Wolff得dim=3（第57行），实际仅2.5；未证log闭合，论证空洞。",
+          "cited_lines": [
+            57,
+            59
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover将Wolff的dim≥2.5结果误述为满维3，完全未涉及Heisenberg障碍、尺度归纳、凸集重构及sticky/grains结构，论证无效。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述了δ-分离方向集的离散化归约",
+          "cited_lines": [
+            3,
+            4,
+            29,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "全篇未提及或处理Heisenberg group式构型",
+          "cited_lines": [
+            6,
+            63
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳骨架",
+          "cited_lines": [
+            6,
+            63
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "完全未涉及凸集并集体积估计",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "无sticky/grains多尺度聚簇结构描述",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出结构定理，无grainy/海森堡分情形",
+          "cited_lines": [
+            1,
+            64
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "仅引用经典Wolff估计且无有效闭合，未证得dim=3",
+          "cited_lines": [
+            56,
+            63
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover claimed a proof via Wolff's L^{3/2} estimate, but this alone is insufficient for the full Kakeya conjecture; the required multi-scale structure, Heisenberg obstructions, and convex union estimation are entirely absent.",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

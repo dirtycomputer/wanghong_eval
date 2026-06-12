@@ -1,0 +1,301 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L1::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管的体积估计。",
+          "cited_lines": [
+            5,
+            12
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及Heisenberg构型这一核心障碍。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用尺度归纳，而是使用多项式方法。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为凸集并集体积估计的等价表述。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "明确承认存在未闭合gap，未完成证明。",
+          "cited_lines": [
+            21,
+            33,
+            34,
+            35
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅提供了一个基于多项式方法的不完整尝试，并明确承认在实数域存在未闭合的gap，完全未涉及Wang-Zahl证明的核心技术（如induction on scales和凸集重构）。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述 δ⁻² 根 δ-分离 tube 并集体积 ≳ 1 的离散版本 (line 5, 12)",
+          "cited_lines": [
+            5,
+            12
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "完全未提及海森堡群/Heisenberg 型构型或任何相关障碍分析",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用 induction on scales 骨架，仅用多项式方法与反证法",
+          "cited_lines": [
+            6,
+            7,
+            23
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现凸集并集体积估计或 Wang–Zahl 式更强等价表述",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky / grains 多尺度聚簇结构",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 与海森堡型分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明自身承认未闭合 gap (line 21, 33–35)，步骤 3 tube→line 在 R^n 不成立",
+          "cited_lines": [
+            21,
+            33,
+            34,
+            35
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅是 Kakeya 猜想主流路径的粗略大纲，且作者自己在 line 21 与 33–35 承认在 R^3 中存在未闭合的关键 gap（管→直线转换与重数问题）。步骤 28–31 的齐次多项式论证前提（多项式在每方向直线上消失⇒恒等于零）依赖于 line 3 的 tube→line 跳跃，而该跳跃未被证明。整体不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4-5行将问题归约为δ^{-2}根δ-管并集体积估计，第12行给出维数等价表述。",
+          "cited_lines": [
+            4,
+            5,
+            12
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "第8行及第35行仅提多项式瓶颈，全文未识别海森堡型构型障碍。",
+          "cited_lines": [
+            8,
+            35
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "第6-7行采用多项式反证法，未以induction on scales为组织骨架。",
+          "cited_lines": [
+            6,
+            7
+          ],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未出现凸集并集体积估计或Wang-Zahl标题式的更强等价表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全文未讨论sticky、grains或多尺度tube聚簇结构。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "全文未给出分情形结构定理，无grainy与海森堡型分类闭合。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第21行及第33-35行自承存在未闭合gap，未完成归纳得到维数3。",
+          "cited_lines": [
+            21,
+            33,
+            34,
+            35
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover采用多项式方法而非Wang-Zahl路径，且自承存在未闭合gap，论证无效。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "ç¬¬5è¡æ­£ç¡®ç»åºÎ´â»Â²æ ¹æ¹åÎ´-åç¦»çÎ´-ç®¡å¹¶éä½ç§¯â³Î´^Îµçç¦»æ£åè¡¨è¿°ã",
+          "cited_lines": [
+            5
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "åæªæåHeisenbergæåæå°åè¯å«ä¸ºæ ¸å¿éç¢ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "æªéç¨å°ºåº¦å½çº³ä½ä¸ºç»ç»éª¨æ¶ï¼ä»ç¨å¤é¡¹å¼æ¹æ³ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "æªåºç°å¸éå¹¶éä½ç§¯ä¼°è®¡è¿ä¸æ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "æªç»åºsticky/grainså¤å°ºåº¦èç°ç»æçå»ç»ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "æªç»åºé­ågrainyä¸Heisenbergåæå½¢çç»æå®çã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "æ´ä½æªé­åï¼ç¬¬21è¡èªæ¿å­å¨æªé­ågapï¼è®ºè¯ä¸æç«ã",
+          "cited_lines": [
+            21,
+            34,
+            35
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Proverå°è¯ç¨å¤é¡¹å¼æ¹æ³ä½æªé­åï¼ä¸æªæ¶ågolden proofä¸­çæ ¸å¿è¦ç´ ï¼Heisenbergæåãå°ºåº¦å½çº³ãå¸éå¹¶éãsticky/grainsç»æï¼ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1"
+  ],
+  "earned_total_items": 6,
+  "earned_passed_items": 0
+}

@@ -1,0 +1,69 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L0::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "model": "gemma-4-31b",
+  "hint_level": 0,
+  "trial": 0,
+  "harness": "gemma-4-31b+openrouter-openrouter",
+  "contaminated": false,
+  "probe_responses": [
+    {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+    },
+    {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+    },
+    {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+    }
+  ],
+  "structured_output": {
+    "idea_overview": "本问题的核心在于突破 Rogers (1947) 建立的 $\\Delta \\ge c \\cdot n / 2^n$ 的线性下界。在格球堆积（Lattice Sphere Packing）的语境下，传统的 Minkowski-Hlawka 理论及其变体通常只能给出 $\\sim 1/2^n$ 或 $\\sim n/2^n$ 的结果。\n\n要实现超线性因子 $f(n)/n \\to \\infty$，必须利用格的特殊代数结构，而非简单的随机格（Random Lattices）或平均值论证。最有效的突破口是利用**分圆域（Cyclotomic Fields）**及其理想格（Ideal Lattices）。\n\n本证明将基于 Akshay Venkatesh (2012) 的研究成果。其核心思路是：在特定的维度 $n$（特别是当 $n$ 具有大量小素因子时），通过构造基于分圆域的格，并利用分圆域中单位群（Unit Group）的对称性，可以对格的密度进行“放大”。",
+    "key_lemmas": "### 引理 1：Minkowski-Hlawka 定理 (基础)\n对于任何 $n$ 维格 $L$，其密度 $\\Delta$ 满足 $\\Delta \\ge \\frac{\\zeta(n)}{2^{n-1}} \\approx 2 \\cdot 2^{-n}$。Rogers 的改进将此提升至 $c \\cdot n 2^{-n}$。\n\n### 引理 2：分圆格的构造 (Venkatesh's Construction)\n设 $K = \\mathbb{Q}(\\zeta_m)$ 为 $m$ 次分圆域，$[K:\\mathbb{Q}] = \\phi(m) = n$。考虑 $K$ 中的一个理想 $\\mathfrak{a}$，通过 canonical embedding $\\sigma: K \\to \\mathbb{R}^n$，可以将 $\\mathfrak{a}$ 视为 $\\mathbb{R}^n$ 中的一个格 $L_\\mathfrak{a}$。\n\n### 引理 3：对称性放大效应\n在一般的随机格中，我们考虑所有可能的格。但在分圆格中，格 $L_\\mathfrak{a}$ 具有一个巨大的自同构群 $\\text{Aut}(L_\\mathfrak{a})$，其中包含分圆域的单位群 $\\mathcal{O}_K^\\times$。\nVenkatesh 证明了：如果 $n$ 选取合适（例如 $n$ 是某个特定形式的乘积），可以通过对理想类群（Ideal Class Group）进行平均，找到一个理想 $\\mathfrak{a}$，使得其对应的格在 $\\mathcal{O}_K^\\times$ 的作用下，其最短向量的分布比随机格更“稀疏”，从而允许更大的球半径。",
+    "full_proof": "**步骤 1：定义目标维度**\n我们不要求对所有 $n$ 成立，而是在一个无穷子集 $\\mathcal{N} \\subset \\mathbb{N}$ 上证明。选取 $n = \\phi(m)$，其中 $m$ 是一个精心选择的整数（例如 $m$ 为素数 $p$ 且 $p-1$ 有大量小因子）。\n\n**步骤 2：利用分圆域的单位群**\n设 $K = \\mathbb{Q}(\\zeta_m)$。分圆域的单位群 $\\mathcal{O}_K^\\times$ 的秩为 $r = \\phi(m)/2 - 1$。\n对于任何理想 $\\mathfrak{a} \\subset \\mathcal{O}_K$，其对应的格 $L_\\mathfrak{a}$ 在 $\\mathcal{O}_K^\\times$ 的作用下是不变的。这意味着如果 $v \\in L_\\mathfrak{a}$ 是一个最短向量，那么 $\\forall u \\in \\mathcal{O}_K^\\times, uv$ 也是一个最短向量。\n\n**步骤 3：密度估计的提升**\n在传统的 Minkowski-Hlawka 论证中，我们计算 $\\mathbb{E}[\\#\\{v \\in L \\setminus \\{0\\} : \\|v\\| < \\rho\\}]$。\n在分圆格中，由于单位群 $\\mathcal{O}_K^\\times$ 的存在，向量是以“轨道”（orbits）形式出现的。一个轨道 $\\mathcal{O}_K^\\times \\cdot v$ 的大小取决于 $v$ 的稳定子群。\nVenkatesh 通过分析分圆域的对数映射（log-map）和单位群在 $\\mathbb{R}^n$ 中的分布，证明了对于某些 $n$，存在理想 $\\mathfrak{a}$ 使得：\n$$\\Delta(L_\\mathfrak{a}) \\ge \\frac{n \\log \\log n}{2^n} \\cdot c'$$\n（注：在特定维度下，该因子可进一步优化）。\n\n**步骤 4：结论**\n选取 $f(n) = n \\log \\log n$（或在更强的构造中为 $n \\log n$），则 $\\frac{f(n)}{n} = \\log \\log n \\to \\infty$ 当 $n \\to \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度增长因子是超线性的。\n\n**不确定性标注：**\n- 该证明是**存在性论证**（通过对理想类群的平均值分析），而非给出具体的基矩阵。\n- 该结果在 $n$ 的所有取值上是否成立仍有争议，目前最严谨的结论是在一个**无穷子集** $\\mathcal{N}$ 上成立。",
+    "cited_references": []
+  },
+  "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n\n本问题的核心在于突破 Rogers (1947) 建立的 $\\Delta \\ge c \\cdot n / 2^n$ 的线性下界。在格球堆积（Lattice Sphere Packing）的语境下，传统的 Minkowski-Hlawka 理论及其变体通常只能给出 $\\sim 1/2^n$ 或 $\\sim n/2^n$ 的结果。\n\n要实现超线性因子 $f(n)/n \\to \\infty$，必须利用格的特殊代数结构，而非简单的随机格（Random Lattices）或平均值论证。最有效的突破口是利用**分圆域（Cyclotomic Fields）**及其理想格（Ideal Lattices）。\n\n本证明将基于 Akshay Venkatesh (2012) 的研究成果。其核心思路是：在特定的维度 $n$（特别是当 $n$ 具有大量小素因子时），通过构造基于分圆域的格，并利用分圆域中单位群（Unit Group）的对称性，可以对格的密度进行“放大”。\n\n## 2. 关键引理与论证\n\n### 引理 1：Minkowski-Hlawka 定理 (基础)\n对于任何 $n$ 维格 $L$，其密度 $\\Delta$ 满足 $\\Delta \\ge \\frac{\\zeta(n)}{2^{n-1}} \\approx 2 \\cdot 2^{-n}$。Rogers 的改进将此提升至 $c \\cdot n 2^{-n}$。\n\n### 引理 2：分圆格的构造 (Venkatesh's Construction)\n设 $K = \\mathbb{Q}(\\zeta_m)$ 为 $m$ 次分圆域，$[K:\\mathbb{Q}] = \\phi(m) = n$。考虑 $K$ 中的一个理想 $\\mathfrak{a}$，通过 canonical embedding $\\sigma: K \\to \\mathbb{R}^n$，可以将 $\\mathfrak{a}$ 视为 $\\mathbb{R}^n$ 中的一个格 $L_\\mathfrak{a}$。\n\n### 引理 3：对称性放大效应\n在一般的随机格中，我们考虑所有可能的格。但在分圆格中，格 $L_\\mathfrak{a}$ 具有一个巨大的自同构群 $\\text{Aut}(L_\\mathfrak{a})$，其中包含分圆域的单位群 $\\mathcal{O}_K^\\times$。\nVenkatesh 证明了：如果 $n$ 选取合适（例如 $n$ 是某个特定形式的乘积），可以通过对理想类群（Ideal Class Group）进行平均，找到一个理想 $\\mathfrak{a}$，使得其对应的格在 $\\mathcal{O}_K^\\times$ 的作用下，其最短向量的分布比随机格更“稀疏”，从而允许更大的球半径。\n\n## 3. 完整证明\n\n**步骤 1：定义目标维度**\n我们不要求对所有 $n$ 成立，而是在一个无穷子集 $\\mathcal{N} \\subset \\mathbb{N}$ 上证明。选取 $n = \\phi(m)$，其中 $m$ 是一个精心选择的整数（例如 $m$ 为素数 $p$ 且 $p-1$ 有大量小因子）。\n\n**步骤 2：利用分圆域的单位群**\n设 $K = \\mathbb{Q}(\\zeta_m)$。分圆域的单位群 $\\mathcal{O}_K^\\times$ 的秩为 $r = \\phi(m)/2 - 1$。\n对于任何理想 $\\mathfrak{a} \\subset \\mathcal{O}_K$，其对应的格 $L_\\mathfrak{a}$ 在 $\\mathcal{O}_K^\\times$ 的作用下是不变的。这意味着如果 $v \\in L_\\mathfrak{a}$ 是一个最短向量，那么 $\\forall u \\in \\mathcal{O}_K^\\times, uv$ 也是一个最短向量。\n\n**步骤 3：密度估计的提升**\n在传统的 Minkowski-Hlawka 论证中，我们计算 $\\mathbb{E}[\\#\\{v \\in L \\setminus \\{0\\} : \\|v\\| < \\rho\\}]$。\n在分圆格中，由于单位群 $\\mathcal{O}_K^\\times$ 的存在，向量是以“轨道”（orbits）形式出现的。一个轨道 $\\mathcal{O}_K^\\times \\cdot v$ 的大小取决于 $v$ 的稳定子群。\nVenkatesh 通过分析分圆域的对数映射（log-map）和单位群在 $\\mathbb{R}^n$ 中的分布，证明了对于某些 $n$，存在理想 $\\mathfrak{a}$ 使得：\n$$\\Delta(L_\\mathfrak{a}) \\ge \\frac{n \\log \\log n}{2^n} \\cdot c'$$\n（注：在特定维度下，该因子可进一步优化）。\n\n**步骤 4：结论**\n选取 $f(n) = n \\log \\log n$（或在更强的构造中为 $n \\log n$），则 $\\frac{f(n)}{n} = \\log \\log n \\to \\infty$ 当 $n \\to \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度增长因子是超线性的。\n\n**不确定性标注：**\n- 该证明是**存在性论证**（通过对理想类群的平均值分析），而非给出具体的基矩阵。\n- 该结果在 $n$ 的所有取值上是否成立仍有争议，目前最严谨的结论是在一个**无穷子集** $\\mathcal{N}$ 上成立。\n\n## 4. 我引用/检索到的文献清单\n\n1. **Venkatesh, A. (2012).** \"A note on sphere packings in high dimension\". *arXiv:1212.6184*. (核心引用：证明了利用分圆域构造可获得超线性因子 $n \\log \\log n$ 的下界)。\n2. **Rogers, C. A. (1947).** \"The packing of equal spheres\". *Journal of the London Mathematical Society*. (背景引用：线性下界的来源)。\n3. **Campos, Jenssen, Michelen, Sahasrabudhe (2023).** \"A new lower bound for sphere packing\". *arXiv:2312.10026*. (对比引用：该文证明了非格堆积可达 $n \\log n / 2^n$，但本题要求的是格堆积)。",
+  "transcript": [
+    {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density lower bound superlinear",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+        "2012-12-26",
+        "2023-12-15",
+        "2001-10-30",
+        "2016-03-14",
+        "1999-06-18"
+      ]
+    }
+  ],
+  "audit": {
+    "out_of_window_references": [],
+    "out_of_window_network": []
+  },
+  "usage": {
+    "input_tokens": 1818,
+    "output_tokens": 2085,
+    "wall_seconds": 124.00408049299995
+  },
+  "error": null
+}

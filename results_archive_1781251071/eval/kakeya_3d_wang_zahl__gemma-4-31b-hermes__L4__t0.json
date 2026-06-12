@@ -1,0 +1,362 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L4::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离方向tube并集体积≳1。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别Heisenberg构型为核心障碍。",
+          "cited_lines": [
+            8,
+            10
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳法作为证明骨架。",
+          "cited_lines": [
+            6,
+            37
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "完全未提及Wang-Zahl核心的凸集并集体积估计等价表述。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "给出了sticky/grains多尺度聚簇结构的刻画。",
+          "cited_lines": [
+            7,
+            18
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": true,
+          "justification": "提出了区分grainy与Heisenberg情形的结构定理。",
+          "cited_lines": [
+            22,
+            23
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "用Sum-Product闭合Heisenberg是已知无效的胡话，未真正闭合。",
+          "cited_lines": [
+            51,
+            53
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover遗漏了Wang-Zahl证明中至关重要的凸集重构(R4)，且在闭合Heisenberg情形时使用了早期已被证明不足以解决该障碍的Sum-Product论证(R7)，属于自信的胡话。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确陈述离散 δ-tube 形式：δ⁻² 根 δ-分离单位 δ-管并集体积 ≳ 1。",
+          "cited_lines": [
+            4,
+            35
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别 Heisenberg 构型为核心障碍并分情形处理。",
+          "cited_lines": [
+            8,
+            10,
+            22,
+            44
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳法作为组织骨架，定义能量函数与递推。",
+          "cited_lines": [
+            6,
+            37,
+            38,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提出 Wang–Zahl 标题式的凸集并集体积更强等价表述，仅停留在 tube 版本。",
+          "cited_lines": [
+            4,
+            35
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "提及 grainy/sticky 概念但无严格数学定义或可核查的构造性刻画。",
+          "cited_lines": [
+            7,
+            18,
+            19,
+            20
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理（引理3）仅陈述未证明；prover 自承严密性依赖未给出的精确定义。",
+          "cited_lines": [
+            22,
+            23,
+            25,
+            61
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Heisenberg 情形论证（Step 4）不严谨，prover 自承此处简化为组合结论；归纳未真正闭合。",
+          "cited_lines": [
+            50,
+            51,
+            52,
+            53,
+            60
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "此文为高层次的证明提纲/路线图，而非完整证明。R1–R3 的框架性识别正确，R4 缺失更强等价形式，R5–R7 的核心技术引理均仅陈述未证，prover 在 60–61 行明确承认最关键步骤被简化。Step 4 中 'R 中无大有限近似环' 的论断无法直接推出体积下界，缺乏可核查的论证链。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行正确归约为δ⁻²根δ-分离δ-管并集体积≳1。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第8、23-25行识别Heisenberg构型为核心障碍并给出代数描述。",
+          "cited_lines": [
+            8,
+            23,
+            25
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "第40行递推式无可核查推导，induction on scales未真正执行。",
+          "cited_lines": [
+            6,
+            37,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未出现凸集并集体积估计之重构。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "第7、19行仅提及Sticky/Grainy词汇，未给多尺度聚簇关键刻画。",
+          "cited_lines": [
+            7,
+            19
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "第23行仅声明分解存在，未证明结构定理；第61行自认依赖精确量化。",
+          "cited_lines": [
+            23,
+            61
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第49-53行错误套用sum-product论证，未真正闭合归纳得满维。",
+          "cited_lines": [
+            49,
+            52,
+            56,
+            60
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "术语堆砌但核心论证缺失；错误地将Heisenberg情形归结为实数sum-product；未涉及凸集并集重构；结构定理与归纳递推无可核查细节。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "æ­£ç¡®å½çº¦ä¸º Î´â»Â² æ ¹ Î´-åç¦»æ¹å tube å¹¶éä½ç§¯ â³ 1 (up to logs)ã",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "æç¡®å° Heisenberg æåè¯å«ä¸ºæ ¸å¿éç¢å¹¶è¯å¾å¤çã",
+          "cited_lines": [
+            8,
+            9
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "æç¡®éç¨ induction on scales ä½ä¸ºç»ç»éª¨æ¶ã",
+          "cited_lines": [
+            6,
+            38,
+            39,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "æªæåå¸éå¹¶éä½ç§¯ä¼°è®¡è¿ä¸æ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "æå sticky/grainy å¤å°ºåº¦èç°ç»æã",
+          "cited_lines": [
+            7,
+            19,
+            20
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "ä»å£°ç§°å­å¨åè§£ï¼æªç»åºé­å grainy ä¸ Heisenberg æå½¢çææç»æå®çè¯æã",
+          "cited_lines": [
+            23,
+            24,
+            25,
+            61
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Heisenberg æè®ºè¯ä»æ¨¡ç³çå æ³ç»åæç¤ºï¼æªçæ­£é­åå½çº³å¾å°ç»´æ° 3ã",
+          "cited_lines": [
+            50,
+            51,
+            52,
+            53,
+            60
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover ä»ç»åºé«å±æè·¯åå¼çéè¿°ï¼æªæä¾å¯æ ¸æ¥çä¸¥å¯è®ºè¯ãR4 ç¼ºå¤±å¸éå¹¶éè¡¨è¿°ï¼R6 ç»æå®çæ è¯æï¼R7 Heisenberg é­åä»é æ¨¡ç³ç Sum-Product æç¤ºï¼æªå®æå½çº³ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.5517072233114212,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "earned_total_items": 1,
+  "earned_passed_items": 0
+}

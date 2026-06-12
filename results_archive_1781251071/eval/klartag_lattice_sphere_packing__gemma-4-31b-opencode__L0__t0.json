@@ -1,0 +1,17 @@
+{
+  "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L0::t0",
+  "task_id": "klartag_lattice_sphere_packing",
+  "judges": [],
+  "item_consensus": {},
+  "passed_items": 0,
+  "total_items": 6,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": true,
+  "revealed_items": [],
+  "earned_passed_items": 0,
+  "earned_total_items": 0
+}

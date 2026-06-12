@@ -1,0 +1,375 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L4::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行4和37-39正确将猜想归约为δ⁻²根δ-分离管的体积下界问题。",
+          "cited_lines": [
+            4,
+            37,
+            38,
+            39
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "行11和51-54明确识别并讨论了海森堡型构型作为核心障碍。",
+          "cited_lines": [
+            11,
+            51,
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "行6和41-45明确采用尺度归纳并定义了尺度序列与能量函数。",
+          "cited_lines": [
+            6,
+            41,
+            42,
+            43,
+            44,
+            45
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及将问题重构为凸集并集体积估计这一Wang-Zahl核心等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "行24-26给出Sticky引理，行48讨论了Grainy多尺度聚簇结构。",
+          "cited_lines": [
+            24,
+            25,
+            26,
+            48
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "行56-58明确承认存在Gap，未能证明闭合grainy与海森堡型的结构定理。",
+          "cited_lines": [
+            56,
+            57,
+            58
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行63-64基于假设条件得出结论，证明未真正闭合，未严格得到满维3。",
+          "cited_lines": [
+            63,
+            64
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover正确识别了Kakeya猜想证明中的核心概念（如induction on scales, Heisenberg构型, sticky/grains），但在最关键的结构定理闭合处（排除Heisenberg构型）明确承认了Gap，且缺失了Wang-Zahl证明中凸集重构的关键步骤，因此证明不成立。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 4: 正确将猜想归约为 δ⁻² 根 δ-分离方向管的并集体积 ≳ δ^{-ε}",
+          "cited_lines": [
+            4,
+            37,
+            38
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "Lines 11, 31, 53-54: 明确识别 Heisenberg 型构型为核心障碍",
+          "cited_lines": [
+            11,
+            31,
+            53,
+            54
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "Lines 6, 41-42: 明确采用尺度归纳作为组织骨架",
+          "cited_lines": [
+            6,
+            41,
+            42
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积估计（Wang-Zahl 标题式更强表述）",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "Lines 10, 24-26, 28-31: 给出 sticky 引理与 grainy 多尺度聚簇刻画",
+          "cited_lines": [
+            10,
+            24,
+            25,
+            26,
+            28,
+            29,
+            30,
+            31
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "Line 56-58 明确标注 Heisenberg 情形为 Gap，未完成闭合",
+          "cited_lines": [
+            56,
+            57,
+            58
+          ],
+          "confidence": 0.97
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Line 56-64: Heisenberg 情形未闭合，结论条件性（'如果被成功排除'），非完整证明",
+          "cited_lines": [
+            56,
+            57,
+            58,
+            63,
+            64
+          ],
+          "confidence": 0.97
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明框架方向正确（R1-R3, R5 通过），但核心难点 Heisenberg 情形被 prover 自身标注为 Gap（line 56-58），未给出有效论证，归纳未闭合，不构成完整证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "体积下界误写为≳δ^{-ε}，与有界性矛盾，未正确归约。",
+          "cited_lines": [
+            4,
+            38
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡型构型为三维关键障碍。",
+          "cited_lines": [
+            10,
+            11,
+            53
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "采用尺度归纳骨架，设尺度序列与能量函数。",
+          "cited_lines": [
+            6,
+            42,
+            43
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及凸集并集体积的更强等价表述。",
+          "cited_lines": [
+            4,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "给出sticky与grains多尺度聚簇刻画。",
+          "cited_lines": [
+            10,
+            25,
+            48
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "结构定理未证明，第56行自承存在Gap。",
+          "cited_lines": [
+            28,
+            56
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "以条件句假设结尾，未完成归纳闭合得满维。",
+          "cited_lines": [
+            63,
+            64
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "存在根本性符号错误与未填补的核心Gap。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "ç¬¬4è¡æç¡®ç»åºÎ´â»Â²æ ¹æ¹åÎ´-åç¦»çåä½Î´-ç®¡å¹¶éä½ç§¯â³Î´^{-Îµ}ï¼æ­£ç¡®å½çº¦ã",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "ç¬¬10-11è¡è¯å«Heisenberg-typeä¸ºåéç¢å¹¶æè¿°åç¹ç¹ï¼ç¬¦åè¦æ±ã",
+          "cited_lines": [
+            10,
+            11
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "ç¬¬6è¡æç¡®éç¨å°ºåº¦å½çº³ä½ä¸ºç»ç»éª¨æ¶ï¼ç¬¬42è¡å®ä¹å°ºåº¦åºåã",
+          "cited_lines": [
+            6,
+            42
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "æªåºç°å¸éå¹¶éä½ç§¯ä¼°è®¡æWangâZahlæ é¢å¼æ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "ä»å®ä¹stickyå¼çï¼æªç»åºå¤å°ºåº¦èç°ç»æ(sticky/grains)çåå»ç»ã",
+          "cited_lines": [
+            24,
+            25,
+            26
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "ç¬¬28-31è¡å£°ç§°ç»æåè§£ä½æªè¯æé­åï¼ä¸ç¬¬56-58è¡æ¿è®¤Gapï¼æ ææé­åè®ºè¯ã",
+          "cited_lines": [
+            28,
+            29,
+            30,
+            31,
+            56,
+            57,
+            58
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "ç¬¬56-58è¡æç¡®æ æ³¨æ ¸å¿Gapæªè§£å³ï¼æ´ä½æªé­åå¾å°ç»´æ°3ã",
+          "cited_lines": [
+            56,
+            57,
+            58
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Proveræ¿è®¤Heisenbergæå­å¨Gapï¼æªç»åºææé­åè®ºè¯ï¼æ´ä½è¯æä¸æç«ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": true,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 4,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.716111111111111,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "earned_total_items": 1,
+  "earned_passed_items": 0
+}

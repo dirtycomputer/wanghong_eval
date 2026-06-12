@@ -1,0 +1,340 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L3::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行正确给出了δ-tube离散化表述及体积下界目标。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "第18行将Heisenberg构型错解为方向线性关系，属胡话。",
+          "cited_lines": [
+            18
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "第6和14行明确使用了尺度归纳作为证明的组织骨架。",
+          "cited_lines": [
+            6,
+            14
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及Wang-Zahl核心的凸集并集体积估计等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未涉及sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与Heisenberg型并闭合的结构定理。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第38至39行自承未控制量化损失，仅为框架概述，未闭合。",
+          "cited_lines": [
+            38,
+            39
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅堆砌术语，对核心障碍理解错误，缺失关键结构，且自承未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 4 & 22–24 correctly state δ⁻²根δ-分离tube并集体积≳δ^ε目标，计数函数+Cauchy-Schwarz归约基本正确。",
+          "cited_lines": [
+            4,
+            22,
+            23,
+            24
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "Line 6 & 17–18识别Heisenberg构型为障碍，Line 33提及处理尝试，但处理非严格。",
+          "cited_lines": [
+            6,
+            17,
+            18,
+            33
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "Line 6, 14, 36明确以尺度归纳为组织骨架，引理2和步骤4均有体现。",
+          "cited_lines": [
+            6,
+            14,
+            36
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "完全未提及Wang–Zahl标题式的凸集并集体积重构，缺少该更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未出现sticky/grains多尺度聚簇结构的任何刻画，关键词完全缺失。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出闭合grainy与Heisenberg型分情形的结构定理，仅有引理3的非严格叙述。",
+          "cited_lines": [
+            17,
+            18,
+            33
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Line 39自承'框架性概述而非具体常数追踪'，论证未闭合，无法得到满维3。",
+          "cited_lines": [
+            36,
+            38,
+            39
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅为高层证明框架/草图，非完整证明。缺失R4–R6等Wang–Zahl核心结构性贡献（凸集体积重构、sticky/grains聚簇、grainy∨Heisenberg闭合定理），且prover自认量化损失未追踪，不构成有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "行4、21-24正确将猜想归约为δ⁻²根δ-分离tube并集体积≳δ^ε。",
+          "cited_lines": [
+            4,
+            21,
+            22,
+            23,
+            24
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "行18错误定义Heisenberg构型为方向线性关系，行33处理空洞无可核查论证。",
+          "cited_lines": [
+            6,
+            18,
+            33
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "行6、14-15、36以尺度归纳组织证明，虽细节不足但骨架存在。",
+          "cited_lines": [
+            6,
+            14,
+            15,
+            36
+          ],
+          "confidence": 0.6
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未出现凸集并集或凸包重构，仅停留在tube并集体积。",
+          "cited_lines": [
+            4,
+            21,
+            22
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未提及sticky、grains或多尺度聚簇结构刻画。",
+          "cited_lines": [
+            15,
+            31,
+            32,
+            33
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出grainy情形与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [
+            18,
+            33
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "步骤4仅为断言式闭合，无R4-R6支撑，且行38自认框架性概述。",
+          "cited_lines": [
+            36,
+            38,
+            39
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明为框架性概述，缺乏R4-R6的关键结构，未真正闭合；且所声称的多线性+细胞分解路径并非已知可证三维Kakeya满维的有效路径。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": false,
+          "justification": "未归约为并集体积≳1 (up to logs)，而是δ^ε版本",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅提及Heisenberg构型但未提供任何处理论证",
+          "cited_lines": [
+            6,
+            17,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳作为总体逻辑和分解方法",
+          "cited_lines": [
+            6,
+            14,
+            15,
+            30
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未涉及凸集并集体积估计，无更强等价表述",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未提及sticky或grains聚簇结构刻画",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理区分grainy与海森堡型",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "整体论证未闭合，缺乏有效归纳步骤",
+          "cited_lines": [
+            35,
+            36
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅提供极为粗略的框架，无任何实质证明细节，未能满足任何核心判据。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 2,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.6552352166162907,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "earned_total_items": 3,
+  "earned_passed_items": 0
+}

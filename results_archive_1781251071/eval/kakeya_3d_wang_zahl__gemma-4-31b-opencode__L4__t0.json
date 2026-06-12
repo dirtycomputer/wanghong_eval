@@ -1,0 +1,345 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-opencode::L4::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行正确给出了δ⁻²根δ-分离方向δ-管并集体积的离散化表述。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第6和27行明确识别海森堡型构型为导致简单叠加失效的核心障碍。",
+          "cited_lines": [
+            6,
+            27
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "第6和24行明确采用尺度归纳法作为证明的组织骨架。",
+          "cited_lines": [
+            6,
+            24
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未提及将问题重构为凸集并集体积估计或相关的更强等价表述。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": true,
+          "justification": "第12至15行讨论了Grainy情形，第18行提及了管的粘性性质。",
+          "cited_lines": [
+            12,
+            13,
+            14,
+            15,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "第36至37行明确承认结构定理的解析闭合存在跳跃，未给出严格证明。",
+          "cited_lines": [
+            36,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "因结构定理未严格证明，整体归纳未能真正闭合以得到满维3的结论。",
+          "cited_lines": [
+            37
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明在高层思路上正确识别了核心概念，但在关键的结构定理闭合上承认存在跳跃，未完成严格证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 4 correctly states δ⁻² δ-separated unit δ-tubes, union volume ≳ δ^ε.",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.92
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "Line 6 names Heisenberg-type configurations as main obstacle; line 15 describes them.",
+          "cited_lines": [
+            6,
+            15,
+            27
+          ],
+          "confidence": 0.85
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "Line 6 and lines 24–25 explicitly adopt induction on scales as skeleton.",
+          "cited_lines": [
+            6,
+            24,
+            25
+          ],
+          "confidence": 0.88
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "No mention of Wang–Zahl convex set union volume reformulation; stays at tube level.",
+          "cited_lines": [
+            4,
+            22
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "Mentions 'grainy' and 'sticky' (lines 14, 18) but gives no quantitative multi-scale clustering characterization.",
+          "cited_lines": [
+            14,
+            18,
+            32
+          ],
+          "confidence": 0.75
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "引理 3 (line 17) is hand-waving; prover admits '结构定理解析闭合存在跳跃' (line 37). No real proof.",
+          "cited_lines": [
+            17,
+            18,
+            37
+          ],
+          "confidence": 0.93
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Proof self-admits gaps (line 37); no concrete volume computation closes induction to dim 3.",
+          "cited_lines": [
+            31,
+            32,
+            33,
+            34,
+            37
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "The submission is a high-level narrative sketch naming the right concepts (R1–R3) but never delivers quantitative arguments. It omits the Wang–Zahl convex-set reformulation (R4), lacks real sticky/grains structure (R5), explicitly admits a gap in the structural theorem (R6, R7), and never closes the induction to full dimension. Not a valid proof.",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4行给出δ-管并集体积≳δ^ε的离散表述，等价于标准形式。",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "第6、28行明确指认海森堡型构型为主要障碍。",
+          "cited_lines": [
+            6,
+            28
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "第24-25行仅贴标签，归纳方向混乱且无实质骨架。",
+          "cited_lines": [
+            24,
+            25
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未出现凸集并集体积估计的等价重构。",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "第14、18行仅罗列名词，无多尺度聚簇结构刻画。",
+          "cited_lines": [
+            14,
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "第17-19行结构定理空洞，第37行自承存在逻辑跳跃。",
+          "cited_lines": [
+            17,
+            18,
+            19,
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第31-34行断言闭合但无实质组合归纳，未真正得证。",
+          "cited_lines": [
+            31,
+            32,
+            33,
+            34
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅为高层概述，核心结构定理与归纳闭合均缺乏可核查的数学细节，且作者自承跳跃。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "ç¬¬4è¡æç¡®ç»åºÎ´â»Â²æ ¹æ¹åÎ´-åç¦»ç®¡å¹¶éä½ç§¯â³Î´^Îµçç¦»æ£è¡¨è¿°ï¼æ­£ç¡®å½çº¦ã",
+          "cited_lines": [
+            4
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "ç¬¬6è¡æç¡®æåºæµ·æ£®å ¡åæåæ¯ä¸»è¦éç¢ï¼å¹¶æåè¿ä¼¼çº¿æ§åã",
+          "cited_lines": [
+            6
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "ç¬¬6è¡åç¬¬24è¡æç¡®éç¨å°ºåº¦å½çº³æ³ä½ä¸ºç»ç»éª¨æ¶ã",
+          "cited_lines": [
+            6,
+            24
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "åæªæåå°é®é¢éæä¸ºå¸éå¹¶éä½ç§¯ä¼°è®¡è¿ä¸æ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "ä»å¨ç¬¬18è¡æåâç²æ§âä¸è¯ï¼æªç»åºsticky/grainså¤å°ºåº¦èç°ç»æçåå»ç»ã",
+          "cited_lines": [
+            18
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "æªç»åºé­ågrainyä¸æµ·æ£®å ¡ååæå½¢çç»æå®çååè¯æï¼ä»å¨ç¬¬37è¡æ¿è®¤å­å¨è·³è·ã",
+          "cited_lines": [
+            37
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "å R5ãR6ç¼ºå¤±åç»æï¼ç»åé­åå½çº³æªçæ­£å®ç°ï¼æ æ³å¾å°æ»¡ç»´3ã",
+          "cited_lines": [
+            37
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "è¯æä»åçå¨é«å±æè·¯æè¿°ï¼ç¼ºå¤±å¸éå¹¶éä½ç§¯ä¼°è®¡ãsticky/grainså¤å°ºåº¦å»ç»åé­åçç»æå®çç­æ ¸å¿è®ºè¯ï¼æ´ä½æªæç«ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": true,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 3,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.715473801560758,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "earned_total_items": 1,
+  "earned_passed_items": 0
+}

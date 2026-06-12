@@ -1,0 +1,386 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b-hermes::L0::t1",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第6行正确归约为δ⁻²根δ-分离tube并集体积≳1。",
+          "cited_lines": [
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "第49行仅提及平面障碍，未识别并处理海森堡型构型。",
+          "cited_lines": [
+            49,
+            50
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文未采用尺度归纳(induction on scales)作为骨架。",
+          "cited_lines": [
+            28,
+            29
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及或重构为凸集并集的体积估计这一更强表述。",
+          "cited_lines": [
+            14,
+            28
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky或grains等多尺度聚簇结构的关键刻画。",
+          "cited_lines": [
+            14,
+            28
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型并闭合的结构定理。",
+          "cited_lines": [
+            48,
+            52
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第45至54行明确承认未能闭合至维数3，仅得到5/2。",
+          "cited_lines": [
+            45,
+            54
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 仅证明了 Minkowski 维数 >= 5/2 的经典结果，并明确承认无法克服障碍证明至 3，未完成定理证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "Line 6 正确将猜想归约为 δ⁻² 根 δ-分离 tube 并集体积 ≳ 1。",
+          "cited_lines": [
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "Lines 49-50 仅提'平面盘'障碍，未识别 Heisenberg 群构型这一真正的核心障碍。",
+          "cited_lines": [
+            49,
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "全文用 Hairbrush + 能量估计，未采用 induction on scales 组织骨架。",
+          "cited_lines": [
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未出现 Wang–Zahl 标题式的凸集并集体积估计重构。",
+          "cited_lines": [
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未出现 sticky / grains 多尺度聚簇结构的刻画。",
+          "cited_lines": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 与海森堡型分情形闭合的结构定理。",
+          "cited_lines": [
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "Prover 明确承认仅证到 5/2，line 54 称'学术界尚未达成公认完整证明'，未闭合至维数 3。",
+          "cited_lines": [
+            10,
+            48,
+            53,
+            54
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 诚实承认只能证到 Wolff 的 5/2 下界，line 54 明确放弃闭合至 dim=3。这不是不同路径的有效证明，而是未完成证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第6行正确归约为δ⁻²根δ-分离tube并集体积≳1。",
+          "cited_lines": [
+            6
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "未提及Heisenberg型构型，仅提到planar barrier。",
+          "cited_lines": [
+            49,
+            50
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "未采用induction on scales，仅用单次尺度估计。",
+          "cited_lines": [
+            28,
+            44
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未涉及凸集并集体积估计的更强等价表述。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky/grains多尺度聚簇结构刻画。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理，未闭合grainy与海森堡型分情形。",
+          "cited_lines": [
+            1,
+            58
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "仅证到5/2，未闭合至3，且自认存在理论鸿沟。",
+          "cited_lines": [
+            10,
+            54
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "prover未证明定理，仅复述已知5/2结果并标注gap，完全未触及Wang-Zahl证明的核心框架。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "ç¬¬6è¡æç¡®å°çæ³å½çº¦ä¸ºÎ´â»Â²æ ¹æ¹åÎ´-åç¦»çÎ´-ç®¡å¹¶éä½ç§¯â³1ã",
+          "cited_lines": [
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "ä»å¨ç¬¬10ã49è¡æåâå¹³é¢åå¸âéç¢ï¼æªè¯å«æå¤çæµ·æ£®å ¡åæåã",
+          "cited_lines": [
+            10,
+            49
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "åæªéç¨å°ºåº¦å½çº³ä½ä¸ºç»ç»éª¨æ¶ï¼ä»ç¨åå·è®ºè¯å¾å°5/2ä¸çã",
+          "cited_lines": [
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "æªåºç°å¸éå¹¶éä½ç§¯ä¼°è®¡æWangâZahlæ é¢å¼çæ´å¼ºç­ä»·è¡¨è¿°ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "æªç»åºsticky/grainså¤å°ºåº¦èç°ç»æçå»ç»ã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "æªç»åºé­ågrainyä¸æµ·æ£®å ¡åæå½¢çç»æå®çã",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "æ´ä½æªé­åå½çº³å¾å°ç»´æ°3ï¼ä»è¯æå°5/2å¹¶æ¿è®¤æªå®æã",
+          "cited_lines": [
+            43,
+            48,
+            54
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Proverä»å¤ç°äºWolffç5/2ä¸çï¼æªè§¦åä¸ç»´Kakeyaçæ³çå®æ´è¯æï¼ä¸æªéç¨å°ºåº¦å½çº³ãå¸éå¹¶éãsticky/grainsç­æ ¸å¿è¦ç´ ã",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": false,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 1,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 1.0,
+  "needs_human_review": false,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [],
+  "earned_total_items": 7,
+  "earned_passed_items": 1
+}

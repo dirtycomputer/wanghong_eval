@@ -1,0 +1,339 @@
+{
+  "job_id": "kakeya_3d_wang_zahl::gemma-4-31b::L3::t0",
+  "task_id": "kakeya_3d_wang_zahl",
+  "judges": [
+    {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-分离管的并集体积下界。",
+          "cited_lines": [
+            4,
+            5,
+            6
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确指出海森堡群构型是导致体积损失的核心困难。",
+          "cited_lines": [
+            12,
+            39
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确采用尺度归纳作为处理非横截情况的组织骨架。",
+          "cited_lines": [
+            12,
+            40
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未提及Wang-Zahl的凸集并集体积估计或等价重构。",
+          "cited_lines": [
+            9,
+            10,
+            11
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "缺失sticky tubes或grains等多尺度聚簇结构刻画。",
+          "cited_lines": [
+            34,
+            35,
+            36
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "仅用旧的多项式划分，未给出grainy与海森堡型结构定理。",
+          "cited_lines": [
+            41,
+            42,
+            43,
+            44
+          ],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "行50-52明确承认存在闭合缺口，未真正完成证明。",
+          "cited_lines": [
+            50,
+            51,
+            52
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明依赖旧的多项式划分与多线性方法，缺失Wang-Zahl的核心新工具（凸集重构、sticky/grains结构），且作者自承未闭合。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为 δ⁻² 根 δ-分离方向 tube 并集体积 ≳ δ^ε（行 4-5, 29）",
+          "cited_lines": [
+            4,
+            5,
+            29
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": true,
+          "justification": "明确识别海森堡型构型为核心障碍（行 12, 39），但未真正处理",
+          "cited_lines": [
+            12,
+            39
+          ],
+          "confidence": 0.7
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "明确提出尺度归纳 δ→δ^{1/2} 作为骨架（行 12, 40）",
+          "cited_lines": [
+            12,
+            40
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "未重构为 Wang–Zahl 标题式的凸集并集体积估计，全文无此表述",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出 sticky/grains 多尺度聚簇结构，全文无此概念",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出 grainy 与海森堡型分情形闭合的结构定理",
+          "cited_lines": [],
+          "confidence": 0.95
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "证明显式承认未闭合（行 51-52），'闭合缺口'与'维数跳跃'均未解决",
+          "cited_lines": [
+            51,
+            52
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该产物仅为 Guth 2010 多线性 Kakeya 思路的粗糙草稿，完全未涉及 Wang–Zahl 2025 的核心新工具（凸集并集体积重构、sticky/grains 聚簇、grainy-vs-Heisenberg 分情形结构定理）。证明自身在行 51-52 明确承认存在未闭合缺口，不构成对 3D Kakeya 猜想的有效证明。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "正确归约为δ⁻²根δ-管并集体积下界，目标式虽写δ^ε，但等价于维数3的离散表述。",
+          "cited_lines": [
+            4,
+            5,
+            29
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅第39行提及“海森堡群构型”一词，未描述其几何结构，更无实质处理方案。",
+          "cited_lines": [
+            39
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R3",
+          "passed": false,
+          "justification": "虽提及尺度归纳，但证明骨架实为多线性估计与多项式划分，归纳仅作口号。",
+          "cited_lines": [
+            12,
+            40,
+            41,
+            42
+          ],
+          "confidence": 0.75
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全文未出现凸集并集体积估计或Wang–Zahl标题式的更强等价表述。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "未给出sticky、grains或多尺度tube聚簇结构的任何刻画。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "无结构定理将grainy情形与海森堡型分情形闭合，缺失核心分类讨论。",
+          "cited_lines": [],
+          "confidence": 1.0
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "第46-48行仅断言闭合，无可核查的组合归纳论证，未真正得到满维3。",
+          "cited_lines": [
+            46,
+            47,
+            48
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明沿用旧多线性+多项式划分框架，缺失Wang-Zahl的核心结构定理、凸集重构与grainy分析，多处仅为断言。",
+      "parse_failed": false
+    },
+    {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+        {
+          "item_id": "R1",
+          "passed": true,
+          "justification": "第4-5行正确给出δ⁻²根方向δ-分离管并集体积下界，第31行归约到∫f²",
+          "cited_lines": [
+            4,
+            5,
+            31
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R2",
+          "passed": false,
+          "justification": "仅在第12,38行提及海森堡构型，未给出任何实质性处理论证",
+          "cited_lines": [
+            12,
+            38,
+            39
+          ],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R3",
+          "passed": true,
+          "justification": "第8-12行及第40-43行明确采用尺度归纳作为组织骨架",
+          "cited_lines": [
+            12,
+            40,
+            41,
+            42,
+            43
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R4",
+          "passed": false,
+          "justification": "全篇未提及凸集、凸集并集体积估计等核心等价表述",
+          "cited_lines": [
+            4,
+            5
+          ],
+          "confidence": 0.9
+        },
+        {
+          "item_id": "R5",
+          "passed": false,
+          "justification": "全篇未描述管的多尺度聚簇结构(sticky/grains)",
+          "cited_lines": [],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R6",
+          "passed": false,
+          "justification": "未给出区分grainy与海森堡型的结构定理",
+          "cited_lines": [],
+          "confidence": 0.8
+        },
+        {
+          "item_id": "R7",
+          "passed": false,
+          "justification": "论证存在明显缺口，末段自认闭合缺口，未真正归纳闭合",
+          "cited_lines": [
+            50,
+            51,
+            52
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "该证明仅概述已知技术，未实质处理关键障碍，承认闭合缺口，不构成有效证明。",
+      "parse_failed": false
+    }
+  ],
+  "item_consensus": {
+    "R1": true,
+    "R2": false,
+    "R3": true,
+    "R4": false,
+    "R5": false,
+    "R6": false,
+    "R7": false
+  },
+  "passed_items": 2,
+  "total_items": 7,
+  "overall_valid": false,
+  "alternative_valid": false,
+  "agreement": 0.6178020615360769,
+  "needs_human_review": true,
+  "excluded": false,
+  "errored": false,
+  "revealed_items": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "earned_total_items": 3,
+  "earned_passed_items": 0
+}
