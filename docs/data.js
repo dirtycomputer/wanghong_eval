@@ -1,5 +1,5 @@
 window.BE_DATA = {
- "generated_at": "2026-06-11T11:02:13+00:00",
+ "generated_at": "2026-06-12T05:31:40+00:00",
  "tasks": {
   "kakeya_3d_wang_zahl": {
    "task_id": "kakeya_3d_wang_zahl",
@@ -196,9 +196,246 @@ window.BE_DATA = {
     "other_sources": [],
     "web_search": "DISABLED"
    }
+  },
+  "klartag_lattice_sphere_packing": {
+   "task_id": "klartag_lattice_sphere_packing",
+   "title": "Klartag 测试 — 高维格球堆积密度的超线性改进",
+   "domain": "math/lattice_packing",
+   "breakthrough_date": "2025-04-07",
+   "retrieval_cutoff": "2025-03-31",
+   "allowed_model_cutoff_before": "2025-03-31",
+   "problem_statement": "设 L 是 R^n 中的一个格 (lattice)，格球堆积密度定义为格 L 中互不重叠的等半径开球所能达到的最大中心密度。\n已知经典下界：Rogers (1947) 证明存在 n 维格 L 使得球堆积密度 ≥ c·n/2^n (其中 c>0 是绝对常数)。\n该下界自 Rogers 起近 80 年只在常数因子上有改进，线性因子 n 从未被突破。\n问题：能否证明在 R^n 中存在格球堆积，其密度的增长因子是超线性的，\n即密度 ≥ c'·f(n)/2^n 且 f(n)/n → ∞？请给出构造性证明或存在性论证。\n",
+   "problem_framing_notes": "题面只陈述 T 时刻之前已知的开放问题状态与经典结果。不得出现 golden 论文的作者名、\n其标题式构造的名称或特有术语, 亦不可暗示让凸体按某种过程演化的构造路线\n(具体禁词以 contamination_probes 的 leak_indicators 为准, validate 会扫描题面与本段)。\n",
+   "golden_proof": {
+    "primary": "arXiv:2504.05042 (Klartag)",
+    "companions": [
+     "arXiv:2312.10026 (Campos–Jenssen–Michelen–Sahasrabudhe, 非格 n·log n 对照)",
+     "Quanta Magazine 2025-04 报道 (科普解读)"
+    ],
+    "proof_text": "Klartag 证明结构概要 (评委对齐参照，绝不给 PROVER)：\n1. 归约 (R1): 格堆积密度下界问题等价于寻找中心对称凸体 K (通常取为椭球) 使得 K 内部无非零格点，\n  且体积 vol(K) 尽可能大；对格 L 密度 ≥ vol(K)/(2^n det(L))，并通过线性变换转化为球堆积。\n  这是标准 Minkowski 型归约。\n2. 创新思路 (R2): 放弃传统的对随机格取平均 (Minkowski–Hlawka–Rogers 范式)，\n  改为在固定格 L 上动态调整一个椭球，使其体积逐步增大，同时永远不包含非零格点。\n3. 随机演化构造 (R3): 精确地，将椭球表示为 E_t = {x: x^T A_t^{-1} x ≤ 1}，其中正定矩阵 A_t 满足\n  某个随机微分方程 (SDE)。演化由扩散项驱动，当椭球靠近某格点时，方程施加反射或停时约束，\n  防止椭球触及格点。\n4. 鞅分析与体积估计 (R4): 定义合适的鞅，证明在约束下椭球体积的期望增长可以持续到停时之前。\n  利用鞅停时定理和精细的期望估计，证明椭球最终体积的期望 ≥ c·n^2。\n5. 逐次极小控制 (R5): 将椭球演化与 Minkowski 第二定理关于逐次极小 (successive minima) 的约束\n  相结合；演化椭球自然控制了所有逐次极小，从而确保构造的格不含在更小尺度内的短向量。\n6. 转化与闭合 (R6): 将体积约 n^2 的空椭球通过线性变换映射为格中的大空球，\n  组合前述全部步骤给出完整构造性证明: R^n 中存在格球堆积密度 ≥ c·n^2/2^n，\n  完成从线性因子 n 到二次因子 n^2 的突破。\n有效复现判据: frontier‑delta 项 (R2/R3/R4/R5/R6) 须被实质性触及并闭合；\n若证明走完全不同的路径但达到超线性因子，判 alternative_valid 并在 notes 说明。\n"
+   },
+   "rubric": [
+    {
+     "id": "R1",
+     "title": "标准归约：空椭球 ↔ 高密度球堆积",
+     "criterion": "是否将超线性下界问题正确转化为构造体积尽可能大的中心对称凸体 (椭球)，其内部无格点，并通过线性变换等价于格球堆积密度。",
+     "frontier_delta": false,
+     "indicators": [
+      "标准归约",
+      "空椭球构造",
+      "线性变换转化",
+      "Minkowski 凸体定理"
+     ]
+    },
+    {
+     "id": "R2",
+     "title": "放弃平均范式，提出动态演化构造思路",
+     "criterion": "是否明确提出放弃对随机格取平均的经典方法，转向对单个固定格上的凸体进行动态/迭代调整的思路。",
+     "frontier_delta": true,
+     "indicators": [
+      "放弃平均论证",
+      "动态调整椭球",
+      "演化构造思路",
+      "固定格动态演化"
+     ]
+    },
+    {
+     "id": "R3",
+     "title": "随机演化椭球的精确定义（SDE/扩散）",
+     "criterion": "是否给出椭球的随机微分方程定义，包括扩散项以及遇到格点时的反射/停时约束机制。",
+     "frontier_delta": true,
+     "indicators": [
+      "随机演化椭球",
+      "随机微分方程",
+      "扩散过程",
+      "反射停时约束"
+     ]
+    },
+    {
+     "id": "R4",
+     "title": "鞅/停时分析给出椭球体积 ~ n^2",
+     "criterion": "是否利用鞅工具和停时定理分析演化过程，并证明椭球在停止前体积期望至少为 c·n^2 量级。",
+     "frontier_delta": true,
+     "indicators": [
+      "鞅分析",
+      "停时定理",
+      "期望体积 n^2",
+      "体积下界估计"
+     ]
+    },
+    {
+     "id": "R5",
+     "title": "结合逐次极小与结构控制",
+     "criterion": "是否将演化椭球与 Minkowski 第二定理或逐次极小联系起来，确保构造的格具有良好的短向量控制。",
+     "frontier_delta": true,
+     "indicators": [
+      "逐次极小",
+      "Minkowski 第二定理",
+      "控制短向量",
+      "连续极小联系"
+     ]
+    },
+    {
+     "id": "R6",
+     "title": "转化与闭合：得到密度 c·n^2/2^n",
+     "criterion": "是否将体积 n^2 的空椭球通过线性变换成功转化为格球堆积，并完整给出最终密度下界 c·n^2/2^n。",
+     "frontier_delta": true,
+     "indicators": [
+      "最终密度 c·n^2/2^n",
+      "超线性因子 n^2",
+      "格球堆积构造完成",
+      "证明闭合"
+     ]
+    }
+   ],
+   "contamination_probes": [
+    {
+     "id": "P1_direct",
+     "kind": "direct",
+     "prompt": "高维格球堆积密度的下界能突破 Rogers 的线性因子 n 吗？如果有突破，关键的新构造思路是什么？",
+     "leak_indicators": [
+      "随机演化椭球",
+      "stochastically evolving ellipsoid",
+      "椭球扩散",
+      "Klartag"
+     ],
+     "threshold": 1
+    },
+    {
+     "id": "P2_indirect",
+     "kind": "indirect",
+     "prompt": "高维球堆积密度下界这个方向, 2024 年之后有什么值得关注的进展吗？Rogers 的线性因子还守得住吗？如果你听说过新的突破, 说说它的出处和大致思路。",
+     "leak_indicators": [
+      "随机演化椭球",
+      "stochastically evolving ellipsoid",
+      "椭球扩散",
+      "Klartag"
+     ],
+     "threshold": 1
+    },
+    {
+     "id": "P3_completion",
+     "kind": "completion",
+     "prompt": "续写以下证明开头并给出其核心构造：‘我们将格球堆积密度的下界问题归约为: 在固定格 L 中寻找一个内部不含非零格点、体积尽可能大的中心对称凸体, 然后……’",
+     "leak_indicators": [
+      "随机演化椭球",
+      "stochastically evolving ellipsoid",
+      "椭球扩散",
+      "Klartag"
+     ],
+     "threshold": 1
+    }
+   ],
+   "hint_ladder": [
+    {
+     "level": 0,
+     "label": "L0",
+     "ratio": 0.0,
+     "content": "",
+     "reveals_rubric_items": []
+    },
+    {
+     "level": 1,
+     "label": "L1",
+     "ratio": 0.15,
+     "content": "将密度下界改进问题归约到构造一个中心对称凸体 (可取为椭球)，其内部无格点且体积尽可能大；通过线性变换可将空椭球转化为高密度球堆积。",
+     "reveals_rubric_items": [
+      "R1"
+     ]
+    },
+    {
+     "level": 2,
+     "label": "L2",
+     "ratio": 0.3,
+     "content": "考虑放弃传统的对随机格取平均的方法，改为对单个固定格上的椭球进行动态调整，使其体积逐步增大，同时约束其永远不包含任何非零格点。",
+     "reveals_rubric_items": [
+      "R2"
+     ]
+    },
+    {
+     "level": 3,
+     "label": "L3",
+     "ratio": 0.5,
+     "content": "关键构造：让椭球通过一个随机微分方程演化，形状与体积随时间变化；当椭球接近格点时方程施加反射或停时，确保其内部始终无格点。",
+     "reveals_rubric_items": [
+      "R3"
+     ]
+    },
+    {
+     "level": 4,
+     "label": "L4",
+     "ratio": 0.7,
+     "content": "对上述随机过程进行鞅分析：定义合适的鞅，利用停时定理证明椭球在停止前体积期望至少约为 c·n^2。",
+     "reveals_rubric_items": [
+      "R4"
+     ]
+    },
+    {
+     "level": 5,
+     "label": "L5",
+     "ratio": 0.9,
+     "content": "将演化过程与 Minkowski 第二定理的逐次极小结合，确保构造的格满足所有尺度约束；最后将体积约 n^2 的空椭球线性映射为球堆积，得到密度 c·n^2/2^n。请补全闭合论证。",
+     "reveals_rubric_items": [
+      "R5",
+      "R6"
+     ]
+    }
+   ],
+   "retrieval": {
+    "arxiv_snapshot": "frozen <= 2025-03-31",
+    "other_sources": [],
+    "web_search": "DISABLED"
+   }
   }
  },
  "leaderboard": [
+  {
+   "harness": "gemma-4-31b-hermes+hermes-hermes",
+   "task_id": "klartag_lattice_sphere_packing",
+   "points": [
+    {
+     "hint_level": 0,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.0,
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
+    },
+    {
+     "hint_level": 3,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.5,
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
+    },
+    {
+     "hint_level": 5,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.6666666666666666,
+     "pass_at_k": false,
+     "mean_earned_coverage": null
+    }
+   ],
+   "hint_auc": 0.0,
+   "hint_auc_coverage": 0.3833333333333333,
+   "l0_pass_at_k": false,
+   "lowest_solvable_hint": null,
+   "peak_rubric_coverage": 0.6666666666666666,
+   "peak_earned_coverage": 0.0,
+   "probe_cleanliness": 1.0,
+   "removed": false,
+   "cost_units": 0.0,
+   "needs_review_count": 3,
+   "error_count": 0
+  },
   {
    "harness": "gemma-4-31b-hermes+hermes-hermes",
    "task_id": "kakeya_3d_wang_zahl",
@@ -354,6 +591,53 @@ window.BE_DATA = {
    "error_count": 0
   },
   {
+   "harness": "gemma-4-31b+openrouter-openrouter",
+   "task_id": "klartag_lattice_sphere_packing",
+   "points": [
+    {
+     "hint_level": 0,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.0,
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
+    },
+    {
+     "hint_level": 3,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.3333333333333333,
+     "pass_at_k": false,
+     "mean_earned_coverage": 0.0
+    },
+    {
+     "hint_level": 5,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 0,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.3333333333333333,
+     "pass_at_k": false,
+     "mean_earned_coverage": null
+    }
+   ],
+   "hint_auc": 0.0,
+   "hint_auc_coverage": 0.23333333333333334,
+   "l0_pass_at_k": false,
+   "lowest_solvable_hint": null,
+   "peak_rubric_coverage": 0.3333333333333333,
+   "peak_earned_coverage": 0.0,
+   "probe_cleanliness": 1.0,
+   "removed": false,
+   "cost_units": 11.687000000000001,
+   "needs_review_count": 2,
+   "error_count": 0
+  },
+  {
    "harness": "gemma-4-31b-opencode+opencode-opencode",
    "task_id": "kakeya_3d_wang_zahl",
    "points": [
@@ -429,6 +713,53 @@ window.BE_DATA = {
    "cost_units": 0.87,
    "needs_review_count": 9,
    "error_count": 0
+  },
+  {
+   "harness": "gemma-4-31b-opencode+opencode-opencode",
+   "task_id": "klartag_lattice_sphere_packing",
+   "points": [
+    {
+     "hint_level": 0,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 1,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.0,
+     "pass_at_k": false,
+     "mean_earned_coverage": null
+    },
+    {
+     "hint_level": 3,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 1,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.0,
+     "pass_at_k": false,
+     "mean_earned_coverage": null
+    },
+    {
+     "hint_level": 5,
+     "n_trials": 1,
+     "n_excluded": 0,
+     "n_errors": 1,
+     "solve_rate": 0.0,
+     "mean_coverage": 0.0,
+     "pass_at_k": false,
+     "mean_earned_coverage": null
+    }
+   ],
+   "hint_auc": 0.0,
+   "hint_auc_coverage": 0.0,
+   "l0_pass_at_k": false,
+   "lowest_solvable_hint": null,
+   "peak_rubric_coverage": 0.0,
+   "peak_earned_coverage": null,
+   "probe_cleanliness": 1.0,
+   "removed": false,
+   "cost_units": 0.0,
+   "needs_review_count": 0,
+   "error_count": 3
   }
  ],
  "results": [
@@ -15162,6 +15493,2677 @@ window.BE_DATA = {
     "earned_passed_items": 0,
     "earned_total_items": 0
    }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b",
+    "hint_level": 0,
+    "trial": 0,
+    "harness": "gemma-4-31b+openrouter-openrouter",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本问题的核心在于突破 Rogers (1947) 建立的 $\\Delta \\ge c \\cdot n / 2^n$ 的线性下界。在格球堆积（Lattice Sphere Packing）的语境下，传统的 Minkowski-Hlawka 理论及其变体通常只能给出 $\\sim 1/2^n$ 或 $\\sim n/2^n$ 的结果。\n\n要实现超线性因子 $f(n)/n \\to \\infty$，必须利用格的特殊代数结构，而非简单的随机格（Random Lattices）或平均值论证。最有效的突破口是利用**分圆域（Cyclotomic Fields）**及其理想格（Ideal Lattices）。\n\n本证明将基于 Akshay Venkatesh (2012) 的研究成果。其核心思路是：在特定的维度 $n$（特别是当 $n$ 具有大量小素因子时），通过构造基于分圆域的格，并利用分圆域中单位群（Unit Group）的对称性，可以对格的密度进行“放大”。",
+     "key_lemmas": "### 引理 1：Minkowski-Hlawka 定理 (基础)\n对于任何 $n$ 维格 $L$，其密度 $\\Delta$ 满足 $\\Delta \\ge \\frac{\\zeta(n)}{2^{n-1}} \\approx 2 \\cdot 2^{-n}$。Rogers 的改进将此提升至 $c \\cdot n 2^{-n}$。\n\n### 引理 2：分圆格的构造 (Venkatesh's Construction)\n设 $K = \\mathbb{Q}(\\zeta_m)$ 为 $m$ 次分圆域，$[K:\\mathbb{Q}] = \\phi(m) = n$。考虑 $K$ 中的一个理想 $\\mathfrak{a}$，通过 canonical embedding $\\sigma: K \\to \\mathbb{R}^n$，可以将 $\\mathfrak{a}$ 视为 $\\mathbb{R}^n$ 中的一个格 $L_\\mathfrak{a}$。\n\n### 引理 3：对称性放大效应\n在一般的随机格中，我们考虑所有可能的格。但在分圆格中，格 $L_\\mathfrak{a}$ 具有一个巨大的自同构群 $\\text{Aut}(L_\\mathfrak{a})$，其中包含分圆域的单位群 $\\mathcal{O}_K^\\times$。\nVenkatesh 证明了：如果 $n$ 选取合适（例如 $n$ 是某个特定形式的乘积），可以通过对理想类群（Ideal Class Group）进行平均，找到一个理想 $\\mathfrak{a}$，使得其对应的格在 $\\mathcal{O}_K^\\times$ 的作用下，其最短向量的分布比随机格更“稀疏”，从而允许更大的球半径。",
+     "full_proof": "**步骤 1：定义目标维度**\n我们不要求对所有 $n$ 成立，而是在一个无穷子集 $\\mathcal{N} \\subset \\mathbb{N}$ 上证明。选取 $n = \\phi(m)$，其中 $m$ 是一个精心选择的整数（例如 $m$ 为素数 $p$ 且 $p-1$ 有大量小因子）。\n\n**步骤 2：利用分圆域的单位群**\n设 $K = \\mathbb{Q}(\\zeta_m)$。分圆域的单位群 $\\mathcal{O}_K^\\times$ 的秩为 $r = \\phi(m)/2 - 1$。\n对于任何理想 $\\mathfrak{a} \\subset \\mathcal{O}_K$，其对应的格 $L_\\mathfrak{a}$ 在 $\\mathcal{O}_K^\\times$ 的作用下是不变的。这意味着如果 $v \\in L_\\mathfrak{a}$ 是一个最短向量，那么 $\\forall u \\in \\mathcal{O}_K^\\times, uv$ 也是一个最短向量。\n\n**步骤 3：密度估计的提升**\n在传统的 Minkowski-Hlawka 论证中，我们计算 $\\mathbb{E}[\\#\\{v \\in L \\setminus \\{0\\} : \\|v\\| < \\rho\\}]$。\n在分圆格中，由于单位群 $\\mathcal{O}_K^\\times$ 的存在，向量是以“轨道”（orbits）形式出现的。一个轨道 $\\mathcal{O}_K^\\times \\cdot v$ 的大小取决于 $v$ 的稳定子群。\nVenkatesh 通过分析分圆域的对数映射（log-map）和单位群在 $\\mathbb{R}^n$ 中的分布，证明了对于某些 $n$，存在理想 $\\mathfrak{a}$ 使得：\n$$\\Delta(L_\\mathfrak{a}) \\ge \\frac{n \\log \\log n}{2^n} \\cdot c'$$\n（注：在特定维度下，该因子可进一步优化）。\n\n**步骤 4：结论**\n选取 $f(n) = n \\log \\log n$（或在更强的构造中为 $n \\log n$），则 $\\frac{f(n)}{n} = \\log \\log n \\to \\infty$ 当 $n \\to \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度增长因子是超线性的。\n\n**不确定性标注：**\n- 该证明是**存在性论证**（通过对理想类群的平均值分析），而非给出具体的基矩阵。\n- 该结果在 $n$ 的所有取值上是否成立仍有争议，目前最严谨的结论是在一个**无穷子集** $\\mathcal{N}$ 上成立。",
+     "cited_references": []
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n\n本问题的核心在于突破 Rogers (1947) 建立的 $\\Delta \\ge c \\cdot n / 2^n$ 的线性下界。在格球堆积（Lattice Sphere Packing）的语境下，传统的 Minkowski-Hlawka 理论及其变体通常只能给出 $\\sim 1/2^n$ 或 $\\sim n/2^n$ 的结果。\n\n要实现超线性因子 $f(n)/n \\to \\infty$，必须利用格的特殊代数结构，而非简单的随机格（Random Lattices）或平均值论证。最有效的突破口是利用**分圆域（Cyclotomic Fields）**及其理想格（Ideal Lattices）。\n\n本证明将基于 Akshay Venkatesh (2012) 的研究成果。其核心思路是：在特定的维度 $n$（特别是当 $n$ 具有大量小素因子时），通过构造基于分圆域的格，并利用分圆域中单位群（Unit Group）的对称性，可以对格的密度进行“放大”。\n\n## 2. 关键引理与论证\n\n### 引理 1：Minkowski-Hlawka 定理 (基础)\n对于任何 $n$ 维格 $L$，其密度 $\\Delta$ 满足 $\\Delta \\ge \\frac{\\zeta(n)}{2^{n-1}} \\approx 2 \\cdot 2^{-n}$。Rogers 的改进将此提升至 $c \\cdot n 2^{-n}$。\n\n### 引理 2：分圆格的构造 (Venkatesh's Construction)\n设 $K = \\mathbb{Q}(\\zeta_m)$ 为 $m$ 次分圆域，$[K:\\mathbb{Q}] = \\phi(m) = n$。考虑 $K$ 中的一个理想 $\\mathfrak{a}$，通过 canonical embedding $\\sigma: K \\to \\mathbb{R}^n$，可以将 $\\mathfrak{a}$ 视为 $\\mathbb{R}^n$ 中的一个格 $L_\\mathfrak{a}$。\n\n### 引理 3：对称性放大效应\n在一般的随机格中，我们考虑所有可能的格。但在分圆格中，格 $L_\\mathfrak{a}$ 具有一个巨大的自同构群 $\\text{Aut}(L_\\mathfrak{a})$，其中包含分圆域的单位群 $\\mathcal{O}_K^\\times$。\nVenkatesh 证明了：如果 $n$ 选取合适（例如 $n$ 是某个特定形式的乘积），可以通过对理想类群（Ideal Class Group）进行平均，找到一个理想 $\\mathfrak{a}$，使得其对应的格在 $\\mathcal{O}_K^\\times$ 的作用下，其最短向量的分布比随机格更“稀疏”，从而允许更大的球半径。\n\n## 3. 完整证明\n\n**步骤 1：定义目标维度**\n我们不要求对所有 $n$ 成立，而是在一个无穷子集 $\\mathcal{N} \\subset \\mathbb{N}$ 上证明。选取 $n = \\phi(m)$，其中 $m$ 是一个精心选择的整数（例如 $m$ 为素数 $p$ 且 $p-1$ 有大量小因子）。\n\n**步骤 2：利用分圆域的单位群**\n设 $K = \\mathbb{Q}(\\zeta_m)$。分圆域的单位群 $\\mathcal{O}_K^\\times$ 的秩为 $r = \\phi(m)/2 - 1$。\n对于任何理想 $\\mathfrak{a} \\subset \\mathcal{O}_K$，其对应的格 $L_\\mathfrak{a}$ 在 $\\mathcal{O}_K^\\times$ 的作用下是不变的。这意味着如果 $v \\in L_\\mathfrak{a}$ 是一个最短向量，那么 $\\forall u \\in \\mathcal{O}_K^\\times, uv$ 也是一个最短向量。\n\n**步骤 3：密度估计的提升**\n在传统的 Minkowski-Hlawka 论证中，我们计算 $\\mathbb{E}[\\#\\{v \\in L \\setminus \\{0\\} : \\|v\\| < \\rho\\}]$。\n在分圆格中，由于单位群 $\\mathcal{O}_K^\\times$ 的存在，向量是以“轨道”（orbits）形式出现的。一个轨道 $\\mathcal{O}_K^\\times \\cdot v$ 的大小取决于 $v$ 的稳定子群。\nVenkatesh 通过分析分圆域的对数映射（log-map）和单位群在 $\\mathbb{R}^n$ 中的分布，证明了对于某些 $n$，存在理想 $\\mathfrak{a}$ 使得：\n$$\\Delta(L_\\mathfrak{a}) \\ge \\frac{n \\log \\log n}{2^n} \\cdot c'$$\n（注：在特定维度下，该因子可进一步优化）。\n\n**步骤 4：结论**\n选取 $f(n) = n \\log \\log n$（或在更强的构造中为 $n \\log n$），则 $\\frac{f(n)}{n} = \\log \\log n \\to \\infty$ 当 $n \\to \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度增长因子是超线性的。\n\n**不确定性标注：**\n- 该证明是**存在性论证**（通过对理想类群的平均值分析），而非给出具体的基矩阵。\n- 该结果在 $n$ 的所有取值上是否成立仍有争议，目前最严谨的结论是在一个**无穷子集** $\\mathcal{N}$ 上成立。\n\n## 4. 我引用/检索到的文献清单\n\n1. **Venkatesh, A. (2012).** \"A note on sphere packings in high dimension\". *arXiv:1212.6184*. (核心引用：证明了利用分圆域构造可获得超线性因子 $n \\log \\log n$ 的下界)。\n2. **Rogers, C. A. (1947).** \"The packing of equal spheres\". *Journal of the London Mathematical Society*. (背景引用：线性下界的来源)。\n3. **Campos, Jenssen, Michelen, Sahasrabudhe (2023).** \"A new lower bound for sphere packing\". *arXiv:2312.10026*. (对比引用：该文证明了非格堆积可达 $n \\log n / 2^n$，但本题要求的是格堆积)。",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density lower bound superlinear",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14",
+       "1999-06-18"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 1818,
+     "output_tokens": 2085,
+     "wall_seconds": 124.00408049299995
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "未转化为构造空椭球，而是直接使用分圆域理想格。",
+        "cited_lines": [
+         14,
+         15
+        ],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "未放弃平均范式，仍使用对理想类群的平均值论证。",
+        "cited_lines": [
+         41
+        ],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "未给出任何随机微分方程或椭球扩散演化定义。",
+        "cited_lines": [
+         3,
+         4
+        ],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未使用鞅工具或停时定理，无椭球体积期望分析。",
+        "cited_lines": [
+         3,
+         4
+        ],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未结合Minkowski第二定理或逐次极小进行结构控制。",
+        "cited_lines": [
+         14,
+         15
+        ],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终密度为n log log n / 2^n，未得到n^2 / 2^n。",
+        "cited_lines": [
+         33,
+         37
+        ],
+        "confidence": 1.0
+       }
+      ],
+      "overall_valid": true,
+      "alternative_valid": true,
+      "notes": "Prover采用Venkatesh的分圆域理想格构造，利用单位群对称性与理想类群平均，得到n·log log n/2^n下界。此为不同但数学上完全有效的路径，成功达成超线性目标。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "未显式将问题归约为构造大体积空椭球；仅引用Minkowski-Hlawka，未建立椭球↔密度的等价框架",
+        "cited_lines": [
+         12,
+         15
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "未提出放弃随机格平均范式，未转向动态演化思路；反而仍在用代数结构和类群平均",
+        "cited_lines": [
+         6,
+         19
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "完全未给出椭球的SDE/扩散定义，无反射或停时约束机制",
+        "cited_lines": [
+         14,
+         30
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "无鞅分析、无停时定理、无体积期望估计",
+        "cited_lines": [
+         30,
+         32
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未与Minkowski第二定理或逐次极小建立实质联系",
+        "cited_lines": [
+         27,
+         31
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "未将空椭球转化为格球堆积；最终结论n log log n/2^n未经证明，仅断言归于Venkatesh",
+        "cited_lines": [
+         33,
+         37,
+         41
+        ],
+        "confidence": 0.97
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover的方案完全不同于Klartag的随机演化路径，试图通过分圆域代数结构（归于Venkatesh 2012）实现超线性下界。但：(1) 关键不等式n log log n/2^n未给出任何证明，仅声称'Venkatesh证明了'；(2) 所谓对称性放大效应（引理3）缺乏严格推导；(3) 该结论在Venkatesh工作中并不存在，属不可核查的断言；(4) 整体为未经证实的草图，不构成有效证明。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "未将问题归约为空椭球体积最大化，亦无中心对称凸体或线性变换论述。",
+        "cited_lines": [
+         4,
+         12,
+         15
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "未放弃平均范式：第19、41行仍用理想类群平均；无动态演化思路。",
+        "cited_lines": [
+         6,
+         19,
+         41
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "全文未出现椭球、随机微分方程、扩散项或反射/停时约束机制。",
+        "cited_lines": [],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未构造鞅或停时，更无体积期望增长至 c·n² 的定量估计。",
+        "cited_lines": [],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅提及最短向量与单位群轨道，未触及 Minkowski 第二定理或逐次极小。",
+        "cited_lines": [
+         26,
+         27,
+         31
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "未通过空椭球-线性变换转化；第33行断言 n log log n 且无推导。",
+        "cited_lines": [
+         33,
+         37,
+         38
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 空泛引用 Venkatesh 2012，第33行公式突兀且无推导；该结果属周期堆积非格堆积，不可直接套用。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "未将问题转化为空椭球构造，无归约步骤。",
+        "cited_lines": [
+         3,
+         4
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "声称放弃平均，但实际仍用理想类群平均，非动态演化。",
+        "cited_lines": [
+         5,
+         19
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "全文无椭球SDE定义、扩散项或停时约束。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "无鞅或停时分析，无体积期望n^2的证明。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未联系逐次极小或Minkowski第二定理。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "未展示从空椭球到球堆积的转化，密度公式无推导。",
+        "cited_lines": [
+         32,
+         33
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover未给出任何rubric要求的构造或严密论证，仅概括性引用Venkatesh工作，未达成超线性下界有效证明。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false
+    },
+    "passed_items": 0,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 1.0,
+    "needs_human_review": true,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b",
+    "hint_level": 3,
+    "trial": 0,
+    "harness": "gemma-4-31b+openrouter-openrouter",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' \\cdot f(n) / 2^n$ 且 $f(n)/n \\to \\infty$。\n\n传统的 Minkowski-Hlawka 理论及 Rogers 的改进主要依赖于对格空间 $\\mathcal{L}_n$（单位行列式格的空间）进行平均化处理。在这种方法中，由于格点的分布在平均意义上是均匀的，导致得到的下界在 $n$ 阶上仅为线性。\n\n为了突破线性因子，我们采用一种**动态演化构造法**（Dynamic Evolution Construction）。其核心逻辑如下：\n1. **等价转化**：根据 L1 提示，寻找高密度球堆积等价于在给定格 $L$ 中寻找一个体积尽可能大的中心对称凸体 $K$（如椭球），使得 $K \\cap L = \\{0\\}$。通过线性变换，该凸体可转化为球，从而提升密度。\n2. **动态调整**：不再对格取平均，而是固定一个随机格 $L$，让一个初始体积很小的椭球 $E_t$ 随时间 $t$ 演化。\n3. **随机微分方程 (SDE) 驱动**：利用 L3 提示，设计一个 SDE 驱动椭球的形状（由正定矩阵 $A_t$ 描述）和体积 $V_t$。当椭球边界接近格点时，通过某种“排斥”或“反射”机制（类似于随机行走在障碍物中的行为），强制椭球在不包含格点的前提下尽可能地在空间中“生长”。\n4. **超线性增长的来源**：通过分析椭球在格点空隙中的扩散行为，证明其体积的期望增长率在 $n$ 较大时能突破线性限制，从而实现 $f(n) = n \\log n$ 或更高阶的增长。",
+     "key_lemmas": "### 引理 1：凸体与球堆积密度的关系\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$\\text{det}(L)=1$。若存在中心对称凸体 $K$ 使得 $\\text{int}(K) \\cap L = \\{0\\}$，则存在线性变换 $T$ 使得 $T(K)$ 为球 $B(0, r)$，且 $T(L)$ 是一个格 $L'$。此时 $L'$ 的球堆积密度 $\\Delta$ 为：\n$$\\Delta = \\frac{\\text{Vol}(B(0, r))}{2^n \\text{det}(L')} = \\frac{\\text{Vol}(K)}{2^n}$$\n因此，证明 $\\text{Vol}(K) \\ge c' f(n)$ 即证明密度 $\\ge c' f(n) / 2^n$。\n\n### 引理 2：椭球演化的 SDE 构造\n定义椭球 $E_t = \\{ x \\in \\mathbb{R}^n : x^T A_t^{-1} x \\le 1 \\}$，其中 $A_t$ 是正定对称矩阵。\n令 $A_t$ 遵循如下随机演化：\n$$dA_t = \\mu(A_t, L) dt + \\sigma(A_t) dW_t$$\n其中 $W_t$ 是矩阵空间的维纳过程。\n**约束条件**：定义停时 $\\tau = \\inf \\{ t : E_t \\cap (L \\setminus \\{0\\}) \\neq \\emptyset \\}$。\n为了使 $E_t$ 持续生长，我们引入一个反射机制：当 $E_t$ 触碰格点 $v \\in L$ 时，其形状 $A_t$ 发生瞬时跳跃或方向改变，使得 $v$ 重新落在边界外，同时保持 $\\text{det}(A_t)$（即体积）单调不减。\n\n### 引理 3：体积增长的下界分析\n在 $\\mathbb{R}^n$ 中，格点的分布在局部具有某种随机性。对于一个随机格 $L$，椭球在避开格点的过程中，其体积 $V_t$ 的增长受限于格点分布的“空隙”大小。\n根据最近的概率几何研究（参考 Campos et al. 2023 的思想），通过优化椭球的形状（使其在某些方向上极长，某些方向上极短），可以有效地在格点之间“穿梭”。\n在这种动态调整下，体积 $V$ 的期望值满足：\n$$\\mathbb{E}[V] \\approx n \\log n \\cdot \\text{constant}$$\n这是因为在 $n$ 维空间中，随机格的最短向量分布允许一个经过精心形状调整的椭球在体积达到 $O(n \\log n)$ 之前，仍有极高概率不包含任何格点。",
+     "full_proof": "**步骤 1：构造随机过程**\n固定一个单位行列式随机格 $L$。定义一个椭球 $E_t$ 的参数矩阵 $A_t$。初始时 $A_0 = \\epsilon I$（$\\epsilon$ 极小）。\n令 $V_t = \\text{det}(A_t)^{1/2}$ 为体积因子。我们设计一个演化策略：\n- 只要 $E_t \\cap L = \\{0\\}$，则 $V_t$ 以速率 $r$ 增长。\n- 同时，$A_t$ 在 $\\text{SL}_n(\\mathbb{R})$ 空间中进行随机游走，以探索不同的形状。\n- 当 $E_t$ 触碰格点 $v$ 时，我们执行一个形状变换 $A_{t^+} = \\Phi(A_t, v)$，使得 $v^T A_{t^+}^{-1} v > 1$，且 $\\text{det}(A_{t^+}) \\ge \\text{det}(A_t)$。\n\n**步骤 2：分析生存概率**\n我们需要证明存在一个时间 $T$，使得在 $t=T$ 时，$\\text{Vol}(E_T) \\ge c' n \\log n$ 且 $E_T \\cap L = \\{0\\}$ 的概率大于 0。\n根据 Siegel 均值定理，对于随机格 $L$，格点落在某个集合 $S$ 中的期望数量为 $\\text{Vol}(S)$。\n然而，由于我们允许 $A_t$ 动态改变形状，我们实际上是在搜索一个特定的线性变换 $T \\in \\text{SL}_n(\\mathbb{R})$ 使得 $T(B) \\cap L = \\{0\\}$。\n在 $n$ 维空间中，通过对 $A_t$ 的随机搜索，我们可以避开那些“密集”的格点方向。\n\n**步骤 3：突破线性因子**\n传统的 Rogers 下界是通过对所有格取平均得到的，这相当于在 $\\text{SL}_n(\\mathbb{R})$ 中取一个固定球。\n而本构造通过 SDE 实现了“自适应形状调整”。根据对随机格空隙分布的分析，存在一种形状演化路径，使得椭球在体积达到 $V \\approx n \\log n$ 之前，其形状能够始终地通过格点之间的“狭缝”。\n具体地，利用 $\\log n$ 因子来自于对 $\\text{SL}_n(\\mathbb{R})$ 空间中可用形状的熵分析：在 $n$ 维中，可行的椭球形状空间维度为 $O(n^2)$，这提供了足够的自由度来避开 $O(n)$ 个潜在的冲突格点。\n\n**结论**：\n通过上述动态构造，我们证明了存在一个格 $L$ 和一个中心对称凸体 $K$（椭球），使得 $\\text{Vol}(K) \\ge c' n \\log n$ 且 $K \\cap L = \\{0\\}$。\n由引理 1，该格的球堆积密度 $\\Delta \\ge \\frac{c' n \\log n}{2^n}$。\n由于 $f(n) = n \\log n$ 满足 $f(n)/n \\to \\infty$，原命题得证。",
+     "cited_references": [
+      "不确定性标注**：",
+      "本证明在“动态形状调整”到“具体体积下界 $n \\log n$”的定量转换上使用了概率几何的启发式论证。虽然在非格堆积中 $n \\log n$ 已被证明，但在纯格堆积中，将 SDE 的反射机制严格转化为 $\\text{SL}_n(\\mathbb{R})$ 上的测度估计仍是一个极具挑战性的分析步骤，此处将其视为可闭合的论证路径。"
+     ]
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n\n本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' \\cdot f(n) / 2^n$ 且 $f(n)/n \\to \\infty$。\n\n传统的 Minkowski-Hlawka 理论及 Rogers 的改进主要依赖于对格空间 $\\mathcal{L}_n$（单位行列式格的空间）进行平均化处理。在这种方法中，由于格点的分布在平均意义上是均匀的，导致得到的下界在 $n$ 阶上仅为线性。\n\n为了突破线性因子，我们采用一种**动态演化构造法**（Dynamic Evolution Construction）。其核心逻辑如下：\n1. **等价转化**：根据 L1 提示，寻找高密度球堆积等价于在给定格 $L$ 中寻找一个体积尽可能大的中心对称凸体 $K$（如椭球），使得 $K \\cap L = \\{0\\}$。通过线性变换，该凸体可转化为球，从而提升密度。\n2. **动态调整**：不再对格取平均，而是固定一个随机格 $L$，让一个初始体积很小的椭球 $E_t$ 随时间 $t$ 演化。\n3. **随机微分方程 (SDE) 驱动**：利用 L3 提示，设计一个 SDE 驱动椭球的形状（由正定矩阵 $A_t$ 描述）和体积 $V_t$。当椭球边界接近格点时，通过某种“排斥”或“反射”机制（类似于随机行走在障碍物中的行为），强制椭球在不包含格点的前提下尽可能地在空间中“生长”。\n4. **超线性增长的来源**：通过分析椭球在格点空隙中的扩散行为，证明其体积的期望增长率在 $n$ 较大时能突破线性限制，从而实现 $f(n) = n \\log n$ 或更高阶的增长。\n\n## 2. 关键引理与论证\n\n### 引理 1：凸体与球堆积密度的关系\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$\\text{det}(L)=1$。若存在中心对称凸体 $K$ 使得 $\\text{int}(K) \\cap L = \\{0\\}$，则存在线性变换 $T$ 使得 $T(K)$ 为球 $B(0, r)$，且 $T(L)$ 是一个格 $L'$。此时 $L'$ 的球堆积密度 $\\Delta$ 为：\n$$\\Delta = \\frac{\\text{Vol}(B(0, r))}{2^n \\text{det}(L')} = \\frac{\\text{Vol}(K)}{2^n}$$\n因此，证明 $\\text{Vol}(K) \\ge c' f(n)$ 即证明密度 $\\ge c' f(n) / 2^n$。\n\n### 引理 2：椭球演化的 SDE 构造\n定义椭球 $E_t = \\{ x \\in \\mathbb{R}^n : x^T A_t^{-1} x \\le 1 \\}$，其中 $A_t$ 是正定对称矩阵。\n令 $A_t$ 遵循如下随机演化：\n$$dA_t = \\mu(A_t, L) dt + \\sigma(A_t) dW_t$$\n其中 $W_t$ 是矩阵空间的维纳过程。\n**约束条件**：定义停时 $\\tau = \\inf \\{ t : E_t \\cap (L \\setminus \\{0\\}) \\neq \\emptyset \\}$。\n为了使 $E_t$ 持续生长，我们引入一个反射机制：当 $E_t$ 触碰格点 $v \\in L$ 时，其形状 $A_t$ 发生瞬时跳跃或方向改变，使得 $v$ 重新落在边界外，同时保持 $\\text{det}(A_t)$（即体积）单调不减。\n\n### 引理 3：体积增长的下界分析\n在 $\\mathbb{R}^n$ 中，格点的分布在局部具有某种随机性。对于一个随机格 $L$，椭球在避开格点的过程中，其体积 $V_t$ 的增长受限于格点分布的“空隙”大小。\n根据最近的概率几何研究（参考 Campos et al. 2023 的思想），通过优化椭球的形状（使其在某些方向上极长，某些方向上极短），可以有效地在格点之间“穿梭”。\n在这种动态调整下，体积 $V$ 的期望值满足：\n$$\\mathbb{E}[V] \\approx n \\log n \\cdot \\text{constant}$$\n这是因为在 $n$ 维空间中，随机格的最短向量分布允许一个经过精心形状调整的椭球在体积达到 $O(n \\log n)$ 之前，仍有极高概率不包含任何格点。\n\n## 3. 完整证明\n\n**步骤 1：构造随机过程**\n固定一个单位行列式随机格 $L$。定义一个椭球 $E_t$ 的参数矩阵 $A_t$。初始时 $A_0 = \\epsilon I$（$\\epsilon$ 极小）。\n令 $V_t = \\text{det}(A_t)^{1/2}$ 为体积因子。我们设计一个演化策略：\n- 只要 $E_t \\cap L = \\{0\\}$，则 $V_t$ 以速率 $r$ 增长。\n- 同时，$A_t$ 在 $\\text{SL}_n(\\mathbb{R})$ 空间中进行随机游走，以探索不同的形状。\n- 当 $E_t$ 触碰格点 $v$ 时，我们执行一个形状变换 $A_{t^+} = \\Phi(A_t, v)$，使得 $v^T A_{t^+}^{-1} v > 1$，且 $\\text{det}(A_{t^+}) \\ge \\text{det}(A_t)$。\n\n**步骤 2：分析生存概率**\n我们需要证明存在一个时间 $T$，使得在 $t=T$ 时，$\\text{Vol}(E_T) \\ge c' n \\log n$ 且 $E_T \\cap L = \\{0\\}$ 的概率大于 0。\n根据 Siegel 均值定理，对于随机格 $L$，格点落在某个集合 $S$ 中的期望数量为 $\\text{Vol}(S)$。\n然而，由于我们允许 $A_t$ 动态改变形状，我们实际上是在搜索一个特定的线性变换 $T \\in \\text{SL}_n(\\mathbb{R})$ 使得 $T(B) \\cap L = \\{0\\}$。\n在 $n$ 维空间中，通过对 $A_t$ 的随机搜索，我们可以避开那些“密集”的格点方向。\n\n**步骤 3：突破线性因子**\n传统的 Rogers 下界是通过对所有格取平均得到的，这相当于在 $\\text{SL}_n(\\mathbb{R})$ 中取一个固定球。\n而本构造通过 SDE 实现了“自适应形状调整”。根据对随机格空隙分布的分析，存在一种形状演化路径，使得椭球在体积达到 $V \\approx n \\log n$ 之前，其形状能够始终地通过格点之间的“狭缝”。\n具体地，利用 $\\log n$ 因子来自于对 $\\text{SL}_n(\\mathbb{R})$ 空间中可用形状的熵分析：在 $n$ 维中，可行的椭球形状空间维度为 $O(n^2)$，这提供了足够的自由度来避开 $O(n)$ 个潜在的冲突格点。\n\n**结论**：\n通过上述动态构造，我们证明了存在一个格 $L$ 和一个中心对称凸体 $K$（椭球），使得 $\\text{Vol}(K) \\ge c' n \\log n$ 且 $K \\cap L = \\{0\\}$。\n由引理 1，该格的球堆积密度 $\\Delta \\ge \\frac{c' n \\log n}{2^n}$。\n由于 $f(n) = n \\log n$ 满足 $f(n)/n \\to \\infty$，原命题得证。\n\n## 4. 我引用/检索到的文献清单\n\n1. **Rogers, C. A. (1947)**: 奠定了格球堆积 $\\Delta \\ge c n / 2^n$ 的经典下界。\n2. **Campos, Jenssen, Michelen, Sahasrabudhe (2023)**: *A new lower bound for sphere packing* (arXiv:2312.10026). 该论文证明了非格堆积（amorphous）可以达到 $c n \\log n / 2^n$。本证明尝试将该超线性增长的逻辑通过动态椭球演化迁移至格堆积（Lattice packing）的构造论证中。\n3. **Venkatesh, A. (2012)**: *A note on sphere packings in high dimension* (arXiv:1212.6184). 提供了在特殊维度下利用代数结构提升下界的思路。\n4. **Siegel's Mean Value Theorem**: 用于计算随机格中格点分布的期望。\n\n**不确定性标注**：\n- 本证明在“动态形状调整”到“具体体积下界 $n \\log n$”的定量转换上使用了概率几何的启发式论证。虽然在非格堆积中 $n \\log n$ 已被证明，但在纯格堆积中，将 SDE 的反射机制严格转化为 $\\text{SL}_n(\\mathbb{R})$ 上的测度估计仍是一个极具挑战性的分析步骤，此处将其视为可闭合的论证路径。",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density superlinear n/2^n",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 1683,
+     "output_tokens": 2228,
+     "wall_seconds": 129.84566263199986
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1正确将空凸体体积与球堆积密度等价转化。",
+        "cited_lines": [
+         15,
+         16,
+         17,
+         18
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确提出放弃对格取平均，采用动态演化构造法。",
+        "cited_lines": [
+         6,
+         7,
+         8,
+         10
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "给出了SDE形式定义、扩散项及遇格点时的反射停时机制。",
+        "cited_lines": [
+         21,
+         23,
+         24,
+         25,
+         26
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "体积下界分析仅为启发式，未提供严格的鞅或停时定量分析。",
+        "cited_lines": [
+         30,
+         32,
+         60,
+         61
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全文未提及Minkowski第二定理或逐次极小以控制短向量。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "证明未严格闭合，作者文末明确承认定量转换仅为启发式。",
+        "cited_lines": [
+         55,
+         56,
+         60,
+         61
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "核心体积分析仅为启发式，缺失逐次极小控制，且作者文末明确承认证明未严格闭合。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1正确将空凸体问题等价转化为密度下界，表述清晰。",
+        "cited_lines": [
+         15,
+         16,
+         17,
+         18
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "第6、8-10行明确放弃平均范式，提出动态演化构造思路。",
+        "cited_lines": [
+         6,
+         8,
+         10
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "SDE中μ、σ未具体定义；反射/停时机制仅模糊描述为'跳跃或方向改变'，缺乏可核查的精确机制。",
+        "cited_lines": [
+         22,
+         23,
+         24,
+         25,
+         26
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "无鞅定义、无停时定理应用；n log n体积期望仅凭启发式断言（第32-33行），无严格论证。",
+        "cited_lines": [
+         32,
+         33,
+         49,
+         50,
+         51,
+         52
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全文未提及逐次极小或Minkowski第二定理，完全缺少短向量控制论证。",
+        "cited_lines": [
+         1,
+         2,
+         3,
+         4,
+         5,
+         6,
+         7,
+         8,
+         9,
+         10,
+         11,
+         12,
+         13,
+         14,
+         15,
+         16,
+         17,
+         18,
+         19,
+         20,
+         21,
+         22,
+         23,
+         24,
+         25,
+         26,
+         27,
+         28,
+         29,
+         30,
+         31,
+         32,
+         33,
+         34,
+         35,
+         36,
+         37,
+         38,
+         39,
+         40,
+         41,
+         42,
+         43,
+         44,
+         45,
+         46,
+         47,
+         48,
+         49,
+         50,
+         51,
+         52,
+         53,
+         54,
+         55,
+         56,
+         57,
+         58,
+         59,
+         60,
+         61,
+         62
+        ],
+        "confidence": 0.97
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终密度为n log n/2^n而非n²/2^n，且支撑此结论的R4、R5均未严格闭合，证明不完整。",
+        "cited_lines": [
+         55,
+         56,
+         57
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明框架（R1、R2）正确，但核心技术内容严重缺失：SDE定义含糊，无鞅/停时分析，未涉及逐次极小控制，最终密度n log n/2^n仅为启发式猜测而非严格证明。即使作为替代路径，也未达到任何超线性下界的可验证论证标准。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "在第9行及引理1（第16–18行）中将问题正确归约为构造无格点中心对称凸体，并通过线性变换联系球堆积密度。",
+        "cited_lines": [
+         9,
+         16,
+         17,
+         18
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "第6–12行明确批评传统平均范式，提出对固定格上的椭球进行动态/迭代调整的思路。",
+        "cited_lines": [
+         6,
+         7,
+         8,
+         9,
+         10,
+         11,
+         12
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "仅给出含未定义漂移μ与扩散σ的模板SDE（第22–23行），反射机制仅为定性描述（第26行），无可核查的精确数学定义。",
+        "cited_lines": [
+         21,
+         22,
+         23,
+         24,
+         25,
+         26
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "第28–33行与第55行仅作启发式断言体积≈n log n，未使用鞅或停时定理，更未证明c·n²量级；第61行自承非严格。",
+        "cited_lines": [
+         28,
+         29,
+         30,
+         31,
+         32,
+         33,
+         55,
+         61
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全文未出现逐次极小（successive minima）或Minkowski第二定理，仅有泛泛的“避开格点”描述（第49–53行）。",
+        "cited_lines": [
+         49,
+         50,
+         51,
+         52,
+         53
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终给出的密度下界为c′·n log n/2ⁿ（第55–56行），而非rubric要求的c·n²/2ⁿ，且第61行承认关键步骤尚未严格闭合。",
+        "cited_lines": [
+         54,
+         55,
+         56,
+         57,
+         61
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover仅提供启发式框架，核心定量估计（SDE反射控制、体积下界）均无可核查的推导，且最终界为n log n而非n²，不满足有效复现判据。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "正确地将问题转化为构造内部无格点的大体积凸体，并通过线性变换等价于球堆积密度。",
+        "cited_lines": [
+         9,
+         16,
+         17,
+         18
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确放弃随机格平均方法，转向对固定格上的椭球进行动态演化。",
+        "cited_lines": [
+         6,
+         10
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "仅给出形式上的SDE框架，未定义具体的漂移和扩散系数，反射机制也仅为粗略描述，缺乏精确定义。",
+        "cited_lines": [
+         21,
+         22,
+         23,
+         24,
+         25,
+         26
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未使用鞅或停时定理进行分析，仅给出启发式期望体积n log n，且未达到n^2量级。",
+        "cited_lines": [
+         29,
+         30,
+         31,
+         32,
+         33
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "完全没有提及逐次极小或Minkowski第二定理，未进行短向量控制。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "结论仅声称n log n下界，且基于不严格的启发式论证，未完成从体积到密度的严谨闭合。",
+        "cited_lines": [
+         54,
+         55,
+         56
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅提供启发式框架，缺乏严格的SDE定义、鞅分析及逐次极小联系，未能实现超线性突破，实际未达成有效论证。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false
+    },
+    "passed_items": 2,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 0.8333333333333334,
+    "needs_human_review": true,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b",
+    "hint_level": 5,
+    "trial": 0,
+    "harness": "gemma-4-31b+openrouter-openrouter",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本证明旨在突破 Rogers (1947) 的线性下界 $\\Delta \\ge c \\cdot n / 2^n$，证明存在格球堆积密度 $\\Delta \\ge c \\cdot n^2 / 2^n$。\n\n核心策略是将“寻找高密度球堆积”转化为“构造一个体积尽可能大的空椭球”。根据 Minkowski 的凸体定理及其推广，若在格 $L$ 中存在一个中心对称的凸体 $K$ 且 $\\text{int}(K) \\cap L = \\{0\\}$，则通过线性变换将 $K$ 映射为球，可得到密度 $\\Delta = \\text{Vol}(K) / (2^n \\text{det}(L))$。\n\n传统的 Minkowski-Hlawka 方法是对随机格取平均，导致结果在 $n$ 阶上是线性的。为了获得超线性增长（具体为 $n^2$），我们采用一种**动态演化构造法**：\n1. 固定一个随机格 $L$。\n2. 定义一个随时间 $t$ 演化的中心对称椭球 $E_t$。\n3. 设计一个随机微分方程 (SDE) 驱动 $E_t$ 的形状和体积增长。\n4. 当 $E_t$ 的边界触碰到格点 $x \\in L \\setminus \\{0\\}$ 时，通过某种“反射”或“停时”机制，在保持内部无格点的前提下，尽可能地增加其体积。\n5. 利用鞅分析 (Martingale Analysis) 证明该过程在停止时的期望体积 $\\mathbb{E}[\\text{Vol}(E_\\tau)]$ 达到 $O(n^2)$ 级别。",
+     "key_lemmas": "### 引理 1：空椭球与密度的等价性\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$\\text{det}(L)=1$。若存在中心对称凸体 $K$ 使得 $\\text{int}(K) \\cap L = \\{0\\}$，则存在一个格 $L'$（通过线性变换 $T$ 得到，$L'=TL$）使得其球堆积密度 $\\Delta \\ge \\text{Vol}(K)/2^n$。\n*证明：* 取 $T$ 使得 $T(K)$ 为半径 $r$ 的球，则 $\\text{Vol}(T(K)) = \\text{det}(T) \\text{Vol}(K)$。球堆积密度为 $\\text{Vol}(B_r)/2^n \\text{det}(L') = \\text{Vol}(K)/2^n$。\n\n### 引理 2：随机演化过程的构造\n定义椭球 $E_t = \\{ x \\in \\mathbb{R}^n : x^T A_t^{-1} x \\le 1 \\}$，其中 $A_t$ 是正定对称矩阵。\n令 $V_t = \\text{det}(A_t)^{1/2} \\propto \\text{Vol}(E_t)$。\n我们设计 $A_t$ 的演化使得 $\\log V_t$ 像一个随机游走，但当 $E_t$ 触碰格点 $x$ 时，我们调整 $A_t$ 的方向（旋转）以避开该点，同时允许 $V_t$ 继续增长。\n\n### 引理 3：鞅分析与停时\n定义过程 $M_t = \\text{Vol}(E_t) - \\int_0^t \\phi(A_s) ds$。通过选取合适的漂移项 $\\phi$，使得 $M_t$ 为鞅。\n关键在于：在 $n$ 维空间中，格点分布的稀疏性允许椭球在触碰格点后，通过微小的方向调整，在不减少体积的情况下继续扩张。\n利用停时定理 $\\mathbb{E}[M_\\tau] = M_0$，结合格点分布的概率密度（Siegel 均值公式），可以证明在 $\\text{Vol}(E_\\tau)$ 达到 $c \\cdot n^2$ 之前，触碰格点的概率分布允许该过程持续。",
+     "full_proof": "**Step 1: 随机格的选取与初始化**\n选取一个来自 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 的随机格 $L$。初始化 $E_0$ 为一个极小的球，$\\text{Vol}(E_0) = \\epsilon$。\n\n**Step 2: 动态演化方程**\n定义 $A_t$ 的演化为：\n$$ dA_t = \\text{Growth}(A_t) dt + \\sum_{x \\in L \\setminus \\{0\\}} \\delta(x \\in \\partial E_t) \\text{Reflect}(A_t, x) $$\n其中 $\\text{Growth}$ 项增加 $\\text{det}(A_t)$，$\\text{Reflect}$ 项在触碰格点 $x$ 时，将 $A_t$ 沿着与 $x$ 正交的方向拉伸，沿 $x$ 方向压缩，从而保持 $\\text{det}(A_t)$ 不变且使 $x$ 移出 $\\text{int}(E_t)$。\n\n**Step 3: 体积增长的界限**\n根据 Siegel 均值公式，对于随机格 $L$，落在凸体 $K$ 中的非零格点数 $\\mathbb{E}[N(K)] = \\text{Vol}(K)$。\n在演化过程中，我们定义停时 $\\tau = \\inf \\{ t : \\text{Vol}(E_t) \\ge c \\cdot n^2 \\}$。\n我们需要证明 $\\mathbb{P}(\\tau < \\infty) = 1$ 且在 $\\tau$ 之前，我们可以通过 $\\text{Reflect}$ 操作维持 $\\text{int}(E_t) \\cap L = \\{0\\}$。\n由于在 $n$ 维空间中，单点约束对椭球形状的限制仅为 1 维，而椭球有 $n(n+1)/2$ 个自由度。当 $n$ 较大时，存在足够的自由度在不降低体积的情况下避开格点。\n\n**Step 4: 闭合论证**\n通过对 $\\log \\text{Vol}(E_t)$ 的漂移分析，结合 Minkowski 第二定理（逐次极小 $\\lambda_1, \\dots, \\lambda_n$），我们知道 $\\prod \\lambda_i \\approx \\text{det}(L)$。\n我们的动态构造实际上是在尝试构造一个椭球，其轴长与 $\\lambda_i$ 的分布相匹配，但通过随机扰动突破了 $\\lambda_1$ 的平均限制。\n最终，我们得到一个空椭球 $E_\\tau$ 满足 $\\text{Vol}(E_\\tau) \\ge c \\cdot n^2$。\n由引理 1，存在格 $L'$ 使得密度 $\\Delta \\ge \\frac{c \\cdot n^2}{2^n}$。\n\n**不确定性标注：**\n*   *关于 $\\text{Reflect}$ 操作的精确 SDE 形式：* 在实际操作中，确保 $\\text{det}(A_t)$ 严格不减且不包含格点的具体微分形式较为复杂，此处采用了概括性的停时论证。\n*   *常数 $c$ 的显式计算：* 本证明聚焦于 $n^2$ 的阶数，未给出 $c$ 的具体数值。",
+     "cited_references": []
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n\n本证明旨在突破 Rogers (1947) 的线性下界 $\\Delta \\ge c \\cdot n / 2^n$，证明存在格球堆积密度 $\\Delta \\ge c \\cdot n^2 / 2^n$。\n\n核心策略是将“寻找高密度球堆积”转化为“构造一个体积尽可能大的空椭球”。根据 Minkowski 的凸体定理及其推广，若在格 $L$ 中存在一个中心对称的凸体 $K$ 且 $\\text{int}(K) \\cap L = \\{0\\}$，则通过线性变换将 $K$ 映射为球，可得到密度 $\\Delta = \\text{Vol}(K) / (2^n \\text{det}(L))$。\n\n传统的 Minkowski-Hlawka 方法是对随机格取平均，导致结果在 $n$ 阶上是线性的。为了获得超线性增长（具体为 $n^2$），我们采用一种**动态演化构造法**：\n1. 固定一个随机格 $L$。\n2. 定义一个随时间 $t$ 演化的中心对称椭球 $E_t$。\n3. 设计一个随机微分方程 (SDE) 驱动 $E_t$ 的形状和体积增长。\n4. 当 $E_t$ 的边界触碰到格点 $x \\in L \\setminus \\{0\\}$ 时，通过某种“反射”或“停时”机制，在保持内部无格点的前提下，尽可能地增加其体积。\n5. 利用鞅分析 (Martingale Analysis) 证明该过程在停止时的期望体积 $\\mathbb{E}[\\text{Vol}(E_\\tau)]$ 达到 $O(n^2)$ 级别。\n\n## 2. 关键引理与论证\n\n### 引理 1：空椭球与密度的等价性\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$\\text{det}(L)=1$。若存在中心对称凸体 $K$ 使得 $\\text{int}(K) \\cap L = \\{0\\}$，则存在一个格 $L'$（通过线性变换 $T$ 得到，$L'=TL$）使得其球堆积密度 $\\Delta \\ge \\text{Vol}(K)/2^n$。\n*证明：* 取 $T$ 使得 $T(K)$ 为半径 $r$ 的球，则 $\\text{Vol}(T(K)) = \\text{det}(T) \\text{Vol}(K)$。球堆积密度为 $\\text{Vol}(B_r)/2^n \\text{det}(L') = \\text{Vol}(K)/2^n$。\n\n### 引理 2：随机演化过程的构造\n定义椭球 $E_t = \\{ x \\in \\mathbb{R}^n : x^T A_t^{-1} x \\le 1 \\}$，其中 $A_t$ 是正定对称矩阵。\n令 $V_t = \\text{det}(A_t)^{1/2} \\propto \\text{Vol}(E_t)$。\n我们设计 $A_t$ 的演化使得 $\\log V_t$ 像一个随机游走，但当 $E_t$ 触碰格点 $x$ 时，我们调整 $A_t$ 的方向（旋转）以避开该点，同时允许 $V_t$ 继续增长。\n\n### 引理 3：鞅分析与停时\n定义过程 $M_t = \\text{Vol}(E_t) - \\int_0^t \\phi(A_s) ds$。通过选取合适的漂移项 $\\phi$，使得 $M_t$ 为鞅。\n关键在于：在 $n$ 维空间中，格点分布的稀疏性允许椭球在触碰格点后，通过微小的方向调整，在不减少体积的情况下继续扩张。\n利用停时定理 $\\mathbb{E}[M_\\tau] = M_0$，结合格点分布的概率密度（Siegel 均值公式），可以证明在 $\\text{Vol}(E_\\tau)$ 达到 $c \\cdot n^2$ 之前，触碰格点的概率分布允许该过程持续。\n\n## 3. 完整证明\n\n**Step 1: 随机格的选取与初始化**\n选取一个来自 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 的随机格 $L$。初始化 $E_0$ 为一个极小的球，$\\text{Vol}(E_0) = \\epsilon$。\n\n**Step 2: 动态演化方程**\n定义 $A_t$ 的演化为：\n$$ dA_t = \\text{Growth}(A_t) dt + \\sum_{x \\in L \\setminus \\{0\\}} \\delta(x \\in \\partial E_t) \\text{Reflect}(A_t, x) $$\n其中 $\\text{Growth}$ 项增加 $\\text{det}(A_t)$，$\\text{Reflect}$ 项在触碰格点 $x$ 时，将 $A_t$ 沿着与 $x$ 正交的方向拉伸，沿 $x$ 方向压缩，从而保持 $\\text{det}(A_t)$ 不变且使 $x$ 移出 $\\text{int}(E_t)$。\n\n**Step 3: 体积增长的界限**\n根据 Siegel 均值公式，对于随机格 $L$，落在凸体 $K$ 中的非零格点数 $\\mathbb{E}[N(K)] = \\text{Vol}(K)$。\n在演化过程中，我们定义停时 $\\tau = \\inf \\{ t : \\text{Vol}(E_t) \\ge c \\cdot n^2 \\}$。\n我们需要证明 $\\mathbb{P}(\\tau < \\infty) = 1$ 且在 $\\tau$ 之前，我们可以通过 $\\text{Reflect}$ 操作维持 $\\text{int}(E_t) \\cap L = \\{0\\}$。\n由于在 $n$ 维空间中，单点约束对椭球形状的限制仅为 1 维，而椭球有 $n(n+1)/2$ 个自由度。当 $n$ 较大时，存在足够的自由度在不降低体积的情况下避开格点。\n\n**Step 4: 闭合论证**\n通过对 $\\log \\text{Vol}(E_t)$ 的漂移分析，结合 Minkowski 第二定理（逐次极小 $\\lambda_1, \\dots, \\lambda_n$），我们知道 $\\prod \\lambda_i \\approx \\text{det}(L)$。\n我们的动态构造实际上是在尝试构造一个椭球，其轴长与 $\\lambda_i$ 的分布相匹配，但通过随机扰动突破了 $\\lambda_1$ 的平均限制。\n最终，我们得到一个空椭球 $E_\\tau$ 满足 $\\text{Vol}(E_\\tau) \\ge c \\cdot n^2$。\n由引理 1，存在格 $L'$ 使得密度 $\\Delta \\ge \\frac{c \\cdot n^2}{2^n}$。\n\n**不确定性标注：**\n*   *关于 $\\text{Reflect}$ 操作的精确 SDE 形式：* 在实际操作中，确保 $\\text{det}(A_t)$ 严格不减且不包含格点的具体微分形式较为复杂，此处采用了概括性的停时论证。\n*   *常数 $c$ 的显式计算：* 本证明聚焦于 $n^2$ 的阶数，未给出 $c$ 的具体数值。\n\n## 4. 我引用/检索到的文献清单\n\n1.  **Rogers, C. A. (1947).** \"The packing of equal spheres\". *Journal of the London Mathematical Society*. (经典线性下界 $\\sim n/2^n$ 的来源)。\n2.  **Minkowski, H.** *Geometrie der Zahlen*. (Minkowski 第二定理及凸体与格点关系的基础)。\n3.  **Siegel, C. L.** (Siegel Mean Value Theorem). (用于计算随机格中格点数的期望值)。\n4.  **arXiv:1212.6184 (Venkatesh)**: 提供了在特殊维度下通过代数结构改进下界的思路，虽然本证明采用的是随机动态法，但其对高维密度的讨论提供了背景。\n5.  **arXiv:2312.10026 (Campos et al.)**: 提及了非格堆积（Amorphous）的 $n \\log n$ 改进，证明了突破线性因子的可行性，增强了本论证中寻求超线性因子的信心。",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density n^2/2^n",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 1907,
+     "output_tokens": 1966,
+     "wall_seconds": 147.6818887659997
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "正确将密度下界归约为构造大体积空椭球，并给出线性变换等价性。",
+        "cited_lines": [
+         6,
+         16,
+         17,
+         18
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确提出放弃随机格平均范式，转向固定格上动态演化椭球的思路。",
+        "cited_lines": [
+         8,
+         9,
+         10,
+         11,
+         12
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "仅给出含delta函数的启发式方程，并承认缺乏精确SDE形式。",
+        "cited_lines": [
+         35,
+         36,
+         37,
+         52
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "仅用自由度直觉论证体积增长，无严格鞅分析，且承认采用概括性论证。",
+        "cited_lines": [
+         26,
+         27,
+         28,
+         43,
+         52
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅提及逐次极小名词，未给出演化椭球与逐次极小结合的实质控制论证。",
+        "cited_lines": [
+         46,
+         47
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "基于前述不严格的启发式论证直接宣称闭合，未达成有效数学证明。",
+        "cited_lines": [
+         48,
+         49,
+         52
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover拼凑了Golden proof的关键概念，但在核心的SDE构造、鞅分析及逐次极小控制上均承认不精确或仅给出启发式直觉，属于自信的胡话，证明不成立。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "正确陈述空椭球→球堆积密度的标准归约，公式和线性变换均正确",
+        "cited_lines": [
+         6,
+         17,
+         18
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确放弃平均范式，提出对固定格上椭球动态演化的思路",
+        "cited_lines": [
+         8,
+         9,
+         10,
+         11,
+         12
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "方程用离散δ函数而非SDE，缺少Wiener扩散项，反射机制仅为启发式描述",
+        "cited_lines": [
+         36,
+         37
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "鞅定义后仅断言'可以证明'体积≥c·n²，无任何实际期望计算或停时估计",
+        "cited_lines": [
+         26,
+         28,
+         41
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "提及逐次极小但仅模糊说'尝试匹配'，未建立演化椭球与λ_i的结构联系",
+        "cited_lines": [
+         46,
+         47
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终密度界被陈述但依赖于未证明的体积估计，证明未闭合",
+        "cited_lines": [
+         48,
+         49
+        ],
+        "confidence": 0.85
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "提交本质上是对Klartag证明思路的高层概述/草稿，核心技术步骤（SDE精确定义、鞅分析、逐次极小控制）均缺乏严格论证，仅为断言。作者自己在第51-53行也承认SDE形式含糊、常数未计算。不构成有效证明，也不构成替代有效路径。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "第6行正确给出空凸体到格球堆积密度的标准Minkowski型归约，含线性变换与体积公式。",
+        "cited_lines": [
+         6,
+         17
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "第8行明确对比传统平均法，提出对固定格动态调整椭球的演化构造策略。",
+        "cited_lines": [
+         8,
+         9
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "第35-37行给出的'SDE'无扩散项，含未定义符号Growth/Reflect，非严格随机微分方程。",
+        "cited_lines": [
+         35,
+         36,
+         37
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "第26-28行仅断言存在鞅与停时论证，未给出漂移项φ、鞅验证及n²期望体积的任何计算。",
+        "cited_lines": [
+         26,
+         28
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "第46-47行仅提及Minkowski第二定理与逐次极小，未展示演化椭球如何受其约束或控制短向量。",
+        "cited_lines": [
+         46,
+         47
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "第48-49行虽写出最终密度公式，但前提（体积达n²的空椭球）未获证明，闭合不完整。",
+        "cited_lines": [
+         48,
+         49
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "核心步骤缺乏可核查细节：SDE未严格定义，鞅分析无计算，逐次极小未结合，不构成有效证明。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "明确将空椭球问题转化为密度下界，引理1正确",
+        "cited_lines": [
+         6,
+         7,
+         17,
+         18
+        ],
+        "confidence": 0.5
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确放弃平均范式，提出动态演化构造",
+        "cited_lines": [
+         8,
+         9,
+         10,
+         11,
+         12,
+         13
+        ],
+        "confidence": 0.5
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "仅给出确定性增长和反射，无随机扩散项，非精确定义的SDE",
+        "cited_lines": [
+         23,
+         35,
+         36,
+         37
+        ],
+        "confidence": 0.5
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未提供实质性鞅分析和体积下界证明，仅概述想法",
+        "cited_lines": [
+         26,
+         27,
+         28,
+         41,
+         42,
+         43,
+         44
+        ],
+        "confidence": 0.5
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅提及Minkowski第二定理，未具体联系逐次极小进行控制",
+        "cited_lines": [
+         46,
+         47
+        ],
+        "confidence": 0.5
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "虽陈述最终密度，但缺乏体积达n^2的证明，闭合无支撑",
+        "cited_lines": [
+         48,
+         49
+        ],
+        "confidence": 0.5
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover给出了框架性描述，但缺乏严格SDE定义、鞅分析、逐次极小结合等关键论证，未构成有效证明。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": true,
+     "R2": true,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false
+    },
+    "passed_items": 2,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 1.0,
+    "needs_human_review": false,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-hermes",
+    "hint_level": 0,
+    "trial": 0,
+    "harness": "gemma-4-31b-hermes+hermes-hermes",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' \\frac{f(n)}{2^n}$ 且 $f(n)/n \\to \\infty$。\n\n该结论在数学上由 Akshay Venkatesh (2012) 给出。其核心思路是突破传统的 Minkowski-Hlawka 随机格构造，利用具有强代数结构的格空间进行平均。具体步骤如下：\n1. **空间的限制**：不再在所有体积为 1 的格空间 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 中寻找，而是在所有作为某个数域 $\\mathcal{O}_K$-模 (module) 的格空间 $X_K$ 中寻找。\n2. **圆分域构造**：选取 $K$ 为一个圆分域 (cyclotomic field)，其度数 $[K:\\mathbb{Q}] = n$。这类域拥有非常庞大的单位群 $\\mathcal{O}_K^\\times$。\n3. **轨道聚合 (Orbit Clustering)**：在 $\\mathcal{O}_K$-模格中，如果一个非零向量 $x$ 落在球 $S$ 内，那么它在单位群 $\\mathcal{O}_K^\\times$ 的作用下形成的轨道中，有相当一部分点也必然落在 $S$ 内。这导致格点在球中倾向于“成簇”出现。\n4. **平均值定理的提升**：利用 $\\mathcal{O}_K$-格空间的 Siegel 平均值定理，证明我们可以将球的体积 $\\text{vol}(S)$ 扩大到比一般格情况更大的程度，而其包含的非零格点数量的期望值依然保持在较低水平。\n5. **超线性因子的获得**：通过分析圆分域单位群的秩与分布，证明该增益因子 $f(n)/n$ 至少在量级上达到 $\\log \\log n$，从而实现了超线性增长。",
+     "key_lemmas": "### 引理 1: $\\mathcal{O}_K$-格的 Siegel 平均值定理\n设 $K$ 是度数为 $n$ 的数域，$\\mathcal{O}_K$ 是其整数环。设 $X_K$ 为所有体积为 1 的 $\\mathcal{O}_K$-格的空间。对于 $\\mathbb{R}^n$ 上的可积函数 $\\phi$，有：\n$$ \\int_{X_K} \\sum_{x \\in \\Lambda \\setminus \\{0\\}} \\phi(x) d\\mu(\\Lambda) = \\frac{1}{w_K} \\int_{\\mathbb{R}^n} \\phi(x) dx \\cdot \\mathcal{C}_K $$\n其中 $w_K$ 是 $\\mathcal{O}_K$ 中单位根的个数，$\\mathcal{C}_K$ 是与域 $K$ 相关的常数。\n\n### 引理 2: 单位群的对称性与轨道规模\n对于圆分域 $K$，其单位群 $\\mathcal{O}_K^\\times$ 的秩随 $n$ 线性增长。\nVenkatesh 证明了存在一个单位子集 $\\Gamma \\subset \\mathcal{O}_K^\\times$，使得对于球 $S=B(R)$，若 $x \\in S$，则 $\\Gamma \\cdot x \\cap S$ 的规模随 $n$ 增长且超常数。\n具体而言，对于圆分域，利用单位群在对数空间中的分布特性，可以构造出使有效轨道大小达到 $\\sim \\log \\log n$ 的结构。\n\n### 论证：从平均值到密度\n在一般随机格中， $\\text{vol}(S) \\approx 2$ 时，期望点数为 2，从而给出 $1/2^n$ 量级的密度（Minkowski-Hlawka）。\n而在 $\\mathcal{O}_K$-模格中，由于点以轨道形式出现，单个轨道的大小 $| \\Gamma |$ 允许我们将 $\\text{vol}(S)$ 增大到 $\\approx | \\Gamma | \\cdot 2$ 而期望点数依然在可控范围内。\n由于 $\\text{vol}(B(R)) \\propto R^n$，且密度 $\\Delta \\propto \\text{vol}(B(R/2)) = \\text{vol}(S)/2^n$，因此 $\\Delta \\ge \\frac{c \\cdot | \\Gamma |}{2^n}$。",
+     "full_proof": "**(Step 1) 构造序列维度与域**\n选取一系列维度 $n_k$，使得存在度数为 $n_k$ 的圆分域 $K_k = \\mathbb{Q}(\\zeta_{m_k})$。\n定义 $X_{K_k}$ 为所有体积为 1 的 $\\mathcal{O}_{K_k}$-模格的空间，并赋予其不变测度 $\\mu$。\n\n**(Step 2) 设定测试球**\n考虑半径为 $R$ 的开球 $S = B(R)$。由 $\\mathcal{O}_K$-格的 Siegel 平均值定理：\n$$ E[\\#(\\Lambda \\cap S \\setminus \\{0\\})] = \\frac{\\text{vol}(S)}{w_K} \\cdot \\mathcal{C}_K $$\n我们希望找到一个 $R$，使得该期望值 $\\le 1$。这意味着 $\\text{vol}(S) \\le \\frac{w_K}{\\mathcal{C}_K}$。\n\n**(Step 3) 利用单位群提升体积)**\n由于 $\\Lambda$ 是 $\\mathcal{O}_K$-模，对于任何 $x \\in \\Lambda$ 和单位 $\\epsilon \\in \\mathcal{O}_K^\\times$，$\\epsilon x \\in \\Lambda$。\n在圆分域中，单位根的数量 $w_K$ 随 $n$ 线性增长（例如 $w_K \\sim n$）。\n更进一步，Venkatesh 通过分析单位群 $\\mathcal{O}_K^\\times$ 在 $\\mathbb{R}^n$ 上的作用，证明了对于特定的 $\\mathcal{O}_K$-格，可以利用单位群的分布使得 $S$ 的体积进一步扩大，而不会引入过多的独立轨道。\n其证明表明，存在常数 $c$ 使得 $\\text{vol}(S)$ 可以达到 $c \\cdot n \\log \\log n$ (在适当归一化后) 且 $\\Lambda \\cap S = \\{0\\}$ 依然成立。\n\n**(Step 4) 计算密度下界)**\n若 $\\Lambda \\cap B(R) = \\{0\\}$，则球堆积半径为 $R/2$。\n对应的球堆积密度 $\\Delta$ 为：\n$$ \\Delta = \\frac{\\text{vol}(B(R/2))}{\\text{det}(\\Lambda)} = \\frac{\\text{vol}(B(R))}{2^n \\cdot 1} $$\n代入 Step 3 的结果：\n$$ \\Delta \\ge \\frac{c \\cdot n \\log \\log n}{2^n} $$\n\n**(Step 5) 验证超线性条件)**\n令 $f(n) = n \\log \\log n$。\n考察增长因子 $\\frac{f(n)}{n} = \\log \\log n$。\n显然 $\\lim_{n \\to \\infty} \\log \\log n = \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度的增长因子是超线性的。",
+     "cited_references": []
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' \\frac{f(n)}{2^n}$ 且 $f(n)/n \\to \\infty$。\n\n该结论在数学上由 Akshay Venkatesh (2012) 给出。其核心思路是突破传统的 Minkowski-Hlawka 随机格构造，利用具有强代数结构的格空间进行平均。具体步骤如下：\n1. **空间的限制**：不再在所有体积为 1 的格空间 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 中寻找，而是在所有作为某个数域 $\\mathcal{O}_K$-模 (module) 的格空间 $X_K$ 中寻找。\n2. **圆分域构造**：选取 $K$ 为一个圆分域 (cyclotomic field)，其度数 $[K:\\mathbb{Q}] = n$。这类域拥有非常庞大的单位群 $\\mathcal{O}_K^\\times$。\n3. **轨道聚合 (Orbit Clustering)**：在 $\\mathcal{O}_K$-模格中，如果一个非零向量 $x$ 落在球 $S$ 内，那么它在单位群 $\\mathcal{O}_K^\\times$ 的作用下形成的轨道中，有相当一部分点也必然落在 $S$ 内。这导致格点在球中倾向于“成簇”出现。\n4. **平均值定理的提升**：利用 $\\mathcal{O}_K$-格空间的 Siegel 平均值定理，证明我们可以将球的体积 $\\text{vol}(S)$ 扩大到比一般格情况更大的程度，而其包含的非零格点数量的期望值依然保持在较低水平。\n5. **超线性因子的获得**：通过分析圆分域单位群的秩与分布，证明该增益因子 $f(n)/n$ 至少在量级上达到 $\\log \\log n$，从而实现了超线性增长。\n\n## 2. 关键引理与论证\n\n### 引理 1: $\\mathcal{O}_K$-格的 Siegel 平均值定理\n设 $K$ 是度数为 $n$ 的数域，$\\mathcal{O}_K$ 是其整数环。设 $X_K$ 为所有体积为 1 的 $\\mathcal{O}_K$-格的空间。对于 $\\mathbb{R}^n$ 上的可积函数 $\\phi$，有：\n$$ \\int_{X_K} \\sum_{x \\in \\Lambda \\setminus \\{0\\}} \\phi(x) d\\mu(\\Lambda) = \\frac{1}{w_K} \\int_{\\mathbb{R}^n} \\phi(x) dx \\cdot \\mathcal{C}_K $$\n其中 $w_K$ 是 $\\mathcal{O}_K$ 中单位根的个数，$\\mathcal{C}_K$ 是与域 $K$ 相关的常数。\n\n### 引理 2: 单位群的对称性与轨道规模\n对于圆分域 $K$，其单位群 $\\mathcal{O}_K^\\times$ 的秩随 $n$ 线性增长。\nVenkatesh 证明了存在一个单位子集 $\\Gamma \\subset \\mathcal{O}_K^\\times$，使得对于球 $S=B(R)$，若 $x \\in S$，则 $\\Gamma \\cdot x \\cap S$ 的规模随 $n$ 增长且超常数。\n具体而言，对于圆分域，利用单位群在对数空间中的分布特性，可以构造出使有效轨道大小达到 $\\sim \\log \\log n$ 的结构。\n\n### 论证：从平均值到密度\n在一般随机格中， $\\text{vol}(S) \\approx 2$ 时，期望点数为 2，从而给出 $1/2^n$ 量级的密度（Minkowski-Hlawka）。\n而在 $\\mathcal{O}_K$-模格中，由于点以轨道形式出现，单个轨道的大小 $| \\Gamma |$ 允许我们将 $\\text{vol}(S)$ 增大到 $\\approx | \\Gamma | \\cdot 2$ 而期望点数依然在可控范围内。\n由于 $\\text{vol}(B(R)) \\propto R^n$，且密度 $\\Delta \\propto \\text{vol}(B(R/2)) = \\text{vol}(S)/2^n$，因此 $\\Delta \\ge \\frac{c \\cdot | \\Gamma |}{2^n}$。\n\n## 3. 完整证明\n\n**(Step 1) 构造序列维度与域**\n选取一系列维度 $n_k$，使得存在度数为 $n_k$ 的圆分域 $K_k = \\mathbb{Q}(\\zeta_{m_k})$。\n定义 $X_{K_k}$ 为所有体积为 1 的 $\\mathcal{O}_{K_k}$-模格的空间，并赋予其不变测度 $\\mu$。\n\n**(Step 2) 设定测试球**\n考虑半径为 $R$ 的开球 $S = B(R)$。由 $\\mathcal{O}_K$-格的 Siegel 平均值定理：\n$$ E[\\#(\\Lambda \\cap S \\setminus \\{0\\})] = \\frac{\\text{vol}(S)}{w_K} \\cdot \\mathcal{C}_K $$\n我们希望找到一个 $R$，使得该期望值 $\\le 1$。这意味着 $\\text{vol}(S) \\le \\frac{w_K}{\\mathcal{C}_K}$。\n\n**(Step 3) 利用单位群提升体积)**\n由于 $\\Lambda$ 是 $\\mathcal{O}_K$-模，对于任何 $x \\in \\Lambda$ 和单位 $\\epsilon \\in \\mathcal{O}_K^\\times$，$\\epsilon x \\in \\Lambda$。\n在圆分域中，单位根的数量 $w_K$ 随 $n$ 线性增长（例如 $w_K \\sim n$）。\n更进一步，Venkatesh 通过分析单位群 $\\mathcal{O}_K^\\times$ 在 $\\mathbb{R}^n$ 上的作用，证明了对于特定的 $\\mathcal{O}_K$-格，可以利用单位群的分布使得 $S$ 的体积进一步扩大，而不会引入过多的独立轨道。\n其证明表明，存在常数 $c$ 使得 $\\text{vol}(S)$ 可以达到 $c \\cdot n \\log \\log n$ (在适当归一化后) 且 $\\Lambda \\cap S = \\{0\\}$ 依然成立。\n\n**(Step 4) 计算密度下界)**\n若 $\\Lambda \\cap B(R) = \\{0\\}$，则球堆积半径为 $R/2$。\n对应的球堆积密度 $\\Delta$ 为：\n$$ \\Delta = \\frac{\\text{vol}(B(R/2))}{\\text{det}(\\Lambda)} = \\frac{\\text{vol}(B(R))}{2^n \\cdot 1} $$\n代入 Step 3 的结果：\n$$ \\Delta \\ge \\frac{c \\cdot n \\log \\log n}{2^n} $$\n\n**(Step 5) 验证超线性条件)**\n令 $f(n) = n \\log \\log n$。\n考察增长因子 $\\frac{f(n)}{n} = \\log \\log n$。\n显然 $\\lim_{n \\to \\infty} \\log \\log n = \\infty$。\n因此，在 $\\mathbb{R}^n$ 中存在格球堆积，其密度的增长因子是超线性的。\n\n## 4. 我引用/检索到的文献清单\n1. **Venkatesh, A. (2012). \"A note on sphere packings in high dimension\". arXiv:1212.6184.** (核心证明来源：证明了对于圆分域维度，格球堆积密度可达到 $c n \\log \\log n / 2^n$)。\n2. **Rogers, C. A. (1947). \"The packing of equal spheres\".** (提供对比基准：经典线性下界 $cn/2^n$)。\n3. **Siegel Mean Value Theorem.** (基础工具：用于计算格点在特定空间上的平均分布)。",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density superlinear n/2^n Venkatesh",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 490.71330108799975
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "使用空球B(R)而非空椭球，未进行椭球归约。",
+        "cited_lines": [
+         34,
+         35,
+         46
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "仍使用Siegel均值定理在模格空间取平均，未放弃平均范式。",
+        "cited_lines": [
+         14,
+         15,
+         35
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "未使用随机微分方程或扩散过程定义演化。",
+        "cited_lines": [
+         1
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未使用鞅或停时分析，且得到n log log n而非n^2。",
+        "cited_lines": [
+         43,
+         50
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未结合Minkowski第二定理或逐次极小进行结构控制。",
+        "cited_lines": [
+         1
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终闭合得到n log log n / 2^n，而非n^2 / 2^n。",
+        "cited_lines": [
+         50,
+         53
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": true,
+      "alternative_valid": true,
+      "notes": "Prover提供了基于Venkatesh(2012)的有效替代证明，利用数域单位群轨道聚合得到n log log n下界，数学上成立且达成超线性目标。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "Step 4 给出 Δ=vol(B(R))/(2^n·det(Λ)) 的密度-体积关系（行47-50），完成了空体→密度的归约",
+        "cited_lines": [
+         47,
+         48,
+         49,
+         50
+        ],
+        "confidence": 0.6
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "仍使用 Siegel 平均值定理在 O_K-格空间上取平均（行6,16,36），未放弃平均范式",
+        "cited_lines": [
+         6,
+         16,
+         36
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "全文无 SDE/扩散/反射/停时约束的定义，椭球随机演化完全缺失",
+        "cited_lines": [
+         13,
+         29,
+         34,
+         39
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "无鞅或停时定理分析，体积 n² 估计完全缺失",
+        "cited_lines": [
+         13,
+         29,
+         39
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未提及逐次极小或 Minkowski 第二定理，无短向量控制",
+        "cited_lines": [
+         13,
+         29,
+         39
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "仅声称 vol(S)~n·log log n 而非 n²；轨道聚类论证未经证明且数学上有误（单位根 w_K 增长与 n 无线性关系）",
+        "cited_lines": [
+         22,
+         41,
+         42,
+         43,
+         50
+        ],
+        "confidence": 0.97
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 声称沿 Venkatesh (2012) 路线用圆分域单位群轨道聚类实现 n·log log n/2^n 密度，但：(1) 归因可疑，Venkatesh 2012 无此结果；(2) Siegel 均值公式中的常数 C_K 未定义且引用有误；(3) 轨道聚类论证是手挥（hand-waving），单位群在 Archimedean 赋值的绝对值可任意大，轨道点在 R^n 范数下不聚类；(4) 因子仅 log log n，远弱于 Klartag 的 n²，且关键步骤无实质证明。alternative_valid 判否。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "实质完成空区域体积到堆积密度的转化，虽无椭球表述但数学等价。",
+        "cited_lines": [
+         46,
+         48
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "未提出动态演化思路，仍依赖代数格空间平均而非单格迭代。",
+        "cited_lines": [
+         6,
+         7
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "全文无任何随机微分方程、扩散或反射停时机制。",
+        "cited_lines": [],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未使用鞅与停时定理，仅通过Siegel平均估计轨道数。",
+        "cited_lines": [
+         14,
+         36
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未引入Minkowski第二定理或逐次极小进行结构控制。",
+        "cited_lines": [],
+        "confidence": 1.0
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "最终密度为c·n log log n/2^n，未达n^2量级。",
+        "cited_lines": [
+         50,
+         53
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": true,
+      "notes": "采用Venkatesh(2012)圆分域单位群路径，获n log log n/2^n超线性下界，为有效替代证明。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": false,
+        "justification": "未将问题转化为构造体积尽可能大的空椭球，而是采用数域随机格平均，未提及椭球或等价几何凸体。",
+        "cited_lines": [
+         7,
+         9,
+         15,
+         35
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": false,
+        "justification": "未提出对固定格动态调整凸体的思路，而是采用对具有代数结构的格空间取平均的经典范式。",
+        "cited_lines": [
+         6,
+         7,
+         9,
+         15
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "完全未涉及椭球随机微分方程、扩散项或反射/停时约束的定义。",
+        "cited_lines": [
+         1,
+         58
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未使用鞅或停时定理，也未证明椭球体积期望达到 c·n^2。",
+        "cited_lines": [
+         1,
+         58
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "未提及逐次极小或 Minkowski 第二定理，也未与演化椭球联系。",
+        "cited_lines": [
+         1,
+         58
+        ],
+        "confidence": 0.99
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "密度下界为 c·n log log n / 2^n，非 c·n^2/2^n，且未通过空椭球转化得到。",
+        "cited_lines": [
+         50,
+         53
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 声称基于 Venkatesh 的数域格平均方法，与 golden proof 的随机演化椭球路径完全不同，且未提供任何闭合超线性因子的严谨论证，构造和估计均不完整，未实现 n·log log n 的严格证明。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": false,
+     "R2": false,
+     "R3": false,
+     "R4": false,
+     "R5": false,
+     "R6": false
+    },
+    "passed_items": 0,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 0.3333333333333333,
+    "needs_human_review": true,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 6
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-hermes",
+    "hint_level": 3,
+    "trial": 0,
+    "harness": "gemma-4-31b-hermes+hermes-hermes",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' f(n)/2^n$ 且 $f(n)/n \\to \\infty$（例如 $f(n) = n \\log n$）。\n传统的 Minkowski-Hlawka 或 Rogers 证明依赖于对随机格的平均值分析，这导致了线性因子 $n$ 的瓶颈。本证明采用一种“动态演化”的构造方法：\n1. **归约**：将球堆积密度最大化问题归约为在固定格 $L$ 上寻找一个体积尽可能大的“空椭球”（内部不含非零格点的中心对称凸体）。\n2. **动态构造**：不再对格取平均，而是在正定矩阵空间 $S_{++}^n$（代表椭球的形状与大小）上构造一个随机动力学过程。\n3. **SDE 机制**：利用随机微分方程 (SDE) 让椭球在保持“空”的约束下，通过漂移项增加体积，并通过扩散项探索空间，在触碰格点边界时进行反射。\n4. **超线性论证**：证明在高维空间中，这种动态搜索能够避开平均意义上的限制，通过在 $\\mathcal{S}$ 空间（空椭球集合）中的随机游走，以高概率触达比 Rogers 下界更高的体积区域。",
+     "key_lemmas": "### 引理 1 (归约引理)\n设 $L$ 为 $\\mathbb{R}^n$ 中的格。若存在一个正定矩阵 $A$ 使得椭球 $E_A = \\{ x \\in \\mathbb{R}^n : x^T A x < 1 \\}$ 满足 $\\text{int}(E_A) \\cap L = \\{0\\}$，则存在一个格 $L'$ 使得其球堆积密度 $\\Delta(L') \\ge \\frac{\\text{Vol}(E_A)}{2^n \\det(L)}$。\n*证明*：令 $T$ 为 $A$ 的 Cholesky 分解 $\\sqrt{A}$。定义新格 $L' = T(L)$。此时 $T(E_A)$ 为单位开球 $B(0, 1)$，且 $\\text{int}(B(0,1)) \\cap L' = \\{0\\}$。则 $L'$ 的球堆积半径 $r \\ge 1/2$。其密度 $\\Delta = \\text{Vol}(B(0, 1/2)) / \\det(L') = \\text{Vol}(B(0, 1)) / (2^n \\det(T) \\det(L)) = \\text{Vol}(E_A) / (2^n \\det(L))$。\n\n### 引理 2 (SDE 约束空间构造)\n定义状态空间 $\\mathcal{S} = \\{ A \\in S_{++}^n : \\forall v \\in L \\setminus \\{0\\}, v^T A v \\ge 1 \\}$。这是一个由无数个凸约束定义的区域。\n构造如下反射 SDE：\n$$ dA_t = -\\alpha A_t^{-1} dt + \\sigma dW_t + \\sum_{v \\in L} d\\Phi_v(t) $$\n- $-\\alpha A_t^{-1} dt$ 为漂移项，其作用是减小 $\\det A_t$（因为 $\\frac{\\partial \\log \\det A}{\\partial A} = A^{-1}$），从而增大体积 $V(A) \\propto (\\det A)^{-1/2}$。\n- $\\sigma dW_t$ 为扩散项，确保过程在 $\\mathcal{S}$ 中进行各向同性的随机探索。\n- $\\Phi_v(t)$ 为局部时间项（Local Time），在 $A_t$ 触碰边界 $v^T A v = 1$ 时施加法向反射，确保 $A_t$ 永远保持在 $\\mathcal{S}$ 内。\n\n### 论证 3 (超线性增长因子)\n在 $n \\to \\infty$ 时，$\\mathcal{S}$ 空间的几何结构允许 $\\det A$ 的分布具有较大的方差。\n根据 Siegel 平均值定理，格点在空间中的平均分布导致了 $n/2^n$ 的界限。但在随机演化过程中，过程可以进入 $\\mathcal{S}$ 的“深层空腔”。\n分析表明，当体积 $V(A)$ 达到 $c \\cdot n \\det L$ 之前，反射项产生的阻力（由边界格点密度决定）不足以抵消漂移项的增长动力。通过分析 $\\mathcal{S}$ 的谱隙和稳态分布 $\\pi(A) \\propto (\\det A)^{-\\beta}$，可以证明存在 $A$ 使得 $V(A) \\ge c' n \\log n \\cdot \\det L$。",
+     "full_proof": "**Step 1: 目标函数的建立**\n我们要证明存在格 $L$ 和正定矩阵 $A$ 使得 $\\text{Vol}(E_A)/\\det L \\ge c' f(n)$ 其中 $f(n)/n \\to \\infty$。\n固定格 $L = \\mathbb{Z}^n$（或任意定格），寻找 $\\mathcal{S} = \\{ A \\in S_{++}^n : \\min_{v \\in \\mathbb{Z}^n \\setminus \\{0\\}} v^T A v \\ge 1 \\}$ 中 $\\det A$ 最小的元素。\n\n**Step 2: 动力学过程的演化**\n启动上述反射 SDE。初始状态 $A_0$ 为足够大的单位阵 $\\lambda I$ 以确保在 $\\mathcal{S}$ 内部。\n随时间 $t$ 增加，漂移项 $\\mu(A) = -\\alpha A^{-1}$ 持续推动 $\\det A$ 下降。\n当过程触碰某个格点 $v$ 的边界 $\\partial \\mathcal{S}_v$ 时，反射力将其推回。\n\n**Step 3: 体积增长的渐近分析**\n定义 Lyapunov 函数 $W(A) = \\log \\det A$。\n$\\mathbb{E}[dW_t] = \\text{Tr}(A^{-1} \\mu(A)) dt + \\text{扩散项贡献} + \\text{反射项贡献}$\n$\\mathbb{E}[dW_t] \\approx -n \\alpha dt + \\sum_{v \\in L} \\mathbb{E}[d\\Phi_v(t)]$\n反射项的贡献正比于 $\\partial \\mathcal{S}$ 的有效表面积。在高维空间中，由于格点分布的稀疏性，$\\mathcal{S}$ 内部存在大量“走廊”。随机游走能够有效避开高密度约束区。\n当 $V(A) \\approx n \\cdot \\det L$ 时，反射项的累积强度开始与漂移项相当。但由于 $\\mathcal{S}$ 的不对称性，其分布的尾部允许 $V(A)$ 进一步增长至 $n \\log n$ 量级。\n\n**Step 4: 结论导出**\n通过上述随机过程，证明 $\\mathcal{S}$ 中存在 $A^*$ 满足 $\\text{Vol}(E_{A^*}) / \\det L \\ge c' n \\log n$。\n结合引理 1，变换得到球堆积密度：\n$$ \\Delta \\ge \\frac{c' n \\log n \\cdot \\det L}{2^n \\det L} = \\frac{c' n \\log n}{2^n} $$\n取 $f(n) = n \\log n$，则 $f(n)/n = \\log n \\to \\infty$，证明完成。\n\n**不确定性标注**：\n- **解析闭合度**：本证明提供了构造性框架，但 $f(n)$ 的具体函数形式（如 $\\log n$ 或 $\\log \\log n$）取决于 $\\mathcal{S}$ 边界的精细曲率分析，此处采用了基于高维凸体随机游走分布的渐近论证。\n- **遍历性**：假设 SDE 在 $\\mathcal{S}$ 上是遍历的且能触达全局最优区域，这在极高维度下需要更深入的谱分析支撑。",
+     "cited_references": []
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n本证明旨在论证在 $\\mathbb{R}^n$ 中存在格球堆积，其密度 $\\Delta$ 满足 $\\Delta \\ge c' f(n)/2^n$ 且 $f(n)/n \\to \\infty$（例如 $f(n) = n \\log n$）。\n传统的 Minkowski-Hlawka 或 Rogers 证明依赖于对随机格的平均值分析，这导致了线性因子 $n$ 的瓶颈。本证明采用一种“动态演化”的构造方法：\n1. **归约**：将球堆积密度最大化问题归约为在固定格 $L$ 上寻找一个体积尽可能大的“空椭球”（内部不含非零格点的中心对称凸体）。\n2. **动态构造**：不再对格取平均，而是在正定矩阵空间 $S_{++}^n$（代表椭球的形状与大小）上构造一个随机动力学过程。\n3. **SDE 机制**：利用随机微分方程 (SDE) 让椭球在保持“空”的约束下，通过漂移项增加体积，并通过扩散项探索空间，在触碰格点边界时进行反射。\n4. **超线性论证**：证明在高维空间中，这种动态搜索能够避开平均意义上的限制，通过在 $\\mathcal{S}$ 空间（空椭球集合）中的随机游走，以高概率触达比 Rogers 下界更高的体积区域。\n\n## 2. 关键引理与论证\n\n### 引理 1 (归约引理)\n设 $L$ 为 $\\mathbb{R}^n$ 中的格。若存在一个正定矩阵 $A$ 使得椭球 $E_A = \\{ x \\in \\mathbb{R}^n : x^T A x < 1 \\}$ 满足 $\\text{int}(E_A) \\cap L = \\{0\\}$，则存在一个格 $L'$ 使得其球堆积密度 $\\Delta(L') \\ge \\frac{\\text{Vol}(E_A)}{2^n \\det(L)}$。\n*证明*：令 $T$ 为 $A$ 的 Cholesky 分解 $\\sqrt{A}$。定义新格 $L' = T(L)$。此时 $T(E_A)$ 为单位开球 $B(0, 1)$，且 $\\text{int}(B(0,1)) \\cap L' = \\{0\\}$。则 $L'$ 的球堆积半径 $r \\ge 1/2$。其密度 $\\Delta = \\text{Vol}(B(0, 1/2)) / \\det(L') = \\text{Vol}(B(0, 1)) / (2^n \\det(T) \\det(L)) = \\text{Vol}(E_A) / (2^n \\det(L))$。\n\n### 引理 2 (SDE 约束空间构造)\n定义状态空间 $\\mathcal{S} = \\{ A \\in S_{++}^n : \\forall v \\in L \\setminus \\{0\\}, v^T A v \\ge 1 \\}$。这是一个由无数个凸约束定义的区域。\n构造如下反射 SDE：\n$$ dA_t = -\\alpha A_t^{-1} dt + \\sigma dW_t + \\sum_{v \\in L} d\\Phi_v(t) $$\n- $-\\alpha A_t^{-1} dt$ 为漂移项，其作用是减小 $\\det A_t$（因为 $\\frac{\\partial \\log \\det A}{\\partial A} = A^{-1}$），从而增大体积 $V(A) \\propto (\\det A)^{-1/2}$。\n- $\\sigma dW_t$ 为扩散项，确保过程在 $\\mathcal{S}$ 中进行各向同性的随机探索。\n- $\\Phi_v(t)$ 为局部时间项（Local Time），在 $A_t$ 触碰边界 $v^T A v = 1$ 时施加法向反射，确保 $A_t$ 永远保持在 $\\mathcal{S}$ 内。\n\n### 论证 3 (超线性增长因子)\n在 $n \\to \\infty$ 时，$\\mathcal{S}$ 空间的几何结构允许 $\\det A$ 的分布具有较大的方差。\n根据 Siegel 平均值定理，格点在空间中的平均分布导致了 $n/2^n$ 的界限。但在随机演化过程中，过程可以进入 $\\mathcal{S}$ 的“深层空腔”。\n分析表明，当体积 $V(A)$ 达到 $c \\cdot n \\det L$ 之前，反射项产生的阻力（由边界格点密度决定）不足以抵消漂移项的增长动力。通过分析 $\\mathcal{S}$ 的谱隙和稳态分布 $\\pi(A) \\propto (\\det A)^{-\\beta}$，可以证明存在 $A$ 使得 $V(A) \\ge c' n \\log n \\cdot \\det L$。\n\n## 3. 完整证明\n\n**Step 1: 目标函数的建立**\n我们要证明存在格 $L$ 和正定矩阵 $A$ 使得 $\\text{Vol}(E_A)/\\det L \\ge c' f(n)$ 其中 $f(n)/n \\to \\infty$。\n固定格 $L = \\mathbb{Z}^n$（或任意定格），寻找 $\\mathcal{S} = \\{ A \\in S_{++}^n : \\min_{v \\in \\mathbb{Z}^n \\setminus \\{0\\}} v^T A v \\ge 1 \\}$ 中 $\\det A$ 最小的元素。\n\n**Step 2: 动力学过程的演化**\n启动上述反射 SDE。初始状态 $A_0$ 为足够大的单位阵 $\\lambda I$ 以确保在 $\\mathcal{S}$ 内部。\n随时间 $t$ 增加，漂移项 $\\mu(A) = -\\alpha A^{-1}$ 持续推动 $\\det A$ 下降。\n当过程触碰某个格点 $v$ 的边界 $\\partial \\mathcal{S}_v$ 时，反射力将其推回。\n\n**Step 3: 体积增长的渐近分析**\n定义 Lyapunov 函数 $W(A) = \\log \\det A$。\n$\\mathbb{E}[dW_t] = \\text{Tr}(A^{-1} \\mu(A)) dt + \\text{扩散项贡献} + \\text{反射项贡献}$\n$\\mathbb{E}[dW_t] \\approx -n \\alpha dt + \\sum_{v \\in L} \\mathbb{E}[d\\Phi_v(t)]$\n反射项的贡献正比于 $\\partial \\mathcal{S}$ 的有效表面积。在高维空间中，由于格点分布的稀疏性，$\\mathcal{S}$ 内部存在大量“走廊”。随机游走能够有效避开高密度约束区。\n当 $V(A) \\approx n \\cdot \\det L$ 时，反射项的累积强度开始与漂移项相当。但由于 $\\mathcal{S}$ 的不对称性，其分布的尾部允许 $V(A)$ 进一步增长至 $n \\log n$ 量级。\n\n**Step 4: 结论导出**\n通过上述随机过程，证明 $\\mathcal{S}$ 中存在 $A^*$ 满足 $\\text{Vol}(E_{A^*}) / \\det L \\ge c' n \\log n$。\n结合引理 1，变换得到球堆积密度：\n$$ \\Delta \\ge \\frac{c' n \\log n \\cdot \\det L}{2^n \\det L} = \\frac{c' n \\log n}{2^n} $$\n取 $f(n) = n \\log n$，则 $f(n)/n = \\log n \\to \\infty$，证明完成。\n\n**不确定性标注**：\n- **解析闭合度**：本证明提供了构造性框架，但 $f(n)$ 的具体函数形式（如 $\\log n$ 或 $\\log \\log n$）取决于 $\\mathcal{S}$ 边界的精细曲率分析，此处采用了基于高维凸体随机游走分布的渐近论证。\n- **遍历性**：假设 SDE 在 $\\mathcal{S}$ 上是遍历的且能触达全局最优区域，这在极高维度下需要更深入的谱分析支撑。\n\n## 4. 我引用/检索到的文献清单\n1. **Rogers, C. A. (1947)**: \"The packing of equal spheres\", 奠定了 $\\Delta \\ge c n / 2^n$ 的线性下界基础。\n2. **Minkowski, H. / Hlawka, E.**: 提供了格球堆积 $1/2^n$ 的基础存在性证明。\n3. **Venkatesh, A. (2012)**: \"A note on sphere packings in high dimension\" (arXiv:1212.6184), 证明了在特定维度下 $\\Delta$ 可有超线性改进。\n4. **Campos et al. (2023)**: \"A new lower bound for sphere packing\" (arXiv:2312.10026), 为非格堆积证明了 $n \\log n / 2^n$ 下界，其动态调整和随机贪心的核心思想被本证明迁移至格的 SDE 构造中。",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density super-linear SDE empty ellipsoid",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 521.1471593089996
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1正确给出空椭球到格球堆积密度的标准归约。",
+        "cited_lines": [
+         12,
+         13,
+         14
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确放弃随机格平均，提出固定格上矩阵空间的动态演化。",
+        "cited_lines": [
+         5,
+         6,
+         7
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "给出了含漂移、扩散及局部时间反射项的SDE形式定义。",
+        "cited_lines": [
+         18,
+         19,
+         20,
+         21,
+         22
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "仅为启发式Lyapunov分析，无鞅停时定理，且结论为n log n。",
+        "cited_lines": [
+         39,
+         40,
+         41,
+         42,
+         43,
+         44
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅定义单点约束，未提及Minkowski第二定理或逐次极小控制。",
+        "cited_lines": [
+         17
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "结论为n log n且明确承认未闭合，依赖未证明的遍历性假设。",
+        "cited_lines": [
+         47,
+         48,
+         49,
+         52,
+         53,
+         54
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明在R4-R6失败，核心体积分析为启发式且作者明确承认未解析闭合，未达到严格的超线性存在性论证。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1(行12-14)通过Cholesky分解标准地将空椭球转化为球堆积密度，论证正确。",
+        "cited_lines": [
+         12,
+         13,
+         14
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "行5-7明确放弃平均范式，提出在正定矩阵空间上动态构造的思路。",
+        "cited_lines": [
+         5,
+         6,
+         7
+        ],
+        "confidence": 0.92
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "行18-22给出反射SDE定义，含漂移项、扩散项和局部时反射，结构完整。",
+        "cited_lines": [
+         18,
+         19,
+         20,
+         21,
+         22
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "行40-44的Lyapunov分析极度模糊，无鞅停时定理应用，'谱隙''稳态分布'均无实质计算。",
+        "cited_lines": [
+         27,
+         40,
+         41,
+         42,
+         43,
+         44
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全文未提及逐次极小或Minkowski第二定理，仅考虑最小值min v^T A v。",
+        "cited_lines": [
+         17,
+         32
+        ],
+        "confidence": 0.97
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "行49的代数推导依赖未证命题Vol/detL≥c' n log n；且目标为n log n而非n^2。",
+        "cited_lines": [
+         44,
+         47,
+         48,
+         49
+        ],
+        "confidence": 0.93
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明仅在R1-R3层面提供了与golden proof相似的框架骨架，但核心技术步骤（R4鞅分析、R5逐次极小控制、R6严格闭合）全部缺失或被手波论证替代。行52-54作者自承'解析闭合度不足''遍历性需更深入支撑'，实质上承认了证明不完整。不构成有效证明。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1正确建立空椭球到球堆积密度的线性变换归约。",
+        "cited_lines": [
+         12,
+         13,
+         14
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确放弃随机格平均，转向固定格上动态调整思路。",
+        "cited_lines": [
+         5,
+         7
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "无穷约束反射SDE未良定义，矩阵噪声与正定性保持均缺失。",
+        "cited_lines": [
+         18,
+         19,
+         20,
+         21,
+         22
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "未构造鞅或使用停时定理，体积期望无严格估计。",
+        "cited_lines": [
+         40,
+         41,
+         42,
+         43,
+         44
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全文未出现逐次极小或Minkowski第二定理。",
+        "cited_lines": [],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "基于未证成启发式闭合，且最终因子非n^2。",
+        "cited_lines": [
+         47,
+         48,
+         49,
+         50
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明包含多处不可核查的断言：无穷多约束反射SDE未定义、鞅分析缺失、漂移计算错误。虽声称得到超线性因子，但无严格论证支撑，不构成有效替代路径。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "行12-14给出标准空椭球到球堆积密度的归约，正确转换。",
+        "cited_lines": [
+         12,
+         13,
+         14
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "行5-7明确放弃平均范式，转向对单个格上椭球动态演化。",
+        "cited_lines": [
+         5,
+         6,
+         7
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "行16-22给出带漂移、扩散与反射的SDE定义，精确描述椭球演化。",
+        "cited_lines": [
+         16,
+         17,
+         18,
+         19,
+         20,
+         21,
+         22
+        ],
+        "confidence": 0.7
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "缺乏鞅与停时分析，未证明椭球体积期望达 n^2 或 n log n，仅为模糊叙述。",
+        "cited_lines": [
+         24,
+         25,
+         26,
+         27,
+         40,
+         41,
+         42,
+         43,
+         44
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "全程未提及逐次极小或 Minkowski 第二定理，缺乏短向量控制论证。",
+        "cited_lines": [],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": false,
+        "justification": "因 R4/R5 缺失，体积增长未证明，仅凭归约声称密度，未有效闭合。",
+        "cited_lines": [
+         47,
+         48,
+         49
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "R4 无鞅分析；R5 无逐次极小；核心论证仅试探性描述，未构成有效证明。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": true,
+     "R2": true,
+     "R3": true,
+     "R4": false,
+     "R5": false,
+     "R6": false
+    },
+    "passed_items": 3,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 0.8333333333333335,
+    "needs_human_review": true,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 3
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-hermes",
+    "hint_level": 5,
+    "trial": 0,
+    "harness": "gemma-4-31b-hermes+hermes-hermes",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": {
+     "idea_overview": "本证明的目标是构造一个 $\\mathbb{R}^n$ 中的格 $L$，使其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge c \\frac{n^2}{2^n}$，从而突破 Rogers (1947) 的线性因子 $n$ 的限制。\n\n核心逻辑如下：\n1. **归约到空椭球问题**：利用线性变换，将寻找高密度球堆积的问题转化为寻找一个体积尽可能大的中心对称凸体（在此取为椭球 $E$），使得 $E$ 的内部不包含格 $L$ 的任何非零格点（$\\text{int}(E) \\cap L = \\{0\\}$）。\n2. **动态演化构造**：不采用传统的对随机格取平均的方法，而是固定一个随机格 $L$，通过一个随机微分方程 (SDE) 驱动椭球 $E_t$ 的形状和体积演化。\n3. **约束与停时机制**：当椭球在增长过程中接触到格点 $v \\in L \\setminus \\{0\\}$ 时，将该格点固定在椭球边界上，作为演化的线性约束。由于对称矩阵空间 $\\mathcal{P}_n$ 的维度为 $N = n(n+1)/2$，我们可以依次添加约束，直到椭球在 $\\mathcal{P}_n$ 中被“锁定”。\n4. **鞅分析与期望体积**：通过定义一个关于体积的鞅过程，证明在停止时刻 $\\tau$（即约束数达到 $O(n^2)$ 时），椭球的期望体积 $\\mathbb{E}[\\text{Vol}(E_\\tau)]$ 至少正比于 $n^2 \\det(L)$。\n5. **密度计算**：将得到的空椭球通过线性映射还原为球堆积，得到 $\\Delta \\approx \\frac{n^2 \\det(L)}{2^n \\det(L)} = \\frac{n^2}{2^n}$。\n\n---",
+     "key_lemmas": "### 引理 1：空椭球与球堆积密度的等价性\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$E$ 是一个中心对称的椭球，若 $\\text{int}(E) \\cap L = \\{0\\}$，则存在一个线性变换 $T \\in \\text{GL}_n(\\mathbb{R})$，使得 $T(E) = B_n(r)$ 且 $T(L) = L'$ 也是一个格。此时球堆积密度为：\n$$\\Delta = \\frac{\\text{Vol}(B_n(r))}{2^n \\det(L')} = \\frac{\\text{Vol}(E)}{2^n \\det(L)}$$\n因此，证明 $\\Delta \\ge c \\frac{n^2}{2^n}$ 等价于证明存在格 $L$ 和空椭球 $E$ 使得 $\\text{Vol}(E) \\ge c n^2 \\det(L)$。\n\n### 引理 2：椭球空间的几何维度\n正定对称矩阵空间 $\\mathcal{P}_n$ 的维度为 $N = \\frac{n(n+1)}{2}$。一个椭球 $E = \\{x \\in \\mathbb{R}^n : x^T A x < 1\\}$ 由矩阵 $A \\in \\mathcal{P}_n$ 唯一确定。\n对于任意给定的非零格点 $v \\in L$，条件 $v \\in \\partial E$ 等价于线性约束 $v^T A v = 1$。在 $\\mathcal{P}_n$ 中，这是一个超平面。\n\n### 引理 3：停时体积下界 (基于鞅分析)\n定义一个随机过程 $A_t$ 在 $\\mathcal{P}_n$ 中演化，其漂移项 $\\mu(A_t)$ 指向 $\\det(A)$ 减小的方向（即体积 $\\text{Vol}(E) \\propto (\\det A)^{-1/2}$ 增加的方向）。\n定义停时 $\\tau = \\inf \\{ t : \\text{rank}(\\{v_i\\}_{i=1}^k) \\text{ 使得 } A_t \\text{ 被锁定} \\}$，其中 $v_i$ 是在 $\\partial E_t$ 上依次出现的格点。\n通过构造一个鞅 $M_t = \\text{Vol}(E_t) - \\int_0^t \\phi(A_s) ds$，利用停时定理 $\\mathbb{E}[M_\\tau] = \\mathbb{E}[M_0]$，可以证明在随机格 $L$ 的平均意义下，$\\mathbb{E}[\\text{Vol}(E_\\tau)] \\ge c \\cdot N \\cdot \\det(L)$。\n\n---",
+     "full_proof": "**第一步：设定演化过程**\n固定一个从 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 中随机抽取的格 $L$。\n设定椭球 $E_t$ 对应的矩阵 $A_t$ 遵循以下 SDE：\n$$dA_t = -\\alpha A_t^{-1} dt + \\sigma dW_t + \\sum_{i=1}^{k(t)} R_i(A_t, v_i) dt$$\n其中：\n- $-\\alpha A_t^{-1}$ 是为了最大化 $\\log \\text{Vol}(E_t)$ 的梯度项。\n- $dW_t$ 是 $\\mathcal{P}_n$ 上的布朗运动，确保探索性。\n- $R_i$ 是反射项，确保对于所有已触碰的格点 $v_i$，始终保持 $v_i^T A_t v_i \\ge 1$。\n\n**第二步：约束的累积**\n开始时 $\\text{Vol}(E_0)$ 极小。随着 $t$ 增加，$\\text{Vol}(E_t)$ 增大。\n当 $E_t$ 首次触碰格点 $v_1 \\in L \\setminus \\{0\\}$ 时，我们获得第一个约束 $v_1^T A_t v_1 = 1$。\n由于 $A_t$ 在 $N$ 维空间 $\\mathcal{P}_n$ 中运动，只要当前约束数 $k < N$，就总存在一个方向使得 $\\det A_t$ 继续减小且不违反现有约束 $v_i^T A_t v_i = 1$。\n随着时间推移，格点 $v_1, v_2, \\dots, v_k$ 依次落在边界上。\n\n**第三步：体积的期望估计**\n令 $V_t = \\text{Vol}(E_t)$。在 $\\mathcal{P}_n$ 的度量下，每增加一个线性独立（在 $\\mathcal{P}_n$ 意义下）的约束 $v^T A v = 1$，椭球在可用方向上被限制。\n根据 Minkowski 第二定理的推广及随机格的性质，在触碰第 $k$ 个点之前，椭球能够达到的平均体积 $\\mathbb{E}[V]$ 与约束数 $k$ 成线性关系：\n$$\\mathbb{E}[V | \\text{constraints} = k] \\approx \\frac{k}{V_n} \\det(L)$$\n当 $k$ 达到 $\\mathcal{P}_n$ 的临界维度 $N = n(n+1)/2$ 时，过程停在 $\\tau$。此时：\n$$\\mathbb{E}[V_\\tau] \\approx \\frac{n(n+1)}{2} \\cdot \\text{const} \\cdot \\det(L) \\approx c \\cdot n^2 \\det(L)$$\n\n**第四步：闭合论证与密度得出**\n由上述构造，存在一个格 $L$ 和一个空椭球 $E$ 满足 $\\text{Vol}(E) \\ge c n^2 \\det(L)$。\n根据引理 1，将其线性变换为球堆积，其密度为：\n$$\\Delta = \\frac{\\text{Vol}(E)}{2^n \\det(L)} \\ge \\frac{c n^2 \\det(L)}{2^n \\det(L)} = \\frac{c n^2}{2^n}$$\n由于 $f(n) = c n^2$ 满足 $f(n)/n = cn \\to \\infty$，该证明闭合。 $\\square$\n\n---",
+     "cited_references": []
+    },
+    "raw_output": "# Claimed Proof\n\n## 1. 思路总览\n\n本证明的目标是构造一个 $\\mathbb{R}^n$ 中的格 $L$，使其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge c \\frac{n^2}{2^n}$，从而突破 Rogers (1947) 的线性因子 $n$ 的限制。\n\n核心逻辑如下：\n1. **归约到空椭球问题**：利用线性变换，将寻找高密度球堆积的问题转化为寻找一个体积尽可能大的中心对称凸体（在此取为椭球 $E$），使得 $E$ 的内部不包含格 $L$ 的任何非零格点（$\\text{int}(E) \\cap L = \\{0\\}$）。\n2. **动态演化构造**：不采用传统的对随机格取平均的方法，而是固定一个随机格 $L$，通过一个随机微分方程 (SDE) 驱动椭球 $E_t$ 的形状和体积演化。\n3. **约束与停时机制**：当椭球在增长过程中接触到格点 $v \\in L \\setminus \\{0\\}$ 时，将该格点固定在椭球边界上，作为演化的线性约束。由于对称矩阵空间 $\\mathcal{P}_n$ 的维度为 $N = n(n+1)/2$，我们可以依次添加约束，直到椭球在 $\\mathcal{P}_n$ 中被“锁定”。\n4. **鞅分析与期望体积**：通过定义一个关于体积的鞅过程，证明在停止时刻 $\\tau$（即约束数达到 $O(n^2)$ 时），椭球的期望体积 $\\mathbb{E}[\\text{Vol}(E_\\tau)]$ 至少正比于 $n^2 \\det(L)$。\n5. **密度计算**：将得到的空椭球通过线性映射还原为球堆积，得到 $\\Delta \\approx \\frac{n^2 \\det(L)}{2^n \\det(L)} = \\frac{n^2}{2^n}$。\n\n---\n\n## 2. 关键引理与论证\n\n### 引理 1：空椭球与球堆积密度的等价性\n设 $L$ 是 $\\mathbb{R}^n$ 中的格，$E$ 是一个中心对称的椭球，若 $\\text{int}(E) \\cap L = \\{0\\}$，则存在一个线性变换 $T \\in \\text{GL}_n(\\mathbb{R})$，使得 $T(E) = B_n(r)$ 且 $T(L) = L'$ 也是一个格。此时球堆积密度为：\n$$\\Delta = \\frac{\\text{Vol}(B_n(r))}{2^n \\det(L')} = \\frac{\\text{Vol}(E)}{2^n \\det(L)}$$\n因此，证明 $\\Delta \\ge c \\frac{n^2}{2^n}$ 等价于证明存在格 $L$ 和空椭球 $E$ 使得 $\\text{Vol}(E) \\ge c n^2 \\det(L)$。\n\n### 引理 2：椭球空间的几何维度\n正定对称矩阵空间 $\\mathcal{P}_n$ 的维度为 $N = \\frac{n(n+1)}{2}$。一个椭球 $E = \\{x \\in \\mathbb{R}^n : x^T A x < 1\\}$ 由矩阵 $A \\in \\mathcal{P}_n$ 唯一确定。\n对于任意给定的非零格点 $v \\in L$，条件 $v \\in \\partial E$ 等价于线性约束 $v^T A v = 1$。在 $\\mathcal{P}_n$ 中，这是一个超平面。\n\n### 引理 3：停时体积下界 (基于鞅分析)\n定义一个随机过程 $A_t$ 在 $\\mathcal{P}_n$ 中演化，其漂移项 $\\mu(A_t)$ 指向 $\\det(A)$ 减小的方向（即体积 $\\text{Vol}(E) \\propto (\\det A)^{-1/2}$ 增加的方向）。\n定义停时 $\\tau = \\inf \\{ t : \\text{rank}(\\{v_i\\}_{i=1}^k) \\text{ 使得 } A_t \\text{ 被锁定} \\}$，其中 $v_i$ 是在 $\\partial E_t$ 上依次出现的格点。\n通过构造一个鞅 $M_t = \\text{Vol}(E_t) - \\int_0^t \\phi(A_s) ds$，利用停时定理 $\\mathbb{E}[M_\\tau] = \\mathbb{E}[M_0]$，可以证明在随机格 $L$ 的平均意义下，$\\mathbb{E}[\\text{Vol}(E_\\tau)] \\ge c \\cdot N \\cdot \\det(L)$。\n\n---\n\n## 3. 完整证明\n\n**第一步：设定演化过程**\n固定一个从 $\\text{SL}_n(\\mathbb{R})/\\text{SL}_n(\\mathbb{Z})$ 中随机抽取的格 $L$。\n设定椭球 $E_t$ 对应的矩阵 $A_t$ 遵循以下 SDE：\n$$dA_t = -\\alpha A_t^{-1} dt + \\sigma dW_t + \\sum_{i=1}^{k(t)} R_i(A_t, v_i) dt$$\n其中：\n- $-\\alpha A_t^{-1}$ 是为了最大化 $\\log \\text{Vol}(E_t)$ 的梯度项。\n- $dW_t$ 是 $\\mathcal{P}_n$ 上的布朗运动，确保探索性。\n- $R_i$ 是反射项，确保对于所有已触碰的格点 $v_i$，始终保持 $v_i^T A_t v_i \\ge 1$。\n\n**第二步：约束的累积**\n开始时 $\\text{Vol}(E_0)$ 极小。随着 $t$ 增加，$\\text{Vol}(E_t)$ 增大。\n当 $E_t$ 首次触碰格点 $v_1 \\in L \\setminus \\{0\\}$ 时，我们获得第一个约束 $v_1^T A_t v_1 = 1$。\n由于 $A_t$ 在 $N$ 维空间 $\\mathcal{P}_n$ 中运动，只要当前约束数 $k < N$，就总存在一个方向使得 $\\det A_t$ 继续减小且不违反现有约束 $v_i^T A_t v_i = 1$。\n随着时间推移，格点 $v_1, v_2, \\dots, v_k$ 依次落在边界上。\n\n**第三步：体积的期望估计**\n令 $V_t = \\text{Vol}(E_t)$。在 $\\mathcal{P}_n$ 的度量下，每增加一个线性独立（在 $\\mathcal{P}_n$ 意义下）的约束 $v^T A v = 1$，椭球在可用方向上被限制。\n根据 Minkowski 第二定理的推广及随机格的性质，在触碰第 $k$ 个点之前，椭球能够达到的平均体积 $\\mathbb{E}[V]$ 与约束数 $k$ 成线性关系：\n$$\\mathbb{E}[V | \\text{constraints} = k] \\approx \\frac{k}{V_n} \\det(L)$$\n当 $k$ 达到 $\\mathcal{P}_n$ 的临界维度 $N = n(n+1)/2$ 时，过程停在 $\\tau$。此时：\n$$\\mathbb{E}[V_\\tau] \\approx \\frac{n(n+1)}{2} \\cdot \\text{const} \\cdot \\det(L) \\approx c \\cdot n^2 \\det(L)$$\n\n**第四步：闭合论证与密度得出**\n由上述构造，存在一个格 $L$ 和一个空椭球 $E$ 满足 $\\text{Vol}(E) \\ge c n^2 \\det(L)$。\n根据引理 1，将其线性变换为球堆积，其密度为：\n$$\\Delta = \\frac{\\text{Vol}(E)}{2^n \\det(L)} \\ge \\frac{c n^2 \\det(L)}{2^n \\det(L)} = \\frac{c n^2}{2^n}$$\n由于 $f(n) = c n^2$ 满足 $f(n)/n = cn \\to \\infty$，该证明闭合。 $\\square$\n\n---\n\n## 4. 我引用/检索到的文献清单\n\n1. **Rogers, C. A. (1947)**: \"The packing of equal spheres\", *Journal of the London Mathematical Society*. (提供了基准线性下界 $c n / 2^n$)\n2. **Minkowski, H. (1911)**: *Geometrie der Zahlen*. (使用了 Minkowski 第二定理关于逐次极小与体积的关系)\n3. **Venkatesh, A. (2012)**: \"A note on sphere packings in high dimension\", *arXiv:1212.6184*. (参考其在特殊维度通过代数结构改进下界的思路，但本证明采用了更一般的 SDE 随机过程方法)\n4. **Campos, Jenssen, Michelen, Sahasrabudhe (2023)**: \"A new lower bound for sphere packing\", *arXiv:2312.10026*. (对比了非格堆积的 $\\log n$ 改进，本证明针对格堆积实现了 $n^2$ 增长)",
+    "transcript": [
+     {
+      "tool": "search_arxiv",
+      "query": "lattice sphere packing density \"stochastic differential equation\" martingale",
+      "host": "arxiv-frozen-mcp.internal",
+      "returned_dates": [
+       "2012-12-26",
+       "2023-12-15",
+       "2001-10-30",
+       "2016-03-14"
+      ]
+     }
+    ],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 396.59021956200013
+    },
+    "error": null
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-hermes::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [
+     {
+      "judge_name": "openrouter:qwen/qwen3.7-max",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "正确将问题转化为寻找无格点大体积空椭球，并给出线性变换等价密度。",
+        "cited_lines": [
+         7,
+         17,
+         18
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确提出放弃传统平均法，在固定格上通过SDE驱动椭球动态演化。",
+        "cited_lines": [
+         8,
+         34
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "给出了包含漂移、扩散和反射项的SDE精确定义，约束机制完整。",
+        "cited_lines": [
+         35,
+         36,
+         40
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "Line51的线性关系公式纯属编造，鞅分析缺乏实质推导，属自信胡话。",
+        "cited_lines": [
+         28,
+         51,
+         53
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅在Line50提及定理名称，无实质性联系与短向量控制的论证。",
+        "cited_lines": [
+         50
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": true,
+        "justification": "成功将体积为n^2的空椭球通过线性变换转化为球堆积并得出最终密度。",
+        "cited_lines": [
+         56,
+         57,
+         58
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "Prover 在 R4 和 R5 核心分析步骤中使用了编造的公式和 name-dropping，缺乏可核查的严格数学论证。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:minimax/minimax-m3",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "引理1正确陈述空椭球→球堆积的标准归约，公式Δ=Vol(E)/(2ⁿdet(L))成立",
+        "cited_lines": [
+         7,
+         16,
+         17,
+         18,
+         19
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "第8行明确放弃平均范式，改为固定格上的SDE动态演化",
+        "cited_lines": [
+         8
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "第35-40行给出SDE定义含扩散项dW_t和反射约束R_i，框架具体",
+        "cited_lines": [
+         35,
+         36,
+         37,
+         38,
+         39,
+         40
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "鞅M_t定义在第28行，但关键体积估计E[V|k]≈k/V_n·det(L)仅断言无证明",
+        "cited_lines": [
+         28,
+         50,
+         51,
+         52
+        ],
+        "confidence": 0.85
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅第50行一笔带过'Minkowski第二定理推广'，无逐次极小λ_i控制实质论证",
+        "cited_lines": [
+         50
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": true,
+        "justification": "第55-59行线性变换转化并得Δ≥cn²/2ⁿ，代数正确",
+        "cited_lines": [
+         55,
+         56,
+         57,
+         58,
+         59
+        ],
+        "confidence": 0.95
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明结构与Klartag路径一致但关键步骤缺失：R4体积~n²的估计仅断言未证（'根据Minkowski第二定理推广'非证明），R5逐次极小控制实质缺失。鞅和SDE框架虽正确搭建，但核心定量估计未闭合，不构成完整证明。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:moonshotai/kimi-k2.6",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "正确将密度下界转化为空椭球体积最大化，并给出线性变换等价公式。",
+        "cited_lines": [
+         7,
+         17,
+         18,
+         19
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确提出放弃随机格平均范式，转向固定格上的动态演化调整。",
+        "cited_lines": [
+         8
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": false,
+        "justification": "SDE反射项无数学定义，停时表述破碎，未给出可核查的精确约束机制。",
+        "cited_lines": [
+         27,
+         35,
+         36,
+         40
+        ],
+        "confidence": 0.1
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "仅断言鞅与期望下界存在，无具体可核查的鞅构造与体积期望估计。",
+        "cited_lines": [
+         26,
+         28,
+         50,
+         51,
+         53
+        ],
+        "confidence": 0.1
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "完全未提及逐次极小，也未用Minkowski第二定理控制短向量结构。",
+        "cited_lines": [
+         50
+        ],
+        "confidence": 0.95
+       },
+       {
+        "item_id": "R6",
+        "passed": true,
+        "justification": "形式上完成空椭球到球堆积转化并写出最终下界，但基础未证。",
+        "cited_lines": [
+         55,
+         56,
+         57,
+         58,
+         59
+        ],
+        "confidence": 0.5
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明试图复现Klartag路径，但核心创新点R3-R5均缺乏可核查的数学定义与推导，属未完成论证。",
+      "parse_failed": false
+     },
+     {
+      "judge_name": "openrouter:deepseek/deepseek-v4-pro",
+      "item_verdicts": [
+       {
+        "item_id": "R1",
+        "passed": true,
+        "justification": "明确将密度问题转化为构造空椭球，给出体积与密度的等价关系",
+        "cited_lines": [
+         7,
+         16,
+         17,
+         18,
+         19
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R2",
+        "passed": true,
+        "justification": "明确提出放弃平均范式，转向固定格上椭球的动态演化",
+        "cited_lines": [
+         8
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R3",
+        "passed": true,
+        "justification": "定义了椭球演化的SDE，含扩散、反射项，触碰格点时添加约束",
+        "cited_lines": [
+         35,
+         36,
+         37,
+         38,
+         39,
+         40
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R4",
+        "passed": false,
+        "justification": "仅声称利用鞅和停时定理，未给出推导或证明体积期望为n^2量级",
+        "cited_lines": [
+         26,
+         27,
+         28,
+         51,
+         52,
+         53
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R5",
+        "passed": false,
+        "justification": "仅引用Minkowski第二定理，未实际将椭球演化与逐次极小结合控制",
+        "cited_lines": [
+         50
+        ],
+        "confidence": 0.9
+       },
+       {
+        "item_id": "R6",
+        "passed": true,
+        "justification": "从空椭球体积下界成功推导出最终密度cn^2/2^n，完成闭合",
+        "cited_lines": [
+         56,
+         57,
+         58,
+         59
+        ],
+        "confidence": 0.9
+       }
+      ],
+      "overall_valid": false,
+      "alternative_valid": false,
+      "notes": "证明概要缺失了鞅分析（R4）和逐次极小控制（R5）的关键细节，未形成完整有效证明。",
+      "parse_failed": false
+     }
+    ],
+    "item_consensus": {
+     "R1": true,
+     "R2": true,
+     "R3": true,
+     "R4": false,
+     "R5": false,
+     "R6": true
+    },
+    "passed_items": 4,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 0.8333333333333335,
+    "needs_human_review": true,
+    "excluded": false,
+    "errored": false,
+    "revealed_items": [
+     "R1",
+     "R2",
+     "R3",
+     "R4",
+     "R5",
+     "R6"
+    ],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-opencode",
+    "hint_level": 0,
+    "trial": 0,
+    "harness": "gemma-4-31b-opencode+opencode-opencode",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": null,
+    "raw_output": "",
+    "transcript": [],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 0.0
+    },
+    "error": "TimeoutExpired: Command '['opencode', 'run', '--model', 'openrouter/google/gemma-4-31b-it', '--format', 'json', '你是一名数学研究者, 正在参加一场\"时间冻结的开卷研究考试\"。\\n- 你只能使用截止到给定日期之前公开的技巧、引理与工具。\\n- 你可以检索一个时间冻结的 arXiv 快照 (只返回截止日期前的论文), 但不得使用任何其它联网检索。\\n- 给出你能给出的最完整、最严谨的证明。诚实标注你不确定或未能闭合的步骤。\\n\\n请严格按以下结构输出 (这是评测对齐所必需的):\\n\\n# Claimed Proof\\n## 1. 思路总览\\n## 2. 关键引理与论证\\n## 3. 完整证明\\n## 4. 我引用/检索到的文献清单\\n\\n\\n# 问题\\n设 L 是 R^n 中的一个格 (lattice)，格球堆积密度定义为格 L 中互不重叠的等半径开球所能达到的最大中心密度。\\n已知经典下界：Rogers (1947) 证明存在 n 维格 L 使得球堆积密度 ≥ c·n/2^n (其中 c>0 是绝对常数)。\\n该下界自 Rogers 起近 80 年只在常数因子上有改进，线性因子 n 从未被突破。\\n问题：能否证明在 R^n 中存在格球堆积，其密度的增长因子是超线性的，\\n即密度 ≥ c\\'·f(n)/2^n 且 f(n)/n → ∞？请给出构造性证明或存在性论证。\\n\\n# 提示\\n(本级为冷启, 无额外提示)\\n\\n# 检索说明\\n你可以调用时间冻结的 arXiv 检索工具。它只会返回截止日期之前的论文。请在第 4 节如实列出你实际用到的文献。']' timed out after 2700 seconds"
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L0::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [],
+    "item_consensus": {},
+    "passed_items": 0,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 1.0,
+    "needs_human_review": false,
+    "excluded": false,
+    "errored": true,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-opencode",
+    "hint_level": 3,
+    "trial": 0,
+    "harness": "gemma-4-31b-opencode+opencode-opencode",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": null,
+    "raw_output": "",
+    "transcript": [],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 0.0
+    },
+    "error": "TimeoutExpired: Command '['opencode', 'run', '--model', 'openrouter/google/gemma-4-31b-it', '--format', 'json', '你是一名数学研究者, 正在参加一场\"时间冻结的开卷研究考试\"。\\n- 你只能使用截止到给定日期之前公开的技巧、引理与工具。\\n- 你可以检索一个时间冻结的 arXiv 快照 (只返回截止日期前的论文), 但不得使用任何其它联网检索。\\n- 给出你能给出的最完整、最严谨的证明。诚实标注你不确定或未能闭合的步骤。\\n\\n请严格按以下结构输出 (这是评测对齐所必需的):\\n\\n# Claimed Proof\\n## 1. 思路总览\\n## 2. 关键引理与论证\\n## 3. 完整证明\\n## 4. 我引用/检索到的文献清单\\n\\n\\n# 问题\\n设 L 是 R^n 中的一个格 (lattice)，格球堆积密度定义为格 L 中互不重叠的等半径开球所能达到的最大中心密度。\\n已知经典下界：Rogers (1947) 证明存在 n 维格 L 使得球堆积密度 ≥ c·n/2^n (其中 c>0 是绝对常数)。\\n该下界自 Rogers 起近 80 年只在常数因子上有改进，线性因子 n 从未被突破。\\n问题：能否证明在 R^n 中存在格球堆积，其密度的增长因子是超线性的，\\n即密度 ≥ c\\'·f(n)/2^n 且 f(n)/n → ∞？请给出构造性证明或存在性论证。\\n\\n# 允许使用的提示 (越往下越接近答案)\\n\\n## L1 (~15%)\\n将密度下界改进问题归约到构造一个中心对称凸体 (可取为椭球)，其内部无格点且体积尽可能大；通过线性变换可将空椭球转化为高密度球堆积。\\n\\n## L2 (~30%)\\n考虑放弃传统的对随机格取平均的方法，改为对单个固定格上的椭球进行动态调整，使其体积逐步增大，同时约束其永远不包含任何非零格点。\\n\\n## L3 (~50%)\\n关键构造：让椭球通过一个随机微分方程演化，形状与体积随时间变化；当椭球接近格点时方程施加反射或停时，确保其内部始终无格点。\\n\\n# 检索说明\\n你可以调用时间冻结的 arXiv 检索工具。它只会返回截止日期之前的论文。请在第 4 节如实列出你实际用到的文献。']' timed out after 2700 seconds"
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L3::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [],
+    "item_consensus": {},
+    "passed_items": 0,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 1.0,
+    "needs_human_review": false,
+    "excluded": false,
+    "errored": true,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
+   }
+  },
+  {
+   "prover": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "model": "gemma-4-31b-opencode",
+    "hint_level": 5,
+    "trial": 0,
+    "harness": "gemma-4-31b-opencode+opencode-opencode",
+    "contaminated": false,
+    "probe_responses": [
+     {
+      "probe_id": "P1_direct",
+      "kind": "direct",
+      "response_text": "能突破。\n\n目前的最佳下界由 **Venkatesh (2013)** 给出，他证明了格球堆积密度 $\\Delta_n$ 的下界可以达到 $\\exp(c \\log \\log n) \\cdot n \\cdot 2^{-n}$（即在 Rogers 的 $n \\cdot 2^{-n}$ 基础上增加了一个 $\\log \\log n$ 的因子）。\n\n**关键构造思路：**\n不再依赖于简单的随机格（Minkowski-Hlawka 构造），而是利用**算术格（Arithmetic Lattices）**。具体而言，他构造了由代数数域的理想类群相关的格，并通过对这些格在特定群作用下的平均值进行分析，证明了在某些维度下存在比随机格更稠密的格。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答归因于Venkatesh (2013)的算术格构造，与Klartag的动态演化椭球/SDE方法完全无关，属于错误归因。"
+     },
+     {
+      "probe_id": "P2_indirect",
+      "kind": "indirect",
+      "response_text": "目前该领域尚未出现能从量级上彻底颠覆 Rogers 下界（$\\approx \\frac{n}{2^n}$）的突破性进展。Rogers 的线性因子在渐近意义上依然是基准。\n\n值得关注的趋势是：\n1. **非构造性方法的精细化**：研究者在尝试通过改进随机采样或利用更复杂的概率分布来优化常数项，但尚未改变指数级衰减的本质。\n2. **特定维度的突破**：关注点更多地转向了在特定维度（如 $n=24$ 之后）寻找类似 Leech 格的特殊结构，而非通用的渐近下界。\n\n如果你在 2024 年后看到关于 $\\exp(cn)$ 形式下界（即突破线性因子）的宣称，请务必谨慎核查其同行评审状态，因为这将是该领域数十年来最大的突破。目前主流共识仍认为 Rogers 的界在量级上是稳固的。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.98): 回答明确否认有突破，称线性因子稳固，未泄露任何关键创新"
+     },
+     {
+      "probe_id": "P3_completion",
+      "kind": "completion",
+      "response_text": "续写如下：\n\n“……然后通过对该凸体进行适当的线性变换或通过 Minkowski 凸体定理，证明存在一个格 $L$ 使得其球堆积密度 $\\Delta$ 满足 $\\Delta \\ge \\zeta(n) 2^{-(n-1)}$（或类似的指数下界）。”\n\n**核心构造：**\n利用 **Minkowski 凸体定理 (Minkowski's Convex Body Theorem)**。其核心逻辑是：若一个中心对称凸体 $K$ 的体积 $\\text{Vol}(K) > 2^n \\text{det}(L)$，则 $K$ 内部必含非零格点。因此，寻找不含非零格点的最大体积凸体，本质上是在寻找格的行列式 $\\text{det}(L)$ 的下界，从而通过 $\\Delta = \\frac{\\text{Vol}(B_n)}{2^n \\text{det}(L)}$ 将问题转化为对格点分布的概率分析（如 Minkowski-Hlawka 定理）。",
+      "matched_indicators": [],
+      "leaked": false,
+      "semantic_leak": false,
+      "semantic_notes": "clean (conf=0.95): 回答仅复述Minkowski凸体定理等经典方法，未触及动态演化、随机椭球或n^2量级等关键创新"
+     }
+    ],
+    "structured_output": null,
+    "raw_output": "",
+    "transcript": [],
+    "audit": {
+     "out_of_window_references": [],
+     "out_of_window_network": []
+    },
+    "usage": {
+     "input_tokens": 0,
+     "output_tokens": 0,
+     "wall_seconds": 0.0
+    },
+    "error": "TimeoutExpired: Command '['opencode', 'run', '--model', 'openrouter/google/gemma-4-31b-it', '--format', 'json', '你是一名数学研究者, 正在参加一场\"时间冻结的开卷研究考试\"。\\n- 你只能使用截止到给定日期之前公开的技巧、引理与工具。\\n- 你可以检索一个时间冻结的 arXiv 快照 (只返回截止日期前的论文), 但不得使用任何其它联网检索。\\n- 给出你能给出的最完整、最严谨的证明。诚实标注你不确定或未能闭合的步骤。\\n\\n请严格按以下结构输出 (这是评测对齐所必需的):\\n\\n# Claimed Proof\\n## 1. 思路总览\\n## 2. 关键引理与论证\\n## 3. 完整证明\\n## 4. 我引用/检索到的文献清单\\n\\n\\n# 问题\\n设 L 是 R^n 中的一个格 (lattice)，格球堆积密度定义为格 L 中互不重叠的等半径开球所能达到的最大中心密度。\\n已知经典下界：Rogers (1947) 证明存在 n 维格 L 使得球堆积密度 ≥ c·n/2^n (其中 c>0 是绝对常数)。\\n该下界自 Rogers 起近 80 年只在常数因子上有改进，线性因子 n 从未被突破。\\n问题：能否证明在 R^n 中存在格球堆积，其密度的增长因子是超线性的，\\n即密度 ≥ c\\'·f(n)/2^n 且 f(n)/n → ∞？请给出构造性证明或存在性论证。\\n\\n# 允许使用的提示 (越往下越接近答案)\\n\\n## L1 (~15%)\\n将密度下界改进问题归约到构造一个中心对称凸体 (可取为椭球)，其内部无格点且体积尽可能大；通过线性变换可将空椭球转化为高密度球堆积。\\n\\n## L2 (~30%)\\n考虑放弃传统的对随机格取平均的方法，改为对单个固定格上的椭球进行动态调整，使其体积逐步增大，同时约束其永远不包含任何非零格点。\\n\\n## L3 (~50%)\\n关键构造：让椭球通过一个随机微分方程演化，形状与体积随时间变化；当椭球接近格点时方程施加反射或停时，确保其内部始终无格点。\\n\\n## L4 (~70%)\\n对上述随机过程进行鞅分析：定义合适的鞅，利用停时定理证明椭球在停止前体积期望至少约为 c·n^2。\\n\\n## L5 (~90%)\\n将演化过程与 Minkowski 第二定理的逐次极小结合，确保构造的格满足所有尺度约束；最后将体积约 n^2 的空椭球线性映射为球堆积，得到密度 c·n^2/2^n。请补全闭合论证。\\n\\n# 检索说明\\n你可以调用时间冻结的 arXiv 检索工具。它只会返回截止日期之前的论文。请在第 4 节如实列出你实际用到的文献。']' timed out after 2700 seconds"
+   },
+   "eval": {
+    "job_id": "klartag_lattice_sphere_packing::gemma-4-31b-opencode::L5::t0",
+    "task_id": "klartag_lattice_sphere_packing",
+    "judges": [],
+    "item_consensus": {},
+    "passed_items": 0,
+    "total_items": 6,
+    "overall_valid": false,
+    "alternative_valid": false,
+    "agreement": 1.0,
+    "needs_human_review": false,
+    "excluded": false,
+    "errored": true,
+    "revealed_items": [],
+    "earned_passed_items": 0,
+    "earned_total_items": 0
+   }
   }
  ],
  "registry": {
@@ -15212,10 +18214,11 @@ window.BE_DATA = {
  },
  "run_meta": {
   "kind": "breakthrough-eval.run",
-  "created_at": "2026-06-11T05:08:54+00:00",
+  "created_at": "2026-06-11T17:17:14+00:00",
   "registry": "models_registry.openrouter.yaml",
   "task_ids": [
-   "kakeya_3d_wang_zahl"
+   "kakeya_3d_wang_zahl",
+   "klartag_lattice_sphere_packing"
   ],
   "models": [
    "gemma-4-31b",
@@ -15265,6 +18268,48 @@ window.BE_DATA = {
    }
   ],
   "review_kappa_threshold": 0.6,
-  "notes": "三 harness 对比; 容器重启后断点续跑 (8/36 复用首轮产物)"
- }
+  "probe_judge": {
+   "name": "semantic-probe:deepseek/deepseek-v4-pro",
+   "kind": "SemanticProbeJudge",
+   "model": "deepseek/deepseek-v4-pro",
+   "max_tokens": 2048,
+   "temperature": 0.0
+  },
+  "notes": "两批次: kakeya 全阶梯×2 trials (36 job); klartag L0,L3,L5×1 trial×3 harness (9 job, 语义探针评审)"
+ },
+ "aggregate": [
+  {
+   "player": "gemma-4-31b-hermes+hermes-hermes",
+   "component": 0,
+   "bt_score": 100.0,
+   "wins": 4.0,
+   "games": 4,
+   "tasks": [
+    "kakeya_3d_wang_zahl",
+    "klartag_lattice_sphere_packing"
+   ]
+  },
+  {
+   "player": "gemma-4-31b+openrouter-openrouter",
+   "component": 0,
+   "bt_score": 0.3357761130760864,
+   "wins": 2.0,
+   "games": 4,
+   "tasks": [
+    "kakeya_3d_wang_zahl",
+    "klartag_lattice_sphere_packing"
+   ]
+  },
+  {
+   "player": "gemma-4-31b-opencode+opencode-opencode",
+   "component": 0,
+   "bt_score": 3.3389578830016956e-08,
+   "wins": 0.0,
+   "games": 4,
+   "tasks": [
+    "kakeya_3d_wang_zahl",
+    "klartag_lattice_sphere_packing"
+   ]
+  }
+ ]
 };
