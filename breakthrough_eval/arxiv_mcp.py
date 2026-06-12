@@ -23,7 +23,7 @@ import os
 import sys
 from datetime import date
 
-from .arxiv_frozen import InMemoryArxivSource
+from .arxiv_frozen import ArxivApiSource, InMemoryArxivSource
 
 PROTOCOL_VERSION = "2025-06-18"
 SERVER_INFO = {"name": "arxiv-frozen-mcp", "version": "0.1.0"}
@@ -118,7 +118,12 @@ def main() -> int:
     if not cutoff_env:
         print("arxiv-frozen-mcp: 缺少 CUTOFF_DATE 环境变量 (红线: 必须显式冻结)", file=sys.stderr)
         return 2
-    source = InMemoryArxivSource(date.fromisoformat(cutoff_env))
+    cutoff = date.fromisoformat(cutoff_env)
+    # ARXIV_MCP_SOURCE=arxiv → 真实 arXiv API (生产); 其它 → 内存 mock (测试封闭)。
+    if os.environ.get("ARXIV_MCP_SOURCE", "mock").lower() == "arxiv":
+        source = ArxivApiSource(cutoff)
+    else:
+        source = InMemoryArxivSource(cutoff)
     transcript = os.environ.get("ARXIV_MCP_TRANSCRIPT")
 
     for line in sys.stdin:

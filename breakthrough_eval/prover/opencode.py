@@ -48,6 +48,7 @@ def render_opencode_config(cutoff_iso: str, transcript_path: str) -> dict:
                 "environment": {
                     "CUTOFF_DATE": cutoff_iso,
                     "ARXIV_MCP_TRANSCRIPT": transcript_path,
+                    "ARXIV_MCP_SOURCE": "arxiv",  # 真实 harness 用真实冻结 arXiv
                 },
                 "enabled": True,
             }

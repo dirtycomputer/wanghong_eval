@@ -1,48 +1,58 @@
-# Model Registry (plan §6.2)
-# Controller 自动筛 cutoff < retrieval_cutoff 的候选; 厂商 cutoff 是「软」的, 故标 confidence,
-# 最终以 §8 探针实测为准。backend_kwargs 传给后端 factory (mock: capability/contaminated/scaffold_version)。
+# 默认 Model Registry — 真实后端 (OpenRouter / opencode / hermes)。
+# 离线 mock 测试用 models_registry.mock.yaml。
 #
-# 注: 这些都是 provider=mock 的"模拟"模型, 用于离线跑通全链路。
-# 接真实模型时把 provider 改成 local-vllm/codex, backend_kwargs 填 model/model_provider。
+# gemma-4-31b-it 的官方 cutoff 是 "January 2025" (模型卡:
+# https://huggingface.co/google/gemma-4-31B-it — pre-training cutoff date of January 2025)。
+# 这早于 Wang–Zahl 三维 Kakeya 突破 (arXiv 2502.17655, 2025-02-25), 所以它在训练里
+# 不可能见过那篇证明 —— 这也解释了为什么它的污染探针全部 clean。因此它是王虹测试的
+# 一个 (边界) 合法 pre-breakthrough PROVER 候选。
+#
+# 注意 (plan §10.6 "突破日期本身模糊"): cutoff 是厂商宣称的"软"日期, 取月末 2025-01-31
+# 作为保守上界; 距 preprint 约 25 天 buffer。探针实测是最终判据 (plan §6.2/§8), 实跑探针
+# 已通过。confidence 标 medium。
+#
+# API key 从环境变量 OPENROUTER_KEY 读取, 不写进任何文件。
+#
+# 同一模型 × 三个 harness (plan §7: harness = model + scaffold + toolset):
+#   gemma-4-31b          纯模型 + search_arxiv 工具 (OpenRouter 原生 tool-calling)
+#   gemma-4-31b-opencode opencode CLI harness (冻结 arXiv MCP, 禁 webfetch/websearch/bash)
+#   gemma-4-31b-hermes   Hermes Agent harness (冻结 arXiv MCP, toolsets 清空, 每 job 隔离 HOME)
+# 三者的探针都直连裸模型 (污染是模型属性, 与 harness 无关)。
 models:
-  - name: open-precutoff-strong
-    cutoff_date: 2024-10-01
-    cutoff_confidence: high
+  - name: gemma-4-31b
+    cutoff_date: 2025-01-31          # 模型卡 "January 2025" 的保守上界 (月末)
+    cutoff_confidence: medium        # 厂商宣称, 软 cutoff
     open_source: true
     capability_tier: research
-    provider: mock
-    backend_kwargs: { capability: 0.78, scaffold_version: "deep" }
+    provider: openrouter
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "openrouter"
+      max_tool_calls: 3
+      temperature: 0.3
+      max_tokens: 8192      # 实测 gemma 证明 ~2k tok, 8192 防截断 (provider 须支持 tools)
+      probe_max_tokens: 400
 
-  - name: open-precutoff-mid
-    cutoff_date: 2024-06-01
-    cutoff_confidence: high
-    open_source: true
-    capability_tier: strong
-    provider: mock
-    backend_kwargs: { capability: 0.5, scaffold_version: "vanilla" }
-
-  - name: open-precutoff-weak
-    cutoff_date: 2023-12-01
+  - name: gemma-4-31b-opencode
+    cutoff_date: 2025-01-31
     cutoff_confidence: medium
     open_source: true
-    capability_tier: weak
-    provider: mock
-    backend_kwargs: { capability: 0.25, scaffold_version: "vanilla" }
-
-  # cutoff 日期合格 (< 2025-01-31), 但通过 talk/口耳相传见过答案 → 探针应判污染除名 (plan §8.3)。
-  - name: leaky-eligible-by-date
-    cutoff_date: 2024-12-01
-    cutoff_confidence: low
-    open_source: false
     capability_tier: research
-    provider: mock
-    backend_kwargs: { capability: 0.7, contaminated: true, scaffold_version: "deep" }
+    provider: opencode
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "opencode"
+      probe_max_tokens: 400
+      timeout_seconds: 1800
 
-  # cutoff 晚于 retrieval_cutoff → 资格校验直接拒绝 (plan §2, §6.2)。
-  - name: post-cutoff-frontier
-    cutoff_date: 2025-03-01
-    cutoff_confidence: high
-    open_source: false
-    capability_tier: frontier
-    provider: mock
-    backend_kwargs: { capability: 0.95, scaffold_version: "deep" }
+  - name: gemma-4-31b-hermes
+    cutoff_date: 2025-01-31
+    cutoff_confidence: medium
+    open_source: true
+    capability_tier: research
+    provider: hermes
+    backend_kwargs:
+      model: "google/gemma-4-31b-it"
+      scaffold_version: "hermes"
+      probe_max_tokens: 400
+      timeout_seconds: 1800

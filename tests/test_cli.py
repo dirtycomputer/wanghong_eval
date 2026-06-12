@@ -23,11 +23,16 @@ def _restore_package_logger():
     lg.propagate = saved[2]
 
 
+MOCK_JUDGES = ["--judges", "mock:0.4,mock:0.5,mock:0.7", "--probe-judge", "none"]
+
+
 def _argv(tmp_path, *rest):
+    # 测试封闭: mock registry + mock 检索源 (真实默认是 OpenRouter/arXiv 栈)。
     return [
         "--tasks-dir", str(ROOT / "tasks"),
-        "--registry", str(ROOT / "models_registry.yaml"),
+        "--registry", str(ROOT / "models_registry.mock.yaml"),
         "--results-dir", str(tmp_path / "results"),
+        "--arxiv-source", "mock",
         *rest,
     ]
 
@@ -36,6 +41,7 @@ def test_run_reports_early_stop_skips(tmp_path, capsys):
     rc = main(_argv(
         tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
         "--models", "leaky-eligible-by-date", "--trials", "2", "--workers", "1",
+        *MOCK_JUDGES,
     ))
     out = capsys.readouterr().out
     assert rc == 0
@@ -48,6 +54,7 @@ def test_run_summary_includes_error_count(tmp_path, capsys):
     rc = main(_argv(
         tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
         "--models", "open-precutoff-weak", "--hints", "0", "--trials", "1",
+        *MOCK_JUDGES,
     ))
     out = capsys.readouterr().out
     assert rc == 0
@@ -64,7 +71,7 @@ def test_probe_command_is_probe_only(tmp_path, capsys, monkeypatch):
     monkeypatch.setattr(ProverRunner, "run", _forbidden)
     rc = main(_argv(
         tmp_path, "probe", "--task", "kakeya_3d_wang_zahl",
-        "--model", "open-precutoff-strong",
+        "--model", "open-precutoff-strong", "--probe-judge", "none",
     ))
     out = capsys.readouterr().out
     assert rc == 0
@@ -76,6 +83,7 @@ def test_export_web_emits_parseable_bundle(tmp_path):
     rc1 = main(_argv(
         tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
         "--models", "open-precutoff-weak", "--hints", "0,1", "--trials", "1",
+        *MOCK_JUDGES,
     ))
     out = tmp_path / "site" / "data.js"
     rc2 = main(_argv(tmp_path, "export-web", "--out", str(out)))
@@ -96,6 +104,7 @@ def test_export_web_emits_parseable_bundle(tmp_path):
     assert meta["trials"] == 1 and meta["review_kappa_threshold"] == 0.6
     assert [j["kind"] for j in meta["judges"]] == ["MockJudge"] * 3
     assert all("strictness" in j for j in meta["judges"])
+    assert meta["probe_judge"] is None  # 测试里显式关闭
 
 
 def test_export_web_empty_results_fails_cleanly(tmp_path, capsys):
@@ -107,7 +116,7 @@ def test_export_web_empty_results_fails_cleanly(tmp_path, capsys):
 def test_probe_command_reports_contamination(tmp_path, capsys):
     rc = main(_argv(
         tmp_path, "probe", "--task", "kakeya_3d_wang_zahl",
-        "--model", "leaky-eligible-by-date",
+        "--model", "leaky-eligible-by-date", "--probe-judge", "none",
     ))
     out = capsys.readouterr().out
     assert rc == 0

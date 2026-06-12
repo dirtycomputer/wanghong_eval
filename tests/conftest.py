@@ -22,4 +22,4 @@ def task(tasks):
 
 @pytest.fixture
 def registry():
-    return ModelRegistry.load(ROOT / "models_registry.yaml")
+    return ModelRegistry.load(ROOT / "models_registry.mock.yaml")

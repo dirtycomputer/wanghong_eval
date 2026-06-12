@@ -51,6 +51,7 @@ def render_hermes_config(cutoff_iso: str, transcript_path: str, model: str) -> s
         "    env:\n"
         f"      CUTOFF_DATE: \"{cutoff_iso}\"\n"
         f"      ARXIV_MCP_TRANSCRIPT: \"{transcript_path}\"\n"
+        "      ARXIV_MCP_SOURCE: \"arxiv\"\n"
     )
 
 

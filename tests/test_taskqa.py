@@ -82,9 +82,9 @@ def test_cli_task_qa(tmp_path, capsys):
     ROOT = Path(__file__).resolve().parent.parent
     rc = main([
         "--tasks-dir", str(ROOT / "tasks"),
-        "--registry", str(ROOT / "models_registry.yaml"),
+        "--registry", str(ROOT / "models_registry.mock.yaml"),
         "--results-dir", str(tmp_path / "results"),
-        "task-qa",
+        "task-qa", "--judges", "mock:0.4,mock:0.7", "--probe-judge", "none",
     ])
     out = capsys.readouterr().out
     assert rc == 0

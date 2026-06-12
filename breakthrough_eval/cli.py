@@ -2,6 +2,7 @@
 
 Subcommands:
   validate     校验一个/一批 TaskSpec
+  draft-task   用强模型起草 TaskSpec 草稿 (生产流水线·起草工位)
   task-qa      task 的单元测试: golden 锚定 + 探针自测 (生产流水线验收门)
   list-tasks   列出已加载的 task
   list-models  列出 registry 里的 model 及其对某 task 的资格
@@ -34,12 +35,21 @@ DEFAULT_REGISTRY = "models_registry.yaml"
 DEFAULT_RESULTS = "results"
 
 
+# 真实默认栈: 评委四面板 (per-model max_tokens 打满) + deepseek 语义探针评审。
+# mock 仅供离线测试 (--judges mock... / --probe-judge none / --arxiv-source mock)。
+REAL_JUDGE_PANEL = {
+    "qwen/qwen3.7-max": 65_536,
+    "minimax/minimax-m3": 512_000,
+    "moonshotai/kimi-k2.6": 245_760,  # max_completion ≈ ctx, 留 16k 输入头寸
+    "deepseek/deepseek-v4-pro": 384_000,
+}
+DEFAULT_PROBE_JUDGE = "openrouter:deepseek/deepseek-v4-pro"
+
+
 def _default_judges() -> list[JudgeBackend]:
-    # A 3-judge panel with differing strictness → realistic agreement (plan §4.2).
     return [
-        MockJudge(MockJudgeConfig(strictness=0.4, name="judge-lenient")),
-        MockJudge(MockJudgeConfig(strictness=0.5, name="judge-balanced")),
-        MockJudge(MockJudgeConfig(strictness=0.7, name="judge-strict")),
+        openrouter_judge(m, max_tokens=mt, temperature=0.0, timeout=3600)
+        for m, mt in REAL_JUDGE_PANEL.items()
     ]
 
 
@@ -49,7 +59,7 @@ def _parse_judges(spec: str | None) -> list[JudgeBackend]:
     Comma-separated entries; each is one of:
       * ``mock`` or ``mock:<strictness>``
       * ``openrouter:<model>``  e.g. ``openrouter:deepseek/deepseek-v4-pro``
-    Empty / None → the default 3-judge mock panel.
+    Empty / None → 真实四评委面板 (REAL_JUDGE_PANEL, max_tokens 打满)。
     """
     if not spec:
         return _default_judges()
@@ -73,14 +83,29 @@ def _parse_judges(spec: str | None) -> list[JudgeBackend]:
 
 
 def _parse_probe_judge(spec: str | None):
-    """``--probe-judge openrouter:<model>`` → SemanticProbeJudge (None = 仅关键词)。"""
-    if not spec:
+    """``--probe-judge``: 默认真实 deepseek 语义评审; ``none`` = 仅关键词 (离线)。"""
+    if spec is None:
+        spec = DEFAULT_PROBE_JUDGE
+    if spec.lower() in ("none", "off", ""):
         return None
     if spec.startswith("openrouter:"):
         from .eval.openrouter_judge import openrouter_probe_judge
 
         return openrouter_probe_judge(spec.split(":", 1)[1])
-    raise SystemExit(f"未知 probe-judge spec: '{spec}' (用 openrouter:<model>)")
+    raise SystemExit(f"未知 probe-judge spec: '{spec}' (用 openrouter:<model> 或 none)")
+
+
+def _source_factory_for(args, registry: ModelRegistry):
+    """检索源选择: arxiv=真实 API, mock=内存语料, auto=按 registry 是否纯 mock 判定。"""
+    from .arxiv_frozen import ArxivApiSource
+
+    mode = getattr(args, "arxiv_source", "auto")
+    if mode == "mock":
+        return None  # Controller 默认 = InMemoryArxivSource
+    if mode == "arxiv":
+        return ArxivApiSource
+    providers = {e.provider for e in registry.entries.values()}
+    return None if providers <= {"mock"} else ArxivApiSource
 
 
 def _build_controller(args) -> Controller:
@@ -88,10 +113,14 @@ def _build_controller(args) -> Controller:
     registry = ModelRegistry.load(args.registry)
     evaluator = Evaluator(_parse_judges(getattr(args, "judges", None)))
     store = ResultStore(args.results_dir)
-    return Controller(
+    kwargs = dict(
         tasks=tasks, registry=registry, evaluator=evaluator, store=store,
         probe_judge=_parse_probe_judge(getattr(args, "probe_judge", None)),
     )
+    factory = _source_factory_for(args, registry)
+    if factory is not None:
+        kwargs["source_factory"] = factory
+    return Controller(**kwargs)
 
 
 # --------------------------------------------------------------------------- #
@@ -329,6 +358,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--log-level", default=None, help="显式日志级别 (DEBUG/INFO/WARNING/ERROR), 覆盖 -v")
     p.add_argument("--log-file", default=None, help="同时把 DEBUG 级日志写入该文件")
+    p.add_argument(
+        "--arxiv-source", default="auto", choices=["auto", "arxiv", "mock"],
+        help="冻结检索源: arxiv=真实 arXiv API, mock=内存语料, auto=纯 mock registry 才用 mock",
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
 
     v = sub.add_parser("validate", help="校验 TaskSpec")
@@ -355,12 +388,12 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument(
         "--judges",
         default=None,
-        help="评委: mock / mock:0.5 / openrouter:<model> (逗号分隔; 默认 mock 三评委面板)",
+        help="评委: openrouter:<model> / mock / mock:0.5 (逗号分隔; 默认真实四评委面板打满)",
     )
     r.add_argument(
         "--probe-judge",
         default=None,
-        help="语义级探针泄露评审: openrouter:<model> (关键词命中仍一票否决; 默认仅关键词)",
+        help="语义级探针泄露评审 (默认 deepseek-v4-pro; none=仅关键词离线模式)",
     )
     r.set_defaults(func=cmd_run)
 

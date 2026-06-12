@@ -9,8 +9,10 @@ arXiv** 下**先过探针再应考**，EVAL 用**强评委 + rubric** 给出 win
 golden proof = Wang–Zahl, arXiv:2502.17655）。
 
 > 本仓库是按 [`breakthrough_eval_system_plan.md`](breakthrough_eval_system_plan.md) 实现的
-> **完整可运行框架**。所有模型/检索/评委后端都是**可插拔**的：默认用离线 mock 后端跑通全链路
-> 并带测试；接真实 `codex exec` / vLLM / 强评委 API 只需实现同一接口。
+> **完整可运行框架**。所有模型/检索/评委后端都是**可插拔**的：**默认即真实栈**
+> （OpenRouter PROVER/评委 + 真实 arXiv 冻结检索 + opencode/Hermes harness）；
+> mock 实现全部保留但只用于测试与离线演示（`--registry models_registry.mock.yaml`
+> `--judges mock... --probe-judge none --arxiv-source mock`）。
 
 ---
 
@@ -23,26 +25,39 @@ pip install -e ".[dev]"     # 加 pytest
 
 ## 快速开始
 
-```bash
-# 1. 校验 TaskSpec 的红线 (model_cutoff <= retrieval_cutoff < breakthrough_date)
-python -m breakthrough_eval validate
+**默认即真实栈**(需 `OPENROUTER_KEY` 环境变量,产生 API 费用):registry =
+`models_registry.yaml`(gemma 三 harness),评委 = 真实四面板(qwen3.7-max /
+minimax-m3 / kimi-k2.6 / deepseek-v4-pro,max_tokens 打满),探针语义评审 =
+deepseek-v4-pro,冻结检索 = **真实 arXiv API**(服务端 `submittedDate` 过滤 +
+客户端二次硬过滤,3s 礼貌限速)。
 
-# 2. 看哪些 model 对该 task 合格 (cutoff < retrieval_cutoff)
+```bash
+# 1. 校验 TaskSpec 红线 + task 单元测试 (golden 锚定 / 探针自测 / 语义校准)
+python -m breakthrough_eval validate
+python -m breakthrough_eval task-qa
+
+# 2. 看哪些 model 对该 task 合格
 python -m breakthrough_eval list-models --task kakeya_3d_wang_zahl
 
-# 3. 跑通 Controller→PROVER(探针→证明)→EVAL→分数, 产物落盘 results/
-#    --workers N 并发跑 prove+eval (HTTP-bound; 探针每 model+task 仍只跑一次)
-python -m breakthrough_eval run --task kakeya_3d_wang_zahl --trials 5 --workers 4
+# 3. 真实评测: Controller→PROVER(探针→证明)→EVAL→分数, 产物落盘 results/
+python -m breakthrough_eval run --task kakeya_3d_wang_zahl --trials 2 --workers 4
 
-# 4. 渲染主榜 + 每个 harness 的难度曲线
+# 4. 渲染主榜 + 难度曲线 (+ ≥2 task 时的 BT 跨 task 总榜)
 python -m breakthrough_eval leaderboard
 
-# 5. 只跑污染探针 / 差分 sanity check
-python -m breakthrough_eval probe --task kakeya_3d_wang_zahl --model leaky-eligible-by-date
-python -m breakthrough_eval diff-check --task kakeya_3d_wang_zahl --model open-precutoff-weak
-
-# 6. 导出可视化站点数据 (docs/data.js, 见下文 GitHub Pages)
+# 5. 只跑污染探针 (关键词 + deepseek 语义双层) / 导出站点数据
+python -m breakthrough_eval probe --task kakeya_3d_wang_zahl --model gemma-4-31b
 python -m breakthrough_eval export-web
+```
+
+### 离线演示 / 测试(mock 栈)
+
+mock 组件全部保留,但**只在显式要求时使用**(测试套件即此模式,零网络零费用):
+
+```bash
+python -m breakthrough_eval --registry models_registry.mock.yaml --arxiv-source mock \
+  run --task kakeya_3d_wang_zahl --trials 5 --workers 4 \
+  --judges "mock:0.4,mock:0.5,mock:0.7" --probe-judge none
 ```
 
 ### 调试 / 日志
@@ -117,7 +132,7 @@ Controller ──展开 job=(task×model×hint×trial)──▶ PROVER ──pro
 ### 污染防控的四道防线（make-or-break, §8）
 
 1. **模型层** — `ModelEntry.eligible_for` / Controller 只放行 `cutoff < retrieval_cutoff` 的 model。
-2. **检索层** — `ArxivFrozenSource` 在内部按 `submission_date <= cutoff` **硬过滤**，其余断网。
+2. **检索层** — 真实 `ArxivApiSource`(export.arxiv.org)服务端 `submittedDate` 过滤 + 客户端按 v1 提交日二次**硬过滤**;CLI harness 经 `arxiv-frozen-mcp`(`ARXIV_MCP_SOURCE=arxiv`)同源。`InMemoryArxivSource` 仅供测试(`--arxiv-source mock`)。
 3. **探针层** — `ProverRunner` 先跑 `contamination_probes`，任一命中关键创新 → 判污染、跳过证明、除名。
    探针是除名级裁决，因此**确定性**：一律 `temperature=0`，且按**底层权重**缓存（同一模型挂多个
    harness 只探一次、判定一致；共享权重判污染时所有 harness 一起早停）。关键词匹配只是下限——
@@ -146,12 +161,11 @@ PROVER 和强评委都可直接走 OpenRouter（OpenAI 兼容），无需 codex 
 export OPENROUTER_KEY=sk-or-...          # 只从环境变量读, 不写进任何文件
 
 python -m breakthrough_eval \
-  --registry models_registry.openrouter.yaml \
   run --task kakeya_3d_wang_zahl --models gemma-4-31b --trials 1 \
   --judges "openrouter:deepseek/deepseek-v4-pro,mock:0.5"
 ```
 
-- **PROVER**：`provider: openrouter` + `backend_kwargs.model`（见 `models_registry.openrouter.yaml`）。
+- **PROVER**：`provider: openrouter` + `backend_kwargs.model`（见 `models_registry.yaml`，即默认 registry）。
   内置 `OpenRouterProverBackend` 跑一个带 `search_arxiv` 工具的 agent loop，工具只回时间冻结
   快照里的论文，每次调用都记进 transcript 供审计；探针阶段不给工具（要它的「无援」回答）。
 - **评委**：`--judges openrouter:<model>`（可与 `mock` 混用做多评委一致性）。评委是现代强模型
@@ -168,8 +182,7 @@ python -m breakthrough_eval \
 同一模型可以换 harness 对比(plan §7:harness = model + scaffold + toolset):
 
 ```bash
-python -m breakthrough_eval --registry models_registry.openrouter.yaml \
-  run --task kakeya_3d_wang_zahl \
+python -m breakthrough_eval run --task kakeya_3d_wang_zahl \
   --models gemma-4-31b,gemma-4-31b-opencode,gemma-4-31b-hermes --trials 2
 ```
 

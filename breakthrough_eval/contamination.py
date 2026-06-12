@@ -162,12 +162,9 @@ def audit_references(
 def _resolve_unfiltered(source: ArxivFrozenSource, arxiv_id: str):
     """Look a paper up ignoring the cutoff filter (auditors may see everything)."""
     try:
-        for p in source._corpus():  # noqa: SLF001 - auditor needs full view
-            if p.arxiv_id == arxiv_id:
-                return p
-    except NotImplementedError:
+        return source.resolve_any(arxiv_id)
+    except Exception:  # noqa: BLE001 - 审计解析失败 ≠ 越界 (无法证明)
         return None
-    return None
 
 
 def audit_transcript(
