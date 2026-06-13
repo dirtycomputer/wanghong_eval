@@ -1,0 +1,22 @@
+enabled_providers:
+  - arxiv
+  - openalex
+
+providers:
+  arxiv:
+    base_url: "https://export.arxiv.org/api/query"
+    max_results: 10
+    fetch_results: 50
+    timeout: 60
+
+  openalex:
+    base_url: "https://api.openalex.org/works"
+    max_results: 10
+    timeout: 60
+    mailto: ""
+
+  exa:
+    base_url: "https://api.exa.ai"
+    api_key: ""
+    max_results: 10
+    timeout: 60

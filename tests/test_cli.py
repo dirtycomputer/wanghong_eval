@@ -1,6 +1,5 @@
-"""CLI behaviours: early-stop reporting, probe-only `probe`, web export."""
+"""CLI behaviours that do not require running a model backend."""
 
-import json
 import logging
 from pathlib import Path
 
@@ -13,8 +12,6 @@ ROOT = Path(__file__).resolve().parent.parent
 
 @pytest.fixture(autouse=True)
 def _restore_package_logger():
-    # main() calls setup_logging (handlers + propagate=False); undo per test so
-    # caplog-based tests elsewhere keep seeing package records.
     lg = logging.getLogger("breakthrough_eval")
     saved = (list(lg.handlers), lg.level, lg.propagate)
     yield
@@ -25,90 +22,27 @@ def _restore_package_logger():
 
 def _argv(tmp_path, *rest):
     return [
-        "--tasks-dir", str(ROOT / "tasks"),
-        "--registry", str(ROOT / "models_registry.yaml"),
-        "--results-dir", str(tmp_path / "results"),
+        "--tasks-dir",
+        str(ROOT / "tasks"),
+        "--registry",
+        str(ROOT / "models_registry.yaml"),
+        "--results-dir",
+        str(tmp_path / "results"),
         *rest,
     ]
 
 
-def test_run_reports_early_stop_skips(tmp_path, capsys):
-    rc = main(_argv(
-        tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
-        "--models", "leaky-eligible-by-date", "--trials", "2", "--workers", "1",
-    ))
+def test_list_models_uses_current_registry(tmp_path, capsys):
+    rc = main(_argv(tmp_path, "list-models", "--task", "kakeya_3d_wang_zahl"))
     out = capsys.readouterr().out
     assert rc == 0
-    # 污染早停期间追加的 skip 必须汇报给用户, 而不只是 -v 日志。
-    assert "运行中早停跳过" in out
-    assert "早停: 已判污染除名" in out
-
-
-def test_run_summary_includes_error_count(tmp_path, capsys):
-    rc = main(_argv(
-        tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
-        "--models", "open-precutoff-weak", "--hints", "0", "--trials", "1",
-    ))
-    out = capsys.readouterr().out
-    assert rc == 0
-    assert "0 个基础设施错误" in out
-
-
-def test_probe_command_is_probe_only(tmp_path, capsys, monkeypatch):
-    # probe 子命令只允许走 run_probes(); 完整 run() (会进证明阶段) 被禁止。
-    from breakthrough_eval.prover.runner import ProverRunner
-
-    def _forbidden(self, *a, **kw):  # pragma: no cover - 只在违规时触发
-        raise AssertionError("probe 子命令不应触发完整 run() (含证明阶段)")
-
-    monkeypatch.setattr(ProverRunner, "run", _forbidden)
-    rc = main(_argv(
-        tmp_path, "probe", "--task", "kakeya_3d_wang_zahl",
-        "--model", "open-precutoff-strong",
-    ))
-    out = capsys.readouterr().out
-    assert rc == 0
-    assert "探针洁净" in out
-
-
-def test_export_web_emits_parseable_bundle(tmp_path):
-    # run → export-web: data.js 必须是合法 JS 赋值且 JSON 负载完整 (prover+eval 配对)。
-    rc1 = main(_argv(
-        tmp_path, "run", "--task", "kakeya_3d_wang_zahl",
-        "--models", "open-precutoff-weak", "--hints", "0,1", "--trials", "1",
-    ))
-    out = tmp_path / "site" / "data.js"
-    rc2 = main(_argv(tmp_path, "export-web", "--out", str(out)))
-    assert rc1 == 0 and rc2 == 0
-    text = out.read_text(encoding="utf-8")
-    prefix = "window.BE_DATA = "
-    assert text.startswith(prefix)
-    data = json.loads(text[len(prefix):].strip().rstrip(";"))
-    assert len(data["results"]) == 2
-    assert data["leaderboard"] and data["leaderboard"][0]["points"]
-    assert data["tasks"]["kakeya_3d_wang_zahl"]["rubric"]
-    for r in data["results"]:
-        assert r["eval"] is not None and r["prover"]["job_id"] == r["eval"]["job_id"]
-    # 运行配置打进前端数据: registry 条目 (含 backend_kwargs) + run_meta (含评委 describe)
-    assert data["registry"]["open-precutoff-weak"]["provider"] == "mock"
-    assert "backend_kwargs" in data["registry"]["open-precutoff-weak"]
-    meta = data["run_meta"]
-    assert meta["trials"] == 1 and meta["review_kappa_threshold"] == 0.6
-    assert [j["kind"] for j in meta["judges"]] == ["MockJudge"] * 3
-    assert all("strictness" in j for j in meta["judges"])
+    assert "gemma-4-31b-direct" in out
+    assert "gemma-4-31b-codex" in out
+    assert "harness=direct" in out
+    assert "harness=codex" in out
 
 
 def test_export_web_empty_results_fails_cleanly(tmp_path, capsys):
     rc = main(_argv(tmp_path, "export-web", "--out", str(tmp_path / "data.js")))
     assert rc == 1
     assert "为空" in capsys.readouterr().out
-
-
-def test_probe_command_reports_contamination(tmp_path, capsys):
-    rc = main(_argv(
-        tmp_path, "probe", "--task", "kakeya_3d_wang_zahl",
-        "--model", "leaky-eligible-by-date",
-    ))
-    out = capsys.readouterr().out
-    assert rc == 0
-    assert "污染除名" in out

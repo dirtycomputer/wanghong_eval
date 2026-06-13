@@ -1,0 +1,43 @@
+models:
+  - name: tmp-direct
+    cutoff_date: 2025-01-31
+    cutoff_confidence: low
+    open_source: false
+    capability_tier: manual-run
+    api:
+      base_url: "http://127.0.0.1:8083/v1"
+      api_key: "sk-abfe34c38906e5881b4da81f4b7ed34fbedd17ee917a0d1fb682bbe51b51afb3"
+      model: "gpt-5.5"
+      model_provider: "OpenAI"
+      wire_api: "responses"
+      temperature: null
+      max_tokens: 81920
+      timeout: 10000
+      max_retries: 1
+    harness:
+      type: direct
+      scaffold_version: tmp-direct
+      max_tool_calls: 1
+      probe_max_tokens: 8192
+
+  - name: tmp-codex
+    cutoff_date: 2025-01-31
+    cutoff_confidence: low
+    open_source: false
+    capability_tier: manual-run
+    api:
+      base_url: "http://127.0.0.1:8083"
+      api_key: "sk-abfe34c38906e5881b4da81f4b7ed34fbedd17ee917a0d1fb682bbe51b51afb3"
+      model: "gpt-5.4"
+      model_provider: "OpenAI"
+      wire_api: "responses"
+      temperature: null
+      max_tokens: 81920
+      timeout: 10000
+      max_retries: 1
+    harness:
+      type: codex
+      scaffold_version: tmp-codex
+      probe_max_tokens: 8192
+      timeout_seconds: 10000
+      codex_home_dir: "breakthrough_eval/prover/backends/codex_home"

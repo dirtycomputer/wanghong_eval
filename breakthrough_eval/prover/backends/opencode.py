@@ -4,9 +4,9 @@
 
   * ``tools``: 一律禁用 webfetch / websearch / bash / edit / write / patch —— 联网与
     改文件都不该出现在一场「时间冻结的证明考试」里;
-  * 唯一外部信息源是我们的 ``arxiv-frozen-mcp`` (CUTOFF_DATE 服务端硬过滤,
-    每次调用写 JSONL transcript, 事后 §8.4 审计);
-  * 探针阶段绕过 CLI 直连裸模型 (见 ``cli_common.probe_via_api``)。
+  * 唯一外部信息源是我们的 ``restricted_search`` MCP (yaml 配 provider/key/参数,
+    cutoff 由当前 task 传入, 每次调用写 JSONL transcript, 事后 §8.4 审计);
+  * 探针阶段绕过 CLI 直连裸模型 (见 ``cli_utils.probe_via_api``)。
 
 每个 job 在独立 tempdir 里跑: 自带 opencode.json, 并用 XDG_* 把会话/全局配置也
 隔离进去, 避免跨 trial 状态泄漏。
@@ -23,10 +23,10 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from ..llm_client import OpenRouterClient
-from ..models import UsageStats
-from .base import BackendResponse, ProverBackend, ProverContext
-from .cli_common import probe_via_api, read_mcp_transcript
+from ...api_client import OpenAICompatibleClient
+from ...specification import ApiConfig, HarnessConfig, UsageStats
+from ..base import BackendResponse, ProverBackend, ProverContext
+from .cli_utils import probe_via_api, read_mcp_transcript
 
 log = logging.getLogger(__name__)
 
@@ -34,20 +34,24 @@ _ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
 
 # 评测红线: 禁用一切联网/落盘类内置工具 (tools.<name>=false 即从工具列表移除)。
 DISABLED_TOOLS = ["webfetch", "websearch", "bash", "edit", "write", "patch"]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
-def render_opencode_config(cutoff_iso: str, transcript_path: str) -> dict:
+def render_opencode_config(harness: HarnessConfig, transcript_path: str, cutoff_iso: str) -> dict:
+    config_path = REPO_ROOT / harness.search_config_path
     return {
         "$schema": "https://opencode.ai/config.json",
         "share": "disabled",
         "autoupdate": False,
         "mcp": {
-            "arxiv_frozen": {
+            "restricted_search": {
                 "type": "local",
-                "command": ["arxiv-frozen-mcp"],
+                "command": [os.sys.executable, "-m", harness.search_mcp_module],
                 "environment": {
-                    "CUTOFF_DATE": cutoff_iso,
-                    "ARXIV_MCP_TRANSCRIPT": transcript_path,
+                    "RESTRICTED_SEARCH_CONFIG": str(config_path),
+                    "RESTRICTED_SEARCH_CUTOFF": cutoff_iso,
+                    "RESTRICTED_SEARCH_TRANSCRIPT": transcript_path,
+                    "PYTHONPATH": str(REPO_ROOT),
                 },
                 "enabled": True,
             }
@@ -97,20 +101,27 @@ class OpenCodeProverBackend(ProverBackend):
 
     def __init__(
         self,
-        model: str,
-        scaffold_version: str = "opencode",
-        probe_max_tokens: int = 400,
-        timeout_seconds: int = 1800,
-        opencode_bin: str = "opencode",
-        client: OpenRouterClient | None = None,
+        api: ApiConfig,
+        harness: HarnessConfig,
+        client: OpenAICompatibleClient | None = None,
     ):
-        self.model = model
-        self.scaffold_version = scaffold_version
-        self.probe_max_tokens = probe_max_tokens
-        self.timeout_seconds = timeout_seconds
-        self.opencode_bin = opencode_bin
+        self.api = api
+        self.harness = harness
+        self.model = api.model
+        self.scaffold_version = harness.scaffold_version
+        self.probe_max_tokens = harness.probe_max_tokens
+        self.timeout_seconds = harness.timeout_seconds
+        self.opencode_bin = harness.binary or "opencode"
         # 探针直连用; CLI 自己的推理走它内置的 openrouter provider。
-        self.client = client or OpenRouterClient(model=model, temperature=0.3)
+        self.client = client or OpenAICompatibleClient(
+            model=api.model,
+            api_key=api.api_key,
+            base_url=api.base_url,
+            temperature=api.temperature,
+            max_tokens=api.max_tokens,
+            timeout=api.timeout,
+            max_retries=api.max_retries,
+        )
 
     def available(self) -> bool:
         return shutil.which(self.opencode_bin) is not None and self.client.available()
@@ -130,14 +141,14 @@ class OpenCodeProverBackend(ProverBackend):
         cutoff_iso = ctx.task.retrieval_cutoff.isoformat()
         with tempfile.TemporaryDirectory(prefix="be-opencode-") as tmp:
             work = Path(tmp)
-            transcript_path = work / "arxiv_calls.jsonl"
+            transcript_path = work / "restricted_search_calls.jsonl"
             (work / "opencode.json").write_text(
-                json.dumps(render_opencode_config(cutoff_iso, str(transcript_path)),
+                json.dumps(render_opencode_config(self.harness, str(transcript_path), cutoff_iso),
                            ensure_ascii=False, indent=1),
                 encoding="utf-8",
             )
             env = dict(os.environ)
-            env["OPENROUTER_API_KEY"] = env.get("OPENROUTER_API_KEY") or env.get("OPENROUTER_KEY", "")
+            env["OPENROUTER_API_KEY"] = self.api.api_key
             # 会话/全局状态全部隔离进 tempdir (fresh harness per job)。
             env["XDG_DATA_HOME"] = str(work / "xdg-data")
             env["XDG_CONFIG_HOME"] = str(work / "xdg-config")
@@ -165,15 +176,3 @@ class OpenCodeProverBackend(ProverBackend):
             tool_calls = read_mcp_transcript(transcript_path)
             log.info("opencode 完成: %d 字, MCP 检索 %d 次", len(text), len(tool_calls))
             return BackendResponse(text=text, tool_calls=tool_calls, usage=UsageStats())
-
-
-def _factory(**kwargs) -> OpenCodeProverBackend:
-    if "model" not in kwargs:
-        raise KeyError("opencode prover 需要 backend_kwargs.model (e.g. google/gemma-4-31b-it)")
-    return OpenCodeProverBackend(
-        model=kwargs["model"],
-        scaffold_version=kwargs.get("scaffold_version", "opencode"),
-        probe_max_tokens=kwargs.get("probe_max_tokens", 400),
-        timeout_seconds=kwargs.get("timeout_seconds", 1800),
-        opencode_bin=kwargs.get("opencode_bin", "opencode"),
-    )

@@ -190,12 +190,7 @@ window.BE_DATA = {
       "R7"
      ]
     }
-   ],
-   "retrieval": {
-    "arxiv_snapshot": "frozen <= 2025-01-31",
-    "other_sources": [],
-    "web_search": "DISABLED"
-   }
+   ]
   }
  },
  "leaderboard": [

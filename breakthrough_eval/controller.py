@@ -6,8 +6,7 @@ runs each cell through PROVER → EVAL, persists artifacts, and supports:
 
   * eligibility filtering (`cutoff < retrieval_cutoff`, plan §6.2),
   * contamination early-stop (a contaminated (model,task) is removed and its
-    remaining jobs are skipped, plan §8.3 + §10.5 budget),
-  * the differential sanity check (frozen vs post-breakthrough arXiv, plan §8).
+    remaining jobs are skipped, plan §8.3 + §10.5 budget).
 """
 
 from __future__ import annotations
@@ -16,37 +15,24 @@ import logging
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from datetime import date
-from typing import Callable, Optional
+from dataclasses import dataclass
+from typing import Optional
 
-from .arxiv_frozen import ArxivFrozenSource, InMemoryArxivSource
 from .eval.evaluator import Evaluator
-from .models import EvalResult, Job, ModelEntry, ProverRunResult, TaskSpec
-from .prover.base import ProverBackend, get_backend
+from .specification import EvalResult, Job, ModelEntry, ProverRunResult, TaskSpec
+from .prover.backends import make_backend
+from .prover.base import ProverBackend
 from .prover.runner import ProverRunner
-from .registry import ModelRegistry
+from .specification import ModelRegistry
 from .storage import ResultStore
 
 log = logging.getLogger(__name__)
-
-SourceFactory = Callable[[date], ArxivFrozenSource]
-
-
-@dataclass
-class BackendSpec:
-    provider: str = "mock"
-    kwargs: dict = field(default_factory=dict)
 
 
 @dataclass
 class JobMatrix:
     jobs: list[Job]
     skipped: list[tuple[str, str, str]]  # (task_id, model, reason)
-
-
-def default_source_factory(cutoff: date) -> ArxivFrozenSource:
-    return InMemoryArxivSource(cutoff)
 
 
 class Controller:
@@ -56,16 +42,12 @@ class Controller:
         registry: ModelRegistry,
         evaluator: Evaluator,
         store: Optional[ResultStore] = None,
-        source_factory: SourceFactory = default_source_factory,
-        backend_specs: Optional[dict[str, BackendSpec]] = None,
         probe_judge=None,
     ):
         self.tasks = tasks
         self.registry = registry
         self.evaluator = evaluator
         self.store = store
-        self.source_factory = source_factory
-        self.backend_specs = backend_specs or {}
         self.probe_judge = probe_judge  # 语义级探针泄露评审 (可选)
         self._backend_cache: dict[str, ProverBackend] = {}
         # Probe results cached per (task_id, 底层模型权重): contamination is a
@@ -74,23 +56,20 @@ class Controller:
         self._probe_cache: dict[tuple[str, str], list] = {}
 
     def _probe_key(self, job: Job) -> tuple[str, str]:
-        """探针缓存键: 优先 backend_kwargs.model (真实权重 id), 否则 registry 名。"""
+        """探针缓存键: 优先 api.model (真实权重 id), 否则 registry 名。"""
         entry = self.registry.entries.get(job.model)
         ident = job.model
-        if entry is not None and entry.backend_kwargs.get("model"):
-            ident = str(entry.backend_kwargs["model"])
+        if entry is not None and entry.api is not None:
+            ident = entry.api.model
         return (job.task_id, ident)
 
     # ------------------------------------------------------------------ #
     def backend_for(self, model: str) -> ProverBackend:
         if model not in self._backend_cache:
             entry: ModelEntry | None = self.registry.entries.get(model)
-            spec = self.backend_specs.get(model)
-            if spec is None:
-                provider = entry.provider if entry else "mock"
-                kwargs = dict(entry.backend_kwargs) if entry else {}
-                spec = BackendSpec(provider=provider, kwargs=kwargs)
-            self._backend_cache[model] = get_backend(spec.provider, **spec.kwargs)
+            if entry is None:
+                raise KeyError(f"model registry 里没有 '{model}'")
+            self._backend_cache[model] = make_backend(entry.api, entry.harness)
         return self._backend_cache[model]
 
     # ---- job matrix (plan §6.4) --------------------------------------- #
@@ -134,22 +113,28 @@ class Controller:
     # ---- run loop ----------------------------------------------------- #
     def run_job(self, job: Job) -> tuple[ProverRunResult, EvalResult]:
         task = self.tasks[job.task_id]
-        source = self.source_factory(task.retrieval_cutoff)
-        runner = ProverRunner(self.backend_for(job.model), source,
-                              probe_judge=self.probe_judge)
+        runner = ProverRunner(self.backend_for(job.model), probe_judge=self.probe_judge)
 
         # Probe once per (task, 权重); reuse across harnesses/hints/trials (plan §8.3).
         key = self._probe_key(job)
         cached_probes = self._probe_cache.get(key)
         log.info("▶ job %s 开始", job.job_id)
         t0 = time.perf_counter()
-        prover_result = runner.run(task, job, probe_responses=cached_probes)
+        prover_result = runner.run(
+            task,
+            job,
+            probe_responses=cached_probes,
+            log_dir=(self.store.prover_dir / "log") if self.store is not None else None,
+        )
         if cached_probes is None and len(prover_result.probe_responses) == len(
             task.contamination_probes
         ):
             # Only cache a *complete* battery: a probe-phase infra error leaves a
             # partial one, and caching it would let later jobs skip real probing.
             self._probe_cache[key] = prover_result.probe_responses
+
+        if self.store is not None:
+            self.store.save_prover(prover_result)
 
         eval_result = self.evaluator.evaluate(prover_result, task)
         log.info(
@@ -158,7 +143,6 @@ class Controller:
             prover_result.contaminated, prover_result.excluded,
         )
         if self.store is not None:
-            self.store.save_prover(prover_result)
             self.store.save_eval(eval_result)
         return prover_result, eval_result
 
@@ -218,43 +202,3 @@ class Controller:
                 results.extend(self.run_job(job) for job in deferred)
         log.info("运行结束: %d 个 result", len(results))
         return results
-
-    # ---- differential sanity check (plan §8) -------------------------- #
-    def differential_sanity_check(
-        self, task_id: str, model: str, hint_level: int = 0, trials: int = 3
-    ) -> dict:
-        """Run frozen vs post-breakthrough arXiv; the gap validates the benchmark.
-
-        If giving post-T literature suddenly lets the model solve while the
-        frozen version can't, the metric is measuring independence (good), and
-        the frozen run is confirmed un-contaminated.
-        """
-        task = self.tasks[task_id]
-        backend = self.backend_for(model)
-
-        def _solve_rate(cutoff: date) -> float:
-            # Measure *raw* solve capability: score the proof text directly,
-            # deliberately bypassing the audit/exclusion guard (the point is to
-            # see whether feeding post-T literature lets it solve at all).
-            source = self.source_factory(cutoff)
-            runner = ProverRunner(backend, source, probe_judge=self.probe_judge)
-            valids = 0
-            for trial in range(trials):
-                job = Job(task_id=task_id, model=model, hint_level=hint_level, trial=trial)
-                pr = runner.run(task, job)
-                if pr.contaminated or pr.structured_output is None:
-                    continue
-                ev = self.evaluator.evaluate_text(pr.job_id, task, pr.proof_text)
-                valids += int(ev.overall_valid)
-            return valids / trials if trials else 0.0
-
-        frozen = _solve_rate(task.retrieval_cutoff)
-        post = _solve_rate(task.breakthrough_date)  # deliberately leaky
-        return {
-            "task_id": task_id,
-            "model": model,
-            "hint_level": hint_level,
-            "frozen_solve_rate": frozen,
-            "post_breakthrough_solve_rate": post,
-            "gap": post - frozen,
-        }

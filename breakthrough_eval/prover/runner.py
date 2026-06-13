@@ -14,18 +14,18 @@ from __future__ import annotations
 import logging
 import re
 import time
+from pathlib import Path
 
-from ..arxiv_frozen import ArxivFrozenSource
-from ..contamination import any_leaked, audit_run, evaluate_probe
-from ..hints import PROBE_SYSTEM_PROMPT, PROVER_SYSTEM_PROMPT, probe_prompt, prove_prompt
-from ..models import (
+from breakthrough_eval.prover.tools.restricted_search import RESTRICTED_SEARCH_HOST
+from .contamination import any_leaked, audit_run, evaluate_probe
+from .prompts import PROBE_SYSTEM_PROMPT, PROVER_SYSTEM_PROMPT, probe_prompt, prove_prompt
+from ..specification import (
     Job,
     ProverRunResult,
     ProverStructuredOutput,
     TaskSpec,
 )
 from .base import ProverBackend, ProverContext
-from .mock import ARXIV_MCP_HOST
 
 log = logging.getLogger(__name__)
 
@@ -70,13 +70,11 @@ class ProverRunner:
     def __init__(
         self,
         backend: ProverBackend,
-        source: ArxivFrozenSource,
         allowed_hosts: set[str] | None = None,
         probe_judge=None,
     ):
         self.backend = backend
-        self.source = source
-        self.allowed_hosts = allowed_hosts or {ARXIV_MCP_HOST}
+        self.allowed_hosts = allowed_hosts or {RESTRICTED_SEARCH_HOST}
         # 语义级泄露评审 (contamination.SemanticProbeJudge): 关键词命中仍一票否决,
         # 这里抓换措辞的实质复现; None = 仅关键词 (离线默认)。
         self.probe_judge = probe_judge
@@ -91,7 +89,13 @@ class ProverRunner:
             harness=self.backend.harness_fingerprint(job.model),
         )
 
-    def _probe_phase(self, task: TaskSpec, job: Job, result: ProverRunResult) -> None:
+    def _probe_phase(
+        self,
+        task: TaskSpec,
+        job: Job,
+        result: ProverRunResult,
+        log_dir: str | Path | None = None,
+    ) -> None:
         """Run the probe battery into ``result``.
 
         A backend failure (network/provider) sets ``result.error`` and leaves the
@@ -106,9 +110,9 @@ class ProverRunner:
                 phase="probe",
                 system=PROBE_SYSTEM_PROMPT,
                 user=probe_prompt(task, probe.id),
-                source=self.source,
                 allowed_hosts=self.allowed_hosts,
                 probe_id=probe.id,
+                log_dir=Path(log_dir) if log_dir is not None else None,
             )
             t0 = time.perf_counter()
             try:
@@ -155,6 +159,7 @@ class ProverRunner:
         task: TaskSpec,
         job: Job,
         probe_responses: list | None = None,
+        log_dir: str | Path | None = None,
     ) -> ProverRunResult:
         result = self._new_result(task, job)
 
@@ -163,7 +168,7 @@ class ProverRunner:
         # so the Controller probes once and passes the cached responses here
         # (plan §8.3). Only run probes when none were supplied.
         if probe_responses is None:
-            self._probe_phase(task, job, result)
+            self._probe_phase(task, job, result, log_dir=log_dir)
         else:
             result.probe_responses = list(probe_responses)
             log.debug("job %s: 复用缓存探针 (%d)", job.job_id, len(probe_responses))
@@ -185,8 +190,8 @@ class ProverRunner:
             phase="prove",
             system=PROVER_SYSTEM_PROMPT,
             user=prove_prompt(task, job.hint_level),
-            source=self.source,
             allowed_hosts=self.allowed_hosts,
+            log_dir=Path(log_dir) if log_dir is not None else None,
         )
         log.info("job %s: 证明阶段 (hint L%d)", job.job_id, job.hint_level)
         t0 = time.perf_counter()
@@ -197,6 +202,11 @@ class ProverRunner:
             log.error("job %s: 证明阶段异常: %s", job.job_id, result.error)
             return result
         prove_elapsed = time.perf_counter() - t0
+
+        if not resp.text.strip() and resp.structured is None:
+            result.error = "EmptyOutput: 证明阶段返回空文本"
+            log.error("job %s: 证明阶段空输出", job.job_id)
+            return result
 
         result.raw_output = resp.text
         result.structured_output = resp.structured or parse_structured(resp.text)
@@ -212,9 +222,7 @@ class ProverRunner:
 
         # 3. Audit ------------------------------------------------------- #
         result.audit = audit_run(
-            cited_references=result.structured_output.cited_references,
             transcript=result.transcript,
-            source=self.source,
             cutoff=task.retrieval_cutoff,
             allowed_hosts=self.allowed_hosts,
         )

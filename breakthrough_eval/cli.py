@@ -8,7 +8,6 @@ Subcommands:
   leaderboard  从 results 目录聚合并渲染榜单 + 难度曲线
   export-web   导出可视化站点数据 (docs/data.js, 供 GitHub Pages)
   probe        只跑污染探针 (probe-then 的 probe 段)
-  diff-check   差分 sanity check (冻结 vs 突破后 arXiv)
 """
 
 from __future__ import annotations
@@ -18,78 +17,27 @@ import sys
 from pathlib import Path
 
 from .controller import Controller
-from .eval.base import JudgeBackend
 from .eval.evaluator import Evaluator
-from .eval.mock import MockJudge, MockJudgeConfig
-from .eval.openrouter_judge import openrouter_judge
 from .leaderboard import Leaderboard
 from .logging_util import setup_logging
-from .registry import ModelRegistry
+from .specification import ModelRegistry
 from .storage import ResultStore
-from .taskspec import load_all_tasks, validate_taskspec
+from .specification import load_all_tasks, validate_taskspec
 
 DEFAULT_TASKS_DIR = "tasks"
 DEFAULT_REGISTRY = "models_registry.yaml"
 DEFAULT_RESULTS = "results"
-
-
-def _default_judges() -> list[JudgeBackend]:
-    # A 3-judge panel with differing strictness → realistic agreement (plan §4.2).
-    return [
-        MockJudge(MockJudgeConfig(strictness=0.4, name="judge-lenient")),
-        MockJudge(MockJudgeConfig(strictness=0.5, name="judge-balanced")),
-        MockJudge(MockJudgeConfig(strictness=0.7, name="judge-strict")),
-    ]
-
-
-def _parse_judges(spec: str | None) -> list[JudgeBackend]:
-    """Parse a ``--judges`` spec into judge backends.
-
-    Comma-separated entries; each is one of:
-      * ``mock`` or ``mock:<strictness>``
-      * ``openrouter:<model>``  e.g. ``openrouter:deepseek/deepseek-v4-pro``
-    Empty / None → the default 3-judge mock panel.
-    """
-    if not spec:
-        return _default_judges()
-    judges: list[JudgeBackend] = []
-    for raw in spec.split(","):
-        entry = raw.strip()
-        if not entry:
-            continue
-        if entry == "mock":
-            judges.append(MockJudge(MockJudgeConfig(name="mock")))
-        elif entry.startswith("mock:"):
-            judges.append(
-                MockJudge(MockJudgeConfig(strictness=float(entry.split(":", 1)[1]), name=entry))
-            )
-        elif entry.startswith("openrouter:"):
-            model = entry.split(":", 1)[1]
-            judges.append(openrouter_judge(model))
-        else:
-            raise SystemExit(f"未知 judge spec: '{entry}' (用 mock / mock:0.5 / openrouter:<model>)")
-    return judges
-
-
-def _parse_probe_judge(spec: str | None):
-    """``--probe-judge openrouter:<model>`` → SemanticProbeJudge (None = 仅关键词)。"""
-    if not spec:
-        return None
-    if spec.startswith("openrouter:"):
-        from .eval.openrouter_judge import openrouter_probe_judge
-
-        return openrouter_probe_judge(spec.split(":", 1)[1])
-    raise SystemExit(f"未知 probe-judge spec: '{spec}' (用 openrouter:<model>)")
+DEFAULT_EVAL_CONFIG = "breakthrough_eval/eval/eval.yaml"
 
 
 def _build_controller(args) -> Controller:
     tasks = load_all_tasks(args.tasks_dir)
     registry = ModelRegistry.load(args.registry)
-    evaluator = Evaluator(_parse_judges(getattr(args, "judges", None)))
     store = ResultStore(args.results_dir)
+    evaluator = Evaluator.load(store.eval_dir, getattr(args, "eval_config", None))
     return Controller(
         tasks=tasks, registry=registry, evaluator=evaluator, store=store,
-        probe_judge=_parse_probe_judge(getattr(args, "probe_judge", None)),
+        probe_judge=None,
     )
 
 
@@ -132,9 +80,11 @@ def cmd_list_models(args) -> int:
     registry = ModelRegistry.load(args.registry)
     task = tasks[args.task] if args.task else None
     for e in registry.entries.values():
+        api_model = e.api.model if e.api is not None else "—"
         line = (
             f"- {e.name}: cutoff={e.cutoff_date} ({e.cutoff_confidence}) "
-            f"open_source={e.open_source} tier={e.capability_tier} provider={e.provider}"
+            f"open_source={e.open_source} tier={e.capability_tier} "
+            f"harness={e.harness.type} api_model={api_model}"
         )
         if task is not None:
             ok = e.eligible_for(task)
@@ -170,9 +120,8 @@ def cmd_run(args) -> int:
         "trials": args.trials,
         "workers": args.workers,
         "early_stop_on_contamination": not args.no_early_stop,
-        "judges": [j.describe() for j in controller.evaluator.judges],
-        "review_kappa_threshold": controller.evaluator.review_kappa_threshold,
-        "probe_judge": controller.probe_judge.describe() if controller.probe_judge else None,
+        "eval": controller.evaluator.describe(),
+        "probe_judge": None,
     })
 
     results = controller.run(
@@ -232,14 +181,13 @@ def cmd_export_web(args) -> int:
 
 
 def cmd_probe(args) -> int:
-    from .models import Job
+    from .specification import Job
     from .prover.runner import ProverRunner
 
     controller = _build_controller(args)
     task = controller.tasks[args.task]
     backend = controller.backend_for(args.model)
-    source = controller.source_factory(task.retrieval_cutoff)
-    runner = ProverRunner(backend, source, probe_judge=controller.probe_judge)
+    runner = ProverRunner(backend, probe_judge=controller.probe_judge)
     job = Job(task_id=args.task, model=args.model, hint_level=0, trial=0)
     result = runner.run_probes(task, job)  # probe-only: 不进入 (昂贵的) 证明阶段
     print(f"探针结果 — {args.model} @ {args.task}:")
@@ -254,23 +202,13 @@ def cmd_probe(args) -> int:
     return 0
 
 
-def cmd_diff_check(args) -> int:
-    controller = _build_controller(args)
-    report = controller.differential_sanity_check(
-        args.task, args.model, hint_level=args.hint, trials=args.trials
-    )
-    print("差分 sanity check (验证度量在测「独立性」而非检索):")
-    for k, v in report.items():
-        print(f"  {k}: {v}")
-    return 0
-
-
 # --------------------------------------------------------------------------- #
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="breakthrough-eval", description=__doc__)
     p.add_argument("--tasks-dir", default=DEFAULT_TASKS_DIR)
     p.add_argument("--registry", default=DEFAULT_REGISTRY)
     p.add_argument("--results-dir", default=DEFAULT_RESULTS)
+    p.add_argument("--eval-config", default=DEFAULT_EVAL_CONFIG)
     p.add_argument(
         "-v", "--verbose", action="count", default=0,
         help="日志详细度: -v=INFO (每 job/阶段/API 调用进度), -vv=DEBUG",
@@ -300,16 +238,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="prove+eval 并发度 (HTTP-bound; 1=顺序. 探针仍每 model+task 跑一次)",
     )
     r.add_argument("--no-early-stop", action="store_true")
-    r.add_argument(
-        "--judges",
-        default=None,
-        help="评委: mock / mock:0.5 / openrouter:<model> (逗号分隔; 默认 mock 三评委面板)",
-    )
-    r.add_argument(
-        "--probe-judge",
-        default=None,
-        help="语义级探针泄露评审: openrouter:<model> (关键词命中仍一票否决; 默认仅关键词)",
-    )
     r.set_defaults(func=cmd_run)
 
     lb = sub.add_parser("leaderboard", help="渲染榜单")
@@ -322,16 +250,8 @@ def build_parser() -> argparse.ArgumentParser:
     pr = sub.add_parser("probe", help="只跑污染探针")
     pr.add_argument("--task", required=True)
     pr.add_argument("--model", required=True)
-    pr.add_argument("--probe-judge", default=None, help="同 run --probe-judge")
     pr.set_defaults(func=cmd_probe)
 
-    dc = sub.add_parser("diff-check", help="差分 sanity check")
-    dc.add_argument("--task", required=True)
-    dc.add_argument("--model", required=True)
-    dc.add_argument("--hint", type=int, default=0)
-    dc.add_argument("--trials", type=int, default=3)
-    dc.add_argument("--judges", default=None, help="同 run --judges")
-    dc.set_defaults(func=cmd_diff_check)
     return p
 
 

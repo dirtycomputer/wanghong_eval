@@ -1,18 +1,13 @@
-"""Minimal OpenRouter (OpenAI-compatible) chat client — stdlib only.
+"""Minimal OpenAI-compatible chat client — stdlib only.
 
-Used by the real PROVER backend (`prover/openrouter.py`) and the real
-LLM-judge wiring (`eval/openrouter_judge.py`). The HTTP transport is injectable
+Used by direct PROVER backends and real LLM-judge wiring. The HTTP transport is injectable
 so the rest of the system stays testable offline.
-
-The API key is read from the ``OPENROUTER_KEY`` environment variable and is
-*never* written to disk or logs.
 """
 
 from __future__ import annotations
 
 import json
 import logging
-import os
 import time
 import urllib.error
 import urllib.request
@@ -21,14 +16,13 @@ from typing import Callable, Optional
 
 log = logging.getLogger(__name__)
 
-DEFAULT_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
-DEFAULT_KEY_ENV = "OPENROUTER_KEY"
+DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
 
 # transport(url, payload_dict, headers_dict) -> response_dict
 Transport = Callable[[str, dict, dict], dict]
 
 
-class LLMError(RuntimeError):
+class APIError(RuntimeError):
     pass
 
 
@@ -40,14 +34,13 @@ class ChatResult:
     raw: dict = field(default_factory=dict)
 
 
-class OpenRouterClient:
+class OpenAICompatibleClient:
     def __init__(
         self,
         model: str,
         api_key: Optional[str] = None,
-        api_key_env: str = DEFAULT_KEY_ENV,
         base_url: str = DEFAULT_BASE_URL,
-        temperature: float = 0.3,
+        temperature: Optional[float] = None,
         max_tokens: int = 2048,
         timeout: int = 240,
         max_retries: int = 4,
@@ -56,13 +49,13 @@ class OpenRouterClient:
         transport: Optional[Transport] = None,
     ):
         self.model = model
-        self.api_key = api_key if api_key is not None else os.environ.get(api_key_env)
-        self.base_url = base_url
+        self.api_key = api_key or ""
+        self.base_url = base_url.rstrip("/")
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.timeout = timeout
         self.max_retries = max_retries
-        # OpenRouter provider routing (e.g. {"require_parameters": True} to only
+        # OpenAI-compatible provider routing (e.g. {"require_parameters": True} to only
         # route to providers that actually support tools / response_format).
         self.provider_prefs = provider_prefs
         self.extra_headers = extra_headers or {
@@ -85,15 +78,15 @@ class OpenRouterClient:
         temperature: Optional[float] = None,
     ) -> ChatResult:
         if not self.api_key:
-            raise LLMError(
-                f"缺少 API key: 请设置环境变量 {DEFAULT_KEY_ENV} (OpenRouter)。"
-            )
+            raise APIError("缺少 API key: 请在 YAML 的 api.api_key 填写。")
         payload: dict = {
             "model": self.model,
             "messages": messages,
-            "temperature": self.temperature if temperature is None else temperature,
             "max_tokens": max_tokens or self.max_tokens,
         }
+        temp = self.temperature if temperature is None else temperature
+        if temp is not None:
+            payload["temperature"] = temp
         if tools:
             payload["tools"] = tools
             payload["tool_choice"] = tool_choice or "auto"
@@ -111,10 +104,10 @@ class OpenRouterClient:
         elapsed = time.perf_counter() - t0
 
         if "choices" not in data or not data["choices"]:
-            # OpenRouter returns errors as a 200 body with an "error" field.
+            # OpenAI-compatible returns errors as a 200 body with an "error" field.
             err = data.get("error")
             log.error("chat ✗ model=%s %.1fs 无 choices: %s", self.model, elapsed, err)
-            raise LLMError(f"OpenRouter 无 choices: {err or str(data)[:300]}")
+            raise APIError(f"OpenAI-compatible 无 choices: {err or str(data)[:300]}")
         msg = data["choices"][0]["message"]
         pt, ct = self.usage_tokens(data.get("usage") or {})
         log.info(
@@ -123,7 +116,7 @@ class OpenRouterClient:
             len(msg.get("tool_calls") or []),
         )
         return ChatResult(
-            content=msg.get("content") or "",
+            content=self._message_content(msg),
             tool_calls=msg.get("tool_calls") or [],
             usage=data.get("usage") or {},
             raw=data,
@@ -134,22 +127,28 @@ class OpenRouterClient:
         last: Optional[Exception] = None
         for attempt in range(self.max_retries):
             try:
-                return self._transport(self.base_url, payload, self._headers())
+                return self._transport(self.chat_url, payload, self._headers())
             except Exception as exc:  # noqa: BLE001 - retry on any transport error
                 last = exc
                 if attempt < self.max_retries - 1:
                     backoff = 2 ** attempt
                     log.warning(
-                        "OpenRouter 调用失败 (model=%s, attempt %d/%d), %ds 后重试: %s",
+                        "OpenAI-compatible 调用失败 (model=%s, attempt %d/%d), %ds 后重试: %s",
                         self.model, attempt + 1, self.max_retries, backoff, str(exc)[:200],
                     )
                     time.sleep(backoff)
-        raise LLMError(f"OpenRouter 调用失败 (重试 {self.max_retries} 次): {last}")
+        raise APIError(f"OpenAI-compatible 调用失败 (重试 {self.max_retries} 次): {last}")
 
     def _headers(self) -> dict:
         h = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
         h.update(self.extra_headers)
         return h
+
+    @property
+    def chat_url(self) -> str:
+        if self.base_url.endswith("/chat/completions"):
+            return self.base_url
+        return self.base_url + "/chat/completions"
 
     def _http_post(self, url: str, payload: dict, headers: dict) -> dict:
         req = urllib.request.Request(
@@ -160,12 +159,29 @@ class OpenRouterClient:
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", "replace")[:400]
-            raise LLMError(f"HTTP {exc.code}: {detail}") from exc
+            raise APIError(f"HTTP {exc.code}: {detail}") from exc
         except urllib.error.URLError as exc:
-            raise LLMError(f"网络错误: {exc.reason}") from exc
+            raise APIError(f"网络错误: {exc.reason}") from exc
 
     @staticmethod
     def usage_tokens(usage: dict) -> tuple[int, int]:
-        return int(usage.get("prompt_tokens", 0) or 0), int(
-            usage.get("completion_tokens", 0) or 0
-        )
+        prompt = usage.get("prompt_tokens", usage.get("input_tokens", 0))
+        completion = usage.get("completion_tokens", usage.get("output_tokens", 0))
+        return int(prompt or 0), int(completion or 0)
+
+    @staticmethod
+    def _message_content(message: dict) -> str:
+        content = message.get("content")
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            parts: list[str] = []
+            for item in content:
+                if isinstance(item, str):
+                    parts.append(item)
+                elif isinstance(item, dict):
+                    text = item.get("text") or item.get("content")
+                    if isinstance(text, str):
+                        parts.append(text)
+            return "".join(parts)
+        return ""

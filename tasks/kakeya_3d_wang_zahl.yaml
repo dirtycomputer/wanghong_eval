@@ -144,8 +144,3 @@ hint_ladder:
       离散化 → 识别海森堡障碍 → 尺度归纳 → 每尺度做体积估计 →
       用结构定理闭合 grainy 与海森堡情形 → 组合得到满维 3。请补全各关键步的论证。
     reveals_rubric_items: ["R7"]
-
-retrieval:
-  arxiv_snapshot: "frozen <= 2025-01-31"
-  other_sources: []
-  web_search: DISABLED

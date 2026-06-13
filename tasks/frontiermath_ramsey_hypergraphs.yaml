@@ -1,0 +1,154 @@
+# FrontierMath — A Ramsey-style Problem on Hypergraphs
+# 纯数据 TaskSpec: 新增 task 只加 YAML, 不改 runner/judge/prover 逻辑。
+task_id: frontiermath_ramsey_hypergraphs
+title: "FrontierMath — A Ramsey-style Problem on Hypergraphs"
+domain: math/combinatorics
+
+# 时间锚: GPT-5.4 Pro 论文稿日期为 2026-03-10; 检索冻结到前一天。
+breakthrough_date: 2026-03-10
+retrieval_cutoff: 2026-03-09
+allowed_model_cutoff_before: 2026-03-09
+
+# 题面只给 FrontierMath full problem, 不给后续解法关键词。
+problem_statement: |
+  A hypergraph (V, H) is said to contain a partition of size n if there is
+  some D subset V and P subset H such that |D| = n and every member of D is
+  contained in exactly one member of P.
+
+  Define H(n) to be the largest integer k such that there is a hypergraph
+  (V, H) with |V| = k, no isolated vertices, and no partitions of size greater
+  than n.
+
+  It is known that H(n) >= k_n, where k_1 = 1 and
+  k_n = floor(n/2) + k_floor(n/2) + k_floor((n+1)/2).
+
+  Improve this lower bound by a constant factor: prove H(n) >= c*k_n for some
+  constant c > 1. The improvement may fail for small n, but it must already be
+  visible at n = 15.
+
+  Give an explicit algorithm that takes n as input and outputs a witness
+  hypergraph. The output should be a string with vertices labeled
+  1, ..., |V| and edges written with curly braces, for example:
+  {1,2,3},{2,4},{3,4,5},{1,5}.
+problem_framing_notes: |
+  This is the FrontierMath full-problem variant. The prover should produce both
+  an explicit construction algorithm and the mathematical proof that the output
+  has no isolated vertices, has no partition larger than n, and beats the
+  recursive lower bound by a fixed factor.
+
+# golden_proof 只给 EVAL, 不给 PROVER。
+golden_proof:
+  primary: "https://epoch.ai/frontiermath/open-problems/ramsey-hypergraphs"
+  companions:
+    - "Epoch AI FrontierMath problem page: A Ramsey-style Problem on Hypergraphs"
+    - "math-inc/FrontierMathOpen-Hypergraphs Lean formalization and paper source"
+    - "Brian and Larson, Choosing between incompatible ideals, European Journal of Combinatorics 96 (2021)"
+  proof_text: |
+    Reference solution outline:
+    1. Define the unique-coverage functional u_G(P), counting vertices covered
+       by exactly one chosen edge. A hypergraph has no partition of size greater
+       than n iff u_G(P) <= n for every edge subfamily P.
+    2. Introduce support gadgets/frames on a small meta-ground-set. A frame with
+       capacities (n_1,...,n_t) is a finite support multiset whose every chosen
+       subfamily respects the corresponding capacity inequality.
+    3. Prove the substitution theorem: replacing each meta-point i by a smaller
+       witness G_i turns a valid frame into a larger hypergraph with no partition
+       larger than n_1+...+n_t. Vertex counts add according to the supports.
+    4. Build a finite bank of exact small frames and several higher-arity
+       boosters. Exhaustively verify the frame inequalities for these explicit
+       gadgets.
+    5. Use a finite bootstrap for n < 60 and a balanced four-way recursive
+       construction for n >= 60. The large-n recursion uses a fixed four-way core
+       plus residue gadgets, so the multiplicative gain propagates indefinitely.
+    6. Prove by induction that the generated G_n has exactly n distinct edges,
+       no isolated vertices, no partition of size greater than n, and at least
+       (26/25) k_n vertices for every n >= 15.
+    7. Provide the verifier-facing Python constructor solution(n). It uses only
+       hard-coded finite tables and deterministic recursion, not search at
+       runtime. A valid answer may give a different construction, but it must be
+       explicit, verifiable, and must prove a fixed c > 1 already active at n=15.
+
+rubric:
+  - id: R1
+    title: "Correctly formalizes H(n), partitions, and k_n"
+    criterion: "Defines the unique-cover partition condition, the extremal function H(n), and the recursive benchmark k_n without changing the problem."
+    frontier_delta: false
+    indicators: ["unique coverage", "partition of size", "recursive benchmark"]
+  - id: R2
+    title: "Gives a compositional substitution principle"
+    criterion: "Introduces a reusable meta-gadget/frame mechanism and proves that substituting smaller witnesses preserves the no-large-partition property."
+    frontier_delta: true
+    indicators: ["support-gadget substitution", "frame capacities", "substitution theorem"]
+  - id: R3
+    title: "Verifies explicit finite gadgets"
+    criterion: "Uses explicit finite frames/boosters and checks their capacity inequalities rather than relying on an unverified search claim."
+    frontier_delta: true
+    indicators: ["exact small frames", "higher-arity boosters", "finite gadget verification"]
+  - id: R4
+    title: "Closes the uniform improvement for all large n"
+    criterion: "Provides a recursive family that propagates the constant-factor gain for all sufficiently large n."
+    frontier_delta: true
+    indicators: ["balanced four-way", "residue gadgets", "large-n recursion"]
+  - id: R5
+    title: "Handles the n=15 finite threshold"
+    criterion: "Shows the improvement is already active at n=15 and covers the finite bootstrap window before the asymptotic recursion starts."
+    frontier_delta: true
+    indicators: ["26/25", "finite bootstrap", "n=15"]
+  - id: R6
+    title: "Provides an explicit verifier-facing constructor"
+    criterion: "Gives an algorithm or Python function that outputs witness hypergraphs and proves the output has the claimed edge, vertex, and partition properties."
+    frontier_delta: true
+    indicators: ["solution(n)", "hard-coded tables", "witness hypergraph"]
+
+contamination_probes:
+  - id: P1_direct
+    kind: direct
+    prompt: "FrontierMath 的 hypergraph partition / H(n) 题已经被解了吗? 如果解了, 具体构造和关键证明是什么?"
+    leak_indicators: ["26/25", "support-gadget substitution", "exact small frames", "higher-arity boosters", "balanced four-way"]
+    threshold: 1
+  - id: P2_indirect
+    kind: indirect
+    prompt: "如果想把 Brian-Larson 的 H(n) >= k_n 递归下界提升一个常数因子, 你会设计什么样的递归构造?"
+    leak_indicators: ["26/25", "support-gadget substitution", "finite bootstrap", "residue gadgets", "Lubell"]
+    threshold: 1
+  - id: P3_completion
+    kind: completion
+    prompt: "续写证明: '为了构造更大的 H(n) witness, 我们先把每个小 witness 放进一个 meta-hypergraph support pattern 中, 然后...'"
+    leak_indicators: ["substitution theorem", "frame capacities", "balanced four-way", "exact small frames", "higher-arity boosters"]
+    threshold: 1
+
+hint_ladder:
+  - level: 0
+    label: L0
+    ratio: 0.0
+    content: ""
+    reveals_rubric_items: []
+  - level: 1
+    label: L1
+    ratio: 0.15
+    content: "把 partition 条件改写为: 对任意边子族, 被恰好一条选中边覆盖的顶点数不能超过 n。"
+    reveals_rubric_items: ["R1"]
+  - level: 2
+    label: L2
+    ratio: 0.30
+    content: "尝试先构造小的 support pattern, 再把每个 support 点替换成一个已知的小 witness。关键是证明替换后 partition 上界可加。"
+    reveals_rubric_items: ["R2"]
+  - level: 3
+    label: L3
+    ratio: 0.50
+    content: "有限区间需要显式 gadget 库和机器可检查的不等式; 大 n 用平衡递归把固定增益传下去。"
+    reveals_rubric_items: ["R3", "R4"]
+  - level: 4
+    label: L4
+    ratio: 0.70
+    content: "一个可闭合的目标是证明所有 n >= 15 都有 H(n) >= (26/25) k_n, 并单独处理递归启动前的有限窗口。"
+    reveals_rubric_items: ["R5"]
+  - level: 5
+    label: L5
+    ratio: 0.90
+    content: |
+      证明骨架:
+      unique-coverage 等价刻画 -> support/frame substitution theorem ->
+      显式小 frames/boosters 验证 -> 有限 bootstrap -> 大 n 平衡四路递归 ->
+      输出 solution(n) 构造 witness 并证明边数、顶点数和 partition 上界。
+    reveals_rubric_items: ["R6"]

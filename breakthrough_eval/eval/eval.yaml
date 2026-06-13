@@ -1,0 +1,15 @@
+api:
+  base_url: "http://127.0.0.1:8083"
+  api_key: "sk-abfe34c38906e5881b4da81f4b7ed34fbedd17ee917a0d1fb682bbe51b51afb3"
+  model: "gpt-5.5"
+  model_provider: "OpenAI"
+  wire_api: "responses"
+  max_tokens: 81920
+  timeout: 10000
+  max_retries: 1
+
+codex:
+  home_dir: "breakthrough_eval/eval/codex_home"
+  timeout_seconds: 10000
+  model_reasoning_effort: "xhigh"
+  binary: "codex"

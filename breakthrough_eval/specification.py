@@ -16,9 +16,12 @@ from __future__ import annotations
 
 from datetime import date
 from enum import Enum
+from pathlib import Path
 from typing import Literal, Optional
 
+import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import ValidationError
 
 
 # --------------------------------------------------------------------------- #
@@ -53,11 +56,11 @@ class RubricItem(BaseModel):
         True,
         description="是否属于突破本身的关键创新 (要测模型能否自己跨过的 delta).",
     )
-    # Indicators are used by the *mock* judge / contamination matcher only.
+    # Indicators are used by contamination matching and eval auditing only.
     # They are NEVER injected into the PROVER prompt (plan §10 risk 4).
     indicators: list[str] = Field(
         default_factory=list,
-        description="该 item 在证明文本里典型会出现的关键词 (供 mock 评委/探针匹配, 不进 PROVER 提示).",
+        description="该 item 在证明文本里典型会出现的关键词 (供探针/评审审计, 不进 PROVER 提示).",
     )
 
 
@@ -96,14 +99,6 @@ class HintLevel(BaseModel):
     )
 
 
-class RetrievalConfig(BaseModel):
-    """PROVER 的检索面 (plan §2)。web search 红线默认关闭。"""
-
-    arxiv_snapshot: str = Field("frozen <= retrieval_cutoff")
-    other_sources: list[str] = Field(default_factory=list)
-    web_search: Literal["DISABLED", "ENABLED"] = "DISABLED"
-
-
 # --------------------------------------------------------------------------- #
 # TaskSpec
 # --------------------------------------------------------------------------- #
@@ -132,8 +127,6 @@ class TaskSpec(BaseModel):
     rubric: list[RubricItem] = Field(..., min_length=1)
     contamination_probes: list[ContaminationProbe] = Field(default_factory=list)
     hint_ladder: list[HintLevel] = Field(..., min_length=1)
-
-    retrieval: RetrievalConfig = Field(default_factory=RetrievalConfig)
 
     # ------------------------------------------------------------------ #
     @model_validator(mode="after")
@@ -172,9 +165,6 @@ class TaskSpec(BaseModel):
                     f"hint {h.label} 引用了不存在的 rubric item: {sorted(unknown)}"
                 )
 
-        # web search red-line.
-        if self.retrieval.web_search != "DISABLED":
-            raise ValueError("retrieval.web_search 必须为 DISABLED (污染防控红线).")
         return self
 
     # Convenience -------------------------------------------------------- #
@@ -198,20 +188,55 @@ class TaskSpec(BaseModel):
 # --------------------------------------------------------------------------- #
 # Model registry (plan §6.2)
 # --------------------------------------------------------------------------- #
+class ApiConfig(BaseModel):
+    """OpenAI-compatible API endpoint for a measured model."""
+
+    base_url: str = Field(
+        ...,
+        description="OpenAI-compatible base URL, e.g. https://openrouter.ai/api/v1.",
+    )
+    api_key: str = Field("", description="API key. Kept in YAML because YAML is the only run config.")
+    model: str = Field(..., description="Served model id.")
+    model_provider: str = "OpenAI"
+    wire_api: str = "responses"
+    temperature: Optional[float] = None
+    max_tokens: int = 81920
+    timeout: int = 3000
+    max_retries: int = 4
+
+
+class HarnessConfig(BaseModel):
+    """How the model is run: direct API, Codex CLI, opencode, hermes."""
+
+    type: str = Field("direct", description="Harness/backend key.")
+    scaffold_version: str = "default"
+    timeout_seconds: int = 3000
+    max_tool_calls: int = 3
+    probe_max_tokens: int = 8192
+    search_mcp_module: str = "breakthrough_eval.prover.tools.restricted_search.mcp"
+    search_config_path: str = "breakthrough_eval/prover/tools/restricted_search/config.yaml"
+    codex_home_dir: str = "breakthrough_eval/prover/backends/codex_home"
+    binary: str = Field("", description="Optional CLI binary override.")
+
+
 class ModelEntry(BaseModel):
     """A candidate PROVER model with a (soft!) training cutoff."""
+
+    model_config = ConfigDict(extra="forbid")
 
     name: str
     cutoff_date: date
     cutoff_confidence: Literal["low", "medium", "high"] = "medium"
     open_source: bool = False
     capability_tier: str = Field("unknown", description="能力档位标签, e.g. 'research'.")
-    provider: str = Field("mock", description="后端选择键 (mock / local-vllm / ...).")
-    backend_kwargs: dict = Field(
-        default_factory=dict,
-        description="传给后端 factory 的参数 (mock: capability/contaminated/scaffold_version; "
-        "codex: model/model_provider). provider-agnostic.",
-    )
+    api: Optional[ApiConfig] = None
+    harness: HarnessConfig = Field(default_factory=HarnessConfig)
+
+    @model_validator(mode="after")
+    def _check_api_for_real_harness(self) -> "ModelEntry":
+        if self.api is None:
+            raise ValueError(f"model {self.name}: harness '{self.harness.type}' requires api config")
+        return self
 
     def eligible_for(self, task: TaskSpec) -> bool:
         """Eligible iff the model's training cutoff is within the task's allowed
@@ -224,6 +249,80 @@ class ModelEntry(BaseModel):
         admitted; the §8 probes remain the final arbiter of cleanliness.
         """
         return self.cutoff_date <= task.allowed_model_cutoff_before
+
+
+class ModelRegistry:
+    def __init__(self, entries: list[ModelEntry] | None = None):
+        self.entries: dict[str, ModelEntry] = {}
+        for entry in entries or []:
+            self.entries[entry.name] = entry
+
+    def add(self, entry: ModelEntry) -> None:
+        self.entries[entry.name] = entry
+
+    def get(self, name: str) -> ModelEntry:
+        if name not in self.entries:
+            raise KeyError(f"model registry 里没有 '{name}'")
+        return self.entries[name]
+
+    def eligible_models(self, task: TaskSpec) -> list[ModelEntry]:
+        return [entry for entry in self.entries.values() if entry.eligible_for(task)]
+
+    @classmethod
+    def load(cls, path: str | Path) -> "ModelRegistry":
+        data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+        models = data.get("models", data if isinstance(data, list) else [])
+        return cls([ModelEntry(**model) for model in models])
+
+
+def load_taskspec(path: str | Path) -> TaskSpec:
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    return TaskSpec.model_validate(data)
+
+
+def load_all_tasks(directory: str | Path) -> dict[str, TaskSpec]:
+    tasks: dict[str, TaskSpec] = {}
+    for path in sorted(Path(directory).glob("*.y*ml")):
+        spec = load_taskspec(path)
+        if spec.task_id in tasks:
+            raise ValueError(f"重复 task_id: {spec.task_id} ({path})")
+        tasks[spec.task_id] = spec
+    return tasks
+
+
+def validate_taskspec(path: str | Path) -> list[str]:
+    issues: list[str] = []
+    try:
+        spec = load_taskspec(path)
+    except (ValidationError, ValueError) as exc:
+        return [str(exc)]
+
+    if not spec.contamination_probes:
+        issues.append("⚠️ 没有定义任何污染探针 (contamination_probes): 无法执行 probe-then-prove。")
+    if not spec.golden_proof.proof_text.strip():
+        issues.append(
+            "⚠️ golden_proof.proof_text 为空: 评委只能凭自身训练知识对齐 golden, "
+            "对冷门突破判定会静默失真 (建议填证明概要/全文)。"
+        )
+    if spec.max_hint_level < 1:
+        issues.append("⚠️ hint_ladder 只有 L0: 拿不到难度曲线 (建议补 L1..Lk)。")
+    if not any(item.frontier_delta for item in spec.rubric):
+        issues.append("⚠️ rubric 里没有任何 frontier_delta=True 的关键创新点。")
+    for item in spec.rubric:
+        if not item.indicators:
+            issues.append(f"⚠️ rubric {item.id} 没有 indicators: 自动审计缺少该项关键词。")
+    framing = (spec.problem_statement + " " + spec.problem_framing_notes).lower()
+    flagged: set[str] = set()
+    for probe in spec.contamination_probes:
+        for indicator in probe.leak_indicators:
+            lowered = indicator.lower()
+            if lowered in framing and lowered not in flagged:
+                flagged.add(lowered)
+                issues.append(
+                    f"⚠️ 题面疑似泄露探针关键词 '{indicator}' "
+                    "(problem_statement/problem_framing_notes 不应指向答案)。"
+                )
+    return issues
 
 
 # --------------------------------------------------------------------------- #
@@ -412,3 +511,5 @@ class EvalResult(BaseModel):
         if self.earned_total_items == 0:
             return None
         return self.earned_passed_items / self.earned_total_items
+
+    model_config = ConfigDict(extra="forbid")

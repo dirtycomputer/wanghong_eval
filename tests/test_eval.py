@@ -1,143 +1,111 @@
-"""EVAL: judge, multi-judge consensus, κ, golden anchoring (plan §4)."""
+"""Codex-backed EVAL artifacts."""
+
+from __future__ import annotations
 
 import json
+from pathlib import Path
 
-from breakthrough_eval.eval.evaluator import (
-    Evaluator,
-    cohen_kappa,
-    golden_reference_text,
+from breakthrough_eval.eval.codex import CodexEvalAgent, CodexEvalConfig, build_eval_result
+from breakthrough_eval.eval.evaluator import Evaluator
+from breakthrough_eval.specification import (
+    ApiConfig,
+    AuditResult,
+    JudgeVerdict,
+    ProverRunResult,
+    RubricItemVerdict,
 )
-from breakthrough_eval.eval.llm import LLMJudge, build_judge_prompt
-from breakthrough_eval.eval.mock import MockJudge, MockJudgeConfig
 
 
-def _panel():
-    return [
-        MockJudge(MockJudgeConfig(strictness=0.4, name="lenient")),
-        MockJudge(MockJudgeConfig(strictness=0.5, name="balanced")),
-        MockJudge(MockJudgeConfig(strictness=0.7, name="strict")),
-    ]
-
-
-def test_cohen_kappa_extremes():
-    assert cohen_kappa([True, True, False], [True, True, False]) == 1.0
-    assert cohen_kappa([True, False, True], [False, True, False]) < 0.0
-
-
-def test_golden_anchoring_full_marks(task):
-    """Golden proof must score full coverage + overall valid (calibration)."""
-    ev = Evaluator(_panel())
-    result = ev.calibrate_with_golden(task)
-    assert result.passed_items == result.total_items == len(task.rubric)
-    assert result.overall_valid
-    assert result.rubric_coverage == 1.0
-
-
-def test_empty_proof_scores_zero(task):
-    ev = Evaluator(_panel())
-    res = ev.evaluate_text("j", task, "# Claimed Proof\n(nothing)")
-    assert res.passed_items == 0
-    assert not res.overall_valid
-
-
-def test_partial_proof_triggers_disagreement(task):
-    # 2/3 indicators per item: lenient/balanced pass (need 2), strict fails (need 3).
-    lines = ["# Claimed Proof", "## 2. 关键引理"]
-    for item in task.rubric:
-        lines.append(f"- 引理 {item.id}: " + ", ".join(item.indicators[:2]))
-    ev = Evaluator(_panel())
-    res = ev.evaluate_text("j", task, "\n".join(lines))
-    assert res.agreement < 1.0
-    assert res.needs_human_review
-
-
-def test_excluded_run_scored_excluded(task):
-    from breakthrough_eval.models import ProverRunResult
-
-    pr = ProverRunResult(
-        job_id="j", task_id=task.task_id, model="m", hint_level=0, trial=0,
-        harness="h", contaminated=True,
+def _prover(task, **overrides) -> ProverRunResult:
+    data = dict(
+        job_id="task::model::L0::t0",
+        task_id=task.task_id,
+        model="model",
+        hint_level=0,
+        trial=0,
+        harness="codex",
+        raw_output="# Claimed Proof\nThis is the prover answer.",
+        audit=AuditResult(passed=True),
     )
-    ev = Evaluator(_panel())
-    res = ev.evaluate(pr, task)
-    assert res.excluded
-    assert not res.overall_valid
+    data.update(overrides)
+    return ProverRunResult(**data)
 
 
-def test_errored_run_skips_judges_and_is_void(task):
-    # 基础设施错误的 run 作废: 不送评委 (省 API), 标 errored 而非 excluded/0 分。
-    from breakthrough_eval.models import ProverRunResult
-
-    calls = {"n": 0}
-
-    class CountingJudge(MockJudge):
-        def judge(self, *a, **kw):
-            calls["n"] += 1
-            return super().judge(*a, **kw)
-
-    pr = ProverRunResult(
-        job_id="j", task_id=task.task_id, model="m", hint_level=0, trial=0,
-        harness="h", error="LLMError: 网络错误",
+def _config(binary: Path, home_dir: Path) -> CodexEvalConfig:
+    return CodexEvalConfig(
+        api=ApiConfig(base_url="http://127.0.0.1:8083", api_key="sk-test", model="gpt-5.5"),
+        home_dir=home_dir,
+        timeout_seconds=30,
+        binary=str(binary),
     )
-    ev = Evaluator([CountingJudge()])
-    res = ev.evaluate(pr, task)
-    assert res.errored
-    assert not res.excluded
-    assert not res.overall_valid and res.judges == []
-    assert calls["n"] == 0
 
 
-def test_llm_judge_parses_injected_client(task):
+def _fake_codex(path: Path, payload: dict) -> None:
+    script = f"""#!/usr/bin/env python3
+import json
+from pathlib import Path
+
+Path("output").mkdir(exist_ok=True)
+Path("output/result.json").write_text({json.dumps(json.dumps(payload))}, encoding="utf-8")
+print(json.dumps({{"event": "done"}}))
+"""
+    path.write_text(script, encoding="utf-8")
+    path.chmod(path.stat().st_mode | 0o111)
+
+
+def test_codex_eval_writes_input_and_reads_result(tmp_path, task):
     payload = {
         "item_verdicts": [
-            {"item_id": r.id, "passed": True, "cited_lines": [1], "confidence": 0.9}
-            for r in task.rubric
+            {
+                "item_id": item.id,
+                "passed": True,
+                "justification": "cited",
+                "cited_lines": [1],
+                "confidence": 0.9,
+            }
+            for item in task.rubric
         ],
         "overall_valid": True,
         "alternative_valid": False,
+        "needs_human_review": False,
         "notes": "ok",
     }
+    binary = tmp_path / "codex"
+    _fake_codex(binary, payload)
 
-    def fake_complete(system, user):
-        assert "禁止笼统判断" in system  # §4.2 line-citation rule present
-        assert "Rubric" in user
-        return "```json\n" + json.dumps(payload) + "\n```"
+    evaluator = Evaluator(CodexEvalAgent(_config(binary, tmp_path / "codex_home")), tmp_path / "eval")
+    result = evaluator.evaluate(_prover(task), task)
 
-    judge = LLMJudge(complete=fake_complete)
-    verdict = judge.judge(task, "proof", task.golden_proof)
-    assert verdict.overall_valid
-    assert len(verdict.item_verdicts) == len(task.rubric)
-
-
-def test_llm_judge_abstains_on_unparseable_output(task):
-    # A judge that returns junk must NOT crash the run; it abstains + flags review.
-    from breakthrough_eval.eval.llm import LLMJudge
-
-    judge = LLMJudge(complete=lambda s, u: "totally not json", name="broken")
-    verdict = judge.judge(task, "proof", task.golden_proof)
-    assert verdict.parse_failed
-    assert verdict.item_verdicts == []
+    job_dir = tmp_path / "eval"
+    assert (job_dir / "input" / "task.md").exists()
+    assert (job_dir / "input" / "prover.md").read_text(encoding="utf-8").startswith("1: # Claimed Proof")
+    assert (job_dir / "output" / "result.json").exists()
+    assert result.overall_valid
+    assert result.passed_items == result.total_items == len(task.rubric)
+    assert result.judges[0].judge_name == "codex-eval"
 
 
-def test_evaluator_survives_parse_failure(task):
-    from breakthrough_eval.eval.llm import LLMJudge
-
-    good = MockJudge(MockJudgeConfig(strictness=0.5))
-    broken = LLMJudge(complete=lambda s, u: "<<garbage>>", name="broken")
-    ev = Evaluator([good, broken])
-    res = ev.evaluate_text("j", task, golden_reference_text(task))
-    # broken judge abstains; good judge still scores; cell flagged for review
-    assert res.needs_human_review
-    assert res.passed_items == res.total_items  # good judge passes the golden ref
-    assert any(v.parse_failed for v in res.judges)
+def test_errored_prover_skips_codex(tmp_path, task):
+    binary = tmp_path / "missing-codex"
+    evaluator = Evaluator(CodexEvalAgent(_config(binary, tmp_path / "codex_home")), tmp_path / "eval")
+    result = evaluator.evaluate(_prover(task, error="backend failed"), task)
+    assert result.errored
+    assert result.judges == []
+    assert not (tmp_path / "eval").exists()
 
 
-def test_llm_judge_without_client_raises(task):
-    judge = LLMJudge(complete=None)
-    assert not judge.available()
-    try:
-        judge.judge(task, "x", task.golden_proof)
-    except RuntimeError:
-        pass
-    else:  # pragma: no cover
-        raise AssertionError("expected RuntimeError")
+def test_build_eval_result_counts_earned_coverage(task):
+    prover = _prover(task, hint_level=3)
+    judge = JudgeVerdict(
+        judge_name="codex-eval",
+        item_verdicts=[
+            RubricItemVerdict(item_id=item.id, passed=True, cited_lines=[1], confidence=0.9)
+            for item in task.rubric
+        ],
+        overall_valid=True,
+    )
+    result = build_eval_result(task, prover, judge)
+    assert sorted(result.revealed_items) == ["R1", "R2", "R3", "R4"]
+    assert result.earned_total_items == 3
+    assert result.earned_passed_items == 3
+    assert result.earned_coverage == 1.0

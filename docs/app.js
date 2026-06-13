@@ -86,8 +86,8 @@
   }
 
   // ---------- run config (PROVER × EVAL) ----------
-  const REDLINE_BY_PROVIDER = {
-    openrouter: "search_arxiv 原生工具 (tool-calling); 只路由支持 tools 的 provider; 无 web 工具",
+  const REDLINE_BY_HARNESS = {
+    direct: "OpenAI-compatible API + search_arxiv 工具; 无 web 工具",
     opencode: "arxiv-frozen MCP; 禁 webfetch/websearch/bash/edit/write/patch; 每 job 独立 cwd+XDG",
     hermes: "arxiv-frozen MCP; platform_toolsets 清空; 每 job 独立 HOME (无跨会话记忆)",
     codex: "config.toml: web_search=disabled + 冻结 arXiv MCP (required)",
@@ -111,20 +111,21 @@
 
     // PROVER: 每个 harness 一行 (leaderboard 行 ↔ registry 条目)
     const reg = D.registry || {};
-    let p = `<table class="vmatrix"><tr><th>registry 名</th><th>harness 指纹</th><th>provider</th>` +
-      `<th>底层模型</th><th>cutoff (置信度)</th><th>关键参数</th><th>检索/红线</th></tr>`;
+    let p = `<table class="vmatrix"><tr><th>registry 名</th><th>harness 指纹</th><th>harness</th>` +
+      `<th>api.model</th><th>base_url</th><th>api_key</th><th>cutoff (置信度)</th><th>参数/红线</th></tr>`;
     for (const r of rows) {
       const sample = r.group.items[0];
       const mname = sample ? sample.prover.model : "?";
       const e = reg[mname];
-      const kw = e ? e.backend_kwargs : {};
-      const params = Object.entries(kw).filter(([k]) => k !== "model")
+      const api = e && e.api ? e.api : {};
+      const h = e && e.harness ? e.harness : {};
+      const params = Object.entries(h).filter(([k, v]) => !["type"].includes(k) && v !== "" && v != null)
         .map(([k, v]) => `<span class="badge">${esc(k)}=${esc(v)}</span>`).join("") || "—";
       p += `<tr><td><code>${esc(mname)}</code></td><td><code>${esc(r.row.harness)}</code></td>` +
-        `<td>${esc(e ? e.provider : "?")}</td><td><code>${esc(kw.model || "?")}</code></td>` +
+        `<td>${esc(h.type || "?")}</td><td><code>${esc(api.model || "—")}</code></td>` +
+        `<td><code>${esc(api.base_url || "—")}</code></td><td>${api.api_key ? "configured" : "—"}</td>` +
         `<td>${e ? esc(e.cutoff_date) + ` <span class="muted">(${esc(e.cutoff_confidence)})</span>` : "—"}</td>` +
-        `<td>${params}</td>` +
-        `<td class="small">${esc(REDLINE_BY_PROVIDER[e ? e.provider : ""] || "—")}</td></tr>`;
+        `<td>${params}<div class="small muted">${esc(REDLINE_BY_HARNESS[h.type] || "—")}</div></td></tr>`;
     }
     p += "</table><p class='muted small' style='margin:6px 0 0'>三个 harness 的探针阶段均绕过 CLI " +
       "直连裸模型 (无援作答, 污染是模型属性); web search 一律禁用, 唯一外部信息源是时间冻结 arXiv。</p>";

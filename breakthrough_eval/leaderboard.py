@@ -18,7 +18,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-from .models import EvalResult, ProverRunResult
+from .specification import EvalResult, ProverRunResult
 
 
 @dataclass

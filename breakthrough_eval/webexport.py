@@ -26,9 +26,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .leaderboard import Leaderboard
-from .registry import ModelRegistry
+from .specification import ModelRegistry
 from .storage import ResultStore
-from .taskspec import load_all_tasks
+from .specification import load_all_tasks
 
 
 def build_site_data(
@@ -43,7 +43,7 @@ def build_site_data(
 
     # 运行配置: run_meta.json (cmd_run 自动写; 库调用方用 store.save_run_meta)。
     run_meta = store.load_run_meta()
-    # PROVER 配置: registry 里实际被用到的条目 (含 backend_kwargs)。
+    # PROVER 配置: registry 里实际被用到的条目 (api + harness)。
     registry_entries: dict[str, dict] = {}
     if registry_path is not None and Path(registry_path).exists():
         used = {pr.model for pr in provers}

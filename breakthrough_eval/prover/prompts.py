@@ -11,7 +11,7 @@ keep.
 
 from __future__ import annotations
 
-from .models import ProbeKind, TaskSpec
+from ..specification import ProbeKind, TaskSpec
 
 PROBE_SYSTEM_PROMPT = """\
 你是一名数学研究者。请基于你已有的知识, 简短、直接地回答下面的问题 (几句话即可)。
@@ -21,8 +21,11 @@ PROBE_SYSTEM_PROMPT = """\
 PROVER_SYSTEM_PROMPT = """\
 你是一名数学研究者, 正在参加一场"时间冻结的开卷研究考试"。
 - 你只能使用截止到给定日期之前公开的技巧、引理与工具。
-- 你可以检索一个时间冻结的 arXiv 快照 (只返回截止日期前的论文), 但不得使用任何其它联网检索。
-- 给出你能给出的最完整、最严谨的证明。诚实标注你不确定或未能闭合的步骤。
+- 你可以使用 restricted_search 检索工具; 它只返回当前评测 cutoff 之前的搜索结果, 不得使用其它联网检索。
+- 你必须尝试构造证明, 给出你能给出的最完整、最严谨的证明路线。
+- 不要把"这是公开未解决问题"、"我不能证明"或类似表述作为最终答案。
+- 如果某一步无法闭合, 仍要写出你尝试使用的引理、归纳框架、关键估计和具体缺口。
+- 可以诚实标注不确定或未能闭合的步骤, 但不能只停留在拒绝证明或背景综述。
 
 请严格按以下结构输出 (这是评测对齐所必需的):
 
@@ -55,7 +58,7 @@ def prove_prompt(task: TaskSpec, hint_level: int) -> str:
         parts.append("# 提示\n(本级为冷启, 无额外提示)")
 
     parts.append(
-        "# 检索说明\n你可以调用时间冻结的 arXiv 检索工具。它只会返回截止日期之前的论文。"
+        "# 检索说明\n你可以调用 restricted_search 检索工具。它只会返回当前评测 cutoff 之前的结果。"
         "请在第 4 节如实列出你实际用到的文献。"
     )
     return "\n\n".join(parts)

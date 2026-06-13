@@ -3,14 +3,13 @@
 import pytest
 from pydantic import ValidationError
 
-from breakthrough_eval.models import (
+from breakthrough_eval.specification import (
     GoldenProof,
     HintLevel,
-    RetrievalConfig,
     RubricItem,
     TaskSpec,
 )
-from breakthrough_eval.taskspec import validate_taskspec
+from breakthrough_eval.specification import validate_taskspec
 
 
 def _base_kwargs(**over):
@@ -25,7 +24,6 @@ def _base_kwargs(**over):
         golden_proof=GoldenProof(primary="arXiv:x"),
         rubric=[RubricItem(id="R1", title="r1", criterion="c", indicators=["a"])],
         hint_ladder=[HintLevel(level=0, label="L0", ratio=0.0)],
-        retrieval=RetrievalConfig(),
     )
     kw.update(over)
     return kw
@@ -55,11 +53,6 @@ def test_redline_rejects_model_cutoff_after_retrieval():
 def test_hint_ladder_must_start_at_zero():
     with pytest.raises(ValidationError):
         TaskSpec(**_base_kwargs(hint_ladder=[HintLevel(level=1, label="L1", ratio=0.1)]))
-
-
-def test_web_search_must_be_disabled():
-    with pytest.raises(ValidationError):
-        TaskSpec(**_base_kwargs(retrieval=RetrievalConfig(web_search="ENABLED")))
 
 
 def test_leak_indicator_in_framing_notes_flagged(tmp_path):
